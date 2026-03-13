@@ -9,19 +9,18 @@ export default class UiColorPickerHueElement extends HTMLElement {
         }
     }
 
-    #h = 0; // hue
-
-    get h() { return this.#h; }
+    _h = 0; // hue
+    get h() { return this._h; }
     set h(value) { 
-        this.#h = Number(value); 
-        this.style.setProperty('--hue-percent', (Math.round(this.#h/360*100*100)/100)+'%');
-        const attr = Math.round(this.#h);
+        this._h = Number(value); 
+        this.style.setProperty('--h', this._h);
+        const attr = Math.round(this._h);
         if (this.getAttribute('data-hue') !== attr) {
             this.setAttribute('data-hue', attr);
         }
     }
 
-    get hue() { return Math.round(this.#h); }
+    get hue() { return Math.round(this._h); }
     set hue(value) { this.h = value; }
     
     /** 생성자: Shadow DOM 초기화 */
@@ -62,16 +61,16 @@ export default class UiColorPickerHueElement extends HTMLElement {
         return ['data-hue'];
     }
 
-    #getHFromEvent(event){
+    _getHFromEvent(event){
         return this.dataset.dir=='horizontal'
             ?(Math.max(0, Math.min(1, event.offsetX / this.offsetWidth))*360)
             :(Math.max(0, Math.min(1, event.offsetY / this.offsetHeight))*360)
     }
-    #hFromDown = null
+    _hFromDown = null
     onpointerdown(event) {
         this.setPointerCapture(event.pointerId);
-        this.#hFromDown = this.h;
-        const h = this.#getHFromEvent(event)
+        this._hFromDown = this.h;
+        const h = this._getHFromEvent(event)
         if (h === this.h) return;
         this.h = h;
         this.dispatchEvent(new Event('input-hue', { bubbles: true,cancelable: true }));
@@ -80,7 +79,7 @@ export default class UiColorPickerHueElement extends HTMLElement {
 
     onpointermove(event) {
         if (!this.hasPointerCapture(event.pointerId)) return;
-        const h = this.#getHFromEvent(event)
+        const h = this._getHFromEvent(event)
         if (h === this.h) return;
         this.h = h;
         this.dispatchEvent(new Event('input-hue', { bubbles: true,cancelable: true }));
@@ -88,12 +87,12 @@ export default class UiColorPickerHueElement extends HTMLElement {
 
     onpointerup(event) {
         this.releasePointerCapture(event.pointerId);
-        // console.log(this.h ,'===', this.#hFromDown);
-        if (this.h === this.#hFromDown){
-            this.#hFromDown = null    
+        // console.log(this.h ,'===', this._hFromDown);
+        if (this.h === this._hFromDown){
+            this._hFromDown = null    
             return;
         } 
-        this.#hFromDown = null       
+        this._hFromDown = null       
         this.dispatchEvent(new Event('change-hue', { bubbles: true,cancelable: true }));
     }
 
@@ -102,13 +101,13 @@ export default class UiColorPickerHueElement extends HTMLElement {
     }
 
     [Symbol.toPrimitive](hint) {
-        if (hint === 'number') return this.#h;
-        if (hint === 'string') return this.#h.toString(10);
-        return this.#h;
+        if (hint === 'number') return this._h;
+        if (hint === 'string') return this._h.toString(10);
+        return this._h;
     }
 
     toJSON() {
-        return { h: this.#h };
+        return { h: this._h };
     }
 
     /** Shadow DOM 렌더링 */
@@ -116,7 +115,8 @@ export default class UiColorPickerHueElement extends HTMLElement {
         this.shadowRoot.innerHTML = `
             <style>
                 :host {
-                    --hue-percent: 0%;
+                    --h: 0;
+                    --h-percent: calc( var(--h,0) / 360 * 100% );
                     user-select: none;
                     touch-action: none;
                     display: block;
@@ -125,9 +125,11 @@ export default class UiColorPickerHueElement extends HTMLElement {
                     cursor: crosshair;
                 }
                 :host .bg{
+                    pointer-events: none;
                     position: absolute;
                     inset:0px;
-                    background: linear-gradient(to bottom,
+                    --bg-diriction: to bottom;
+                    background: linear-gradient(var(--bg-diriction),
                         hsl(0, 100%, 50%),
                         hsl(60, 100%, 50%),
                         hsl(120, 100%, 50%),
@@ -138,15 +140,7 @@ export default class UiColorPickerHueElement extends HTMLElement {
                     );
                 }
                 :host([data-dir="horizontal"]) .bg{
-                    background: linear-gradient(to right,
-                        hsl(0, 100%, 50%),
-                        hsl(60, 100%, 50%),
-                        hsl(120, 100%, 50%),
-                        hsl(180, 100%, 50%),
-                        hsl(240, 100%, 50%),
-                        hsl(300, 100%, 50%),
-                        hsl(360, 100%, 50%)
-                    );
+                    --bg-diriction: to right;
                 }
                 :host .wrap{
                     width: 100%;
@@ -156,7 +150,7 @@ export default class UiColorPickerHueElement extends HTMLElement {
                 }
                 :host .reference-wrap{
                     position: absolute;
-                    top: var(--hue-percent,0%);
+                    top: var(--h-percent, 0%);
                     transform: translateY(-50%);
                     left: 0;
                     width: 100%;
@@ -171,7 +165,7 @@ export default class UiColorPickerHueElement extends HTMLElement {
                 }
                 :host([data-dir="horizontal"]) .reference-wrap{
                     top: 0;
-                    left: var(--hue-percent,0%);
+                    left: var(--h-percent, 0%);
                     transform: translateX(-50%);
                     width: 1%;
                     height: 100%;
