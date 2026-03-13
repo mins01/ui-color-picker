@@ -1,4 +1,4 @@
-export class UiColorPickerHueElement extends HTMLElement {
+export default class UiColorPickerHueElement extends HTMLElement {
     /** @type {string} 커스텀 엘리먼트 태그명 */
     static tagName = 'ui-color-picker-hue';
 
