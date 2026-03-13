@@ -46,9 +46,7 @@ export default class UiColorPickerHueElement extends HTMLElement {
     attributeChangedCallback(name, oldValue, newValue) {
         if(oldValue === newValue) return;
         if(name=='data-hue') this.h = Number(newValue);
-        if (oldValue !== newValue) {
-            this.render();
-        }
+        // if (oldValue !== newValue) { this.render(); }
     }
 
     setColor(color) {
@@ -164,6 +162,7 @@ export default class UiColorPickerHueElement extends HTMLElement {
                     overflow: visible;
                 }
                 :host([data-dir="horizontal"]) .reference-wrap{
+                    flex-direction: column;
                     top: 0;
                     left: var(--h-percent, 0%);
                     transform: translateX(-50%);
