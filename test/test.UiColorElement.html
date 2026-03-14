@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ko" >
 <head>
-    <title>Test - UiColorPickerElement</title>
+    <title>Test - UiColorElement</title>
     <meta charset="utf-8">
     <meta http-equiv="Content-Script-Type" content="text/javascript">
     <meta http-equiv="Content-Style-Type" content="text/css">
@@ -27,47 +27,52 @@
     
     <!-- meta og -->
     
-    <meta property="og:title" content="Test - UiColorPickerElement">
-    <meta property="og:description" content="Test - UiColorPickerElement">
+    <meta property="og:title" content="Test - UiColorElement">
+    <meta property="og:description" content="Test - UiColorElement">
     <meta property="og:image" content="http://www.mins01.com/img/logo.gif">
     <meta property="og:image:width" content="190">
     <meta property="og:image:height" content="70" />
-    <meta property="og:site_name" content="Test - UiColorPickerElement" />
+    <meta property="og:site_name" content="Test - UiColorElement" />
     <meta property="og:type" content="website">
     
     <!-- //meta og -->
-    <script type="module">
-        import UiColorHueBarElement from '../src/UiColorHueBarElement.js';
-        UiColorHueBarElement.defineCustomElement();
-        import UiColorSlPlaneElement from '../src/UiColorSlPlaneElement.js';
-        UiColorSlPlaneElement.defineCustomElement();
-        import UiColorPickerElement from '../src/UiColorPickerElement.js';
-        UiColorPickerElement.defineCustomElement();
-    </script>
-    <script>
-        // document.addEventListener('input-sl', (event) => { console.log(event,event.target.h,event.target.s,event.target.l) });
-        // document.addEventListener('change-sl', (event) => { console.log(event.type,event.target.h,event.target.s,event.target.l) });
-    </script>
     
+    <script type="module">
+        import UiColorElement from '../src/UiColorElement.js';
+        UiColorElement.defineCustomElement();
+    </script>
+    <style>
+        ui-color.btn{
+            --bs-btn-bg: var(--color);;
+            --bs-btn-border-color: var(--color);;
+            
+            --bs-btn-hover-bg: var(--color);;
+            --bs-btn-hover-border-color: var(--color);;
+            --bs-btn-focus-shadow-rgb: 49, 132, 253;
+            --bs-btn-active-color: #fff;
+            --bs-btn-active-bg: var(--color);;
+            --bs-btn-active-border-color: var(--color);;
+            
+            --bs-btn-disabled-color: #fff;
+            --bs-btn-disabled-bg: var(--color);;
+            --bs-btn-disabled-border-color: var(--color);;
+        }
+    </style>    
 </head>
 
 <body>
     <div class="container" id="container0">
-        <h1>Test - UiColorPickerElement</h1>
+        <h1>Test - UiColorElement</h1>
         <hr>
 
-        <ui-color-picker id="target" style="max-width: 500px;height: 500px;" onclick="console.log(this.pendingColor.toRgbString());" value="#aabbcc">
-            <div class="d-flex flex-column gap-3">
-                <div class="d-flex gap-1" style="width: 100%;height: auto; aspect-ratio: 6/3;">
-                    <ui-color-sl-plane class="rounded border border-1 overflow-hidden" style="flex: 1 0 auto;"></ui-color-sl-plane>
-                    <ui-color-hue-bar class="rounded border border-1 overflow-hidden" style="flex: 0 0 30px;"></ui-color-hue-bar>
-                </div>
-                <div>
-    111
-                </div>
-            </div>
-        </ui-color-picker>
-        
+        <ui-color style="width: 100px;height: 100px;" ></ui-color>
+        <hr>        
+        <ui-color style="width: 100px;height: 100px;" value="#aabbcc" onclick="this.setRgba(Math.floor(Math.random()*256),Math.floor(Math.random()*256),Math.floor(Math.random()*256));console.log(this.value);" >
+            클릭 랜덤
+        </ui-color>
+        <hr>        
+        <ui-color class="btn btn-primary"  value="#ccbbaa" onclick="this.setRgba(Math.floor(Math.random()*256),Math.floor(Math.random()*256),Math.floor(Math.random()*256));console.log(this.value);"  >Bs5 버튼</ui-color>
+
     </div>
     
 </body>

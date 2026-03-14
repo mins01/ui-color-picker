@@ -1,54 +1,37 @@
 import Color from "../third_party/js-color/v2/src/Color.js";
-export default class UiColorPickerElement extends HTMLElement {
+export default class UiColorElement extends HTMLElement {
     /** @type {string} 커스텀 엘리먼트 태그명 */
-    static tagName = 'ui-color-picker';
+    static tagName = 'ui-color';
 
     /** 커스텀 엘리먼트 등록 */
     static defineCustomElement(tagName = this.tagName) {
         if (!customElements.get(tagName)) {
             customElements.define(tagName, this);
+            console.log('defineCustomElement',tagName);
+            
         }
     }
 
-    /** @type {Color} 현재 색 */
-    color = new Color(0,0,0,1); //현재 색
+    
+    
 
-    /** @type {Color} 선택중인 색 */
-    pendingColor = new Color(0,0,0,1); //선택중인 색
 
+
+    color = new Color();
+    
     /** 생성자: Shadow DOM 초기화 */
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
-        this.addEventListener('input-sl', this.oninputSl.bind(this));
-        this.addEventListener('change-sl', this.onchangeSl.bind(this));
-        this.addEventListener('input-hue', this.oninputHue.bind(this));
-        this.addEventListener('change-hue', this.onchangeHue.bind(this));
+        this.syncStyle();
     }
 
-    oninputHue(event){
-        const target = event.target;
-        const hsl = this.pendingColor.toHsl();
-        hsl.h = target.h;
-        this.pendingColor.setHsla(hsl.h, hsl.s, hsl.l);
-        console.log(event.type,this.pendingColor.toRgbString(),this.pendingColor.toHslString());
-    }
-    onchangeHue(event){
-        return this.oninputHue(event);
-    }
-    oninputSl(event){
-        const target = event.target;
-        const hsl = this.pendingColor.toHsl();
-        hsl.s = target.s;
-        hsl.l = target.l;
-        this.pendingColor.setHsla(hsl.h, hsl.s, hsl.l);
-        console.log(event.type,this.pendingColor.toRgbString(),this.pendingColor.toHslString());
-        
-    }
-    onchangeSl(event){
-        return this.oninputSl(event);
-    }
 
+    /** 감시할 속성 목록 */
+    static get observedAttributes() {
+        return ['value'];
+    }
+    
     /** DOM에 추가될 때 호출 */
     connectedCallback() {
         this.render();
@@ -60,21 +43,33 @@ export default class UiColorPickerElement extends HTMLElement {
 
     /** 속성 변경 시 호출 */
     attributeChangedCallback(name, oldValue, newValue) {
+        
+        
         if(oldValue === newValue) return;
-        if(name=='value') this.value = newValue;
+        if(name=='value'){
+            this.value = newValue;
+            console.log(name,newValue,this.value);
+        }
         // if (oldValue !== newValue) { this.render(); }
+    }
+
+    syncStyle(){
+        this.style.setProperty('--color', this.color.toRgbaString());
     }
 
     setColor(color) {
         this.color.setColor(color);
+        this.syncStyle();
     }
-    toColor(){
-        return this.color.clone()
+    setRgba(r,g,b,a=null){ 
+        this.color.setRgba(r,g,b,a);
+        this.syncStyle();
     }
-    toHsl(){ return this.color.toHsl(); }
+    
 
     set value(value) { 
-        this.color.setString(value);
+        const color = Color.fromString(value)
+        this.setColor(color);
     }
     get value() { return this.color.toRgbString(); }
 
@@ -92,6 +87,10 @@ export default class UiColorPickerElement extends HTMLElement {
         if (hint === 'string') return this.toHslString()
         return this.toHslString()
     }
+
+    toColor(){
+        return this.color.clone()
+    }
     toHslString() { 
         return `hsl(${this.hue}, ${this.saturation} ${this.lightness})`;
     }
@@ -99,9 +98,6 @@ export default class UiColorPickerElement extends HTMLElement {
         return this.color.toString(type)
     }
 
-    toColor(){
-        return this.color.clone()
-    }
 
     toJSON() {
         return this.color.toJSON();
@@ -112,9 +108,11 @@ export default class UiColorPickerElement extends HTMLElement {
         this.shadowRoot.innerHTML = `
             <style>
                 :host {
+                    --color: rgb(0, 0, 0);
                     display: block;
                     min-width: 20px;
                     min-height: 20px;
+                    background-color: var(--color, rgb(0, 0, 0));
                 }
             </style>
             <slot></slot>
