@@ -122,7 +122,7 @@ export default class UiColorPickerHueElement extends HTMLElement {
                     min-height: 20px;
                     cursor: crosshair;
                 }
-                :host .bg{
+                :host::part(bg){
                     pointer-events: none;
                     position: absolute;
                     inset:0px;
@@ -137,16 +137,18 @@ export default class UiColorPickerHueElement extends HTMLElement {
                         hsl(360, 100%, 50%)
                     );
                 }
-                :host([data-dir="horizontal"]) .bg{
+                :host([data-dir="horizontal"])::part(bg){
                     --bg-diriction: to right;
                 }
-                :host .wrap{
+                :host::part(track){
+                    z-index: 1;
                     width: 100%;
                     height: 100%;
                     position: relative;
                     overflow: hidden;
                 }
-                :host .reference-wrap{
+                :host::part(hue-indicator){
+                    z-index: 2;
                     position: absolute;
                     top: var(--h-percent, 0%);
                     transform: translateY(-50%);
@@ -161,7 +163,7 @@ export default class UiColorPickerHueElement extends HTMLElement {
                     align-items: center;
                     overflow: visible;
                 }
-                :host([data-dir="horizontal"]) .reference-wrap{
+                :host([data-dir="horizontal"])::part(hue-indicator){
                     flex-direction: column;
                     top: 0;
                     left: var(--h-percent, 0%);
@@ -171,7 +173,7 @@ export default class UiColorPickerHueElement extends HTMLElement {
                     min-width: 4px;
                     min-height: 0;
                 }
-                :host .reference-line{
+                :host::part(hue-handle){
                     --border-width: 2px;
                     width: 100%;
                     height: 100%;
@@ -179,16 +181,16 @@ export default class UiColorPickerHueElement extends HTMLElement {
                     border: 1px solid rgba(255, 255, 255, 0.75);
                     border-width: var(--border-width) 0px;
                 }
-                :host([data-dir="horizontal"]) .reference-line{
+                :host([data-dir="horizontal"])::part(hue-handle){
                     border-width: 0px var(--border-width);
                 }
 
             </style>
-            <div class="wrap">
-                <div class="bg" part="bg">
+            <div part="track">
+                <div part="bg">
                 </div>
-                <div class="reference-wrap"  part="reference-wrap">
-                    <div class="reference-line" part="reference-line"></div>
+                <div part="hue-indicator">
+                    <div part="hue-handle"></div>
                 </div>
                 <slot></slot>
             </div>
