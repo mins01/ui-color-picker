@@ -1,6 +1,6 @@
-export default class UiColorPickerHueElement extends HTMLElement {
+export default class UiColorHueBarElement extends HTMLElement {
     /** @type {string} 커스텀 엘리먼트 태그명 */
-    static tagName = 'ui-color-picker-hue';
+    static tagName = 'ui-color-hue-bar';
 
     /** 커스텀 엘리먼트 등록 */
     static defineCustomElement(tagName = this.tagName) {
@@ -194,12 +194,18 @@ export default class UiColorPickerHueElement extends HTMLElement {
                 :host([data-dir="horizontal"])::part(hue-handle){
                     border-width: 0px var(--border-width);
                 }
+                :host::part(hue-icon){
+                    width: 100%;
+                    height: 100%;
+                }
 
             </style>
             <div part="track">
                 <div part="bg"></div>
                 <div part="hue-indicator">
-                    <div part="hue-handle"></div>
+                    <div part="hue-handle">
+                        <div part="hue-icon"></div>
+                    </div>
                 </div>
                 <slot></slot>
             </div>

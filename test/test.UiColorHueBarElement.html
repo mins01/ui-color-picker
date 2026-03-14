@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ko" >
 <head>
-    <title>Test - UiColorPickerHueElement</title>
+    <title>Test - UiColorHueBarElement</title>
     <meta charset="utf-8">
     <meta http-equiv="Content-Script-Type" content="text/javascript">
     <meta http-equiv="Content-Style-Type" content="text/css">
@@ -27,19 +27,19 @@
     
     <!-- meta og -->
     
-    <meta property="og:title" content="Test - UiColorPickerHueElement">
-    <meta property="og:description" content="Test - UiColorPickerHueElement">
+    <meta property="og:title" content="Test - UiColorHueBarElement">
+    <meta property="og:description" content="Test - UiColorHueBarElement">
     <meta property="og:image" content="http://www.mins01.com/img/logo.gif">
     <meta property="og:image:width" content="190">
     <meta property="og:image:height" content="70" />
-    <meta property="og:site_name" content="Test - UiColorPickerHueElement" />
+    <meta property="og:site_name" content="Test - UiColorHueBarElement" />
     <meta property="og:type" content="website">
     
     <!-- //meta og -->
     
     <script type="module">
-        import UiColorPickerHueElement from '../src/UiColorPickerHueElement.js';
-        UiColorPickerHueElement.defineCustomElement();
+        import UiColorHueBarElement from '../src/UiColorHueBarElement.js';
+        UiColorHueBarElement.defineCustomElement();
     </script>
     <script>
         document.addEventListener('input-hue', (event) => { console.log(event.type,event.target.h,event.target.hue) });
@@ -47,29 +47,50 @@
     </script>
 
     <style>
-        #part-reference-line::part(reference-line) { border-color: #000a; --border-width:400px ; }
+        #part-hue-handle::part(hue-handle) { 
+            border-color: #000a; 
+            --border-width:100vh;
+        }
         #part-bg::part(bg) { background: hsl(var(--h,0), 100%, 50%);}
+        .part-hue-icon::part(hue-handle){
+            border-width: 0px;
+            box-shadow: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .part-hue-icon::part(hue-icon){
+            --border-width:8px;
+            border-width: 0px var(--border-width,0px);
+            border-color: #fff #000 #000 #fff;
+            border-style: solid;
+            box-sizing: border-box;
+            height: 2px;
+        }
+        .part-hue-icon[data-dir="horizontal"]::part(hue-icon){
+            width: 2px;
+            height: 100%;
+            border-width: var(--border-width,0px) 0px;
+        }
     </style>
     
 </head>
 
 <body>
     <div class="container py-3" id="container0">
-        <h1>Test - UiColorPickerHueElement</h1>
+        <h1>Test - UiColorHueBarElement</h1>
         <hr>
-        <ui-color-picker-hue style="width: 300px;height: 400px;" data-hue="90"></ui-color-picker-hue>
+        <ui-color-hue-bar style="width: 300px;height: 400px;"></ui-color-hue-bar>
         <hr>
-        <ui-color-picker-hue style="width: 50px;height: 200px;" id="part-reference-line" data-hue="280"></ui-color-picker-hue>
+        <ui-color-hue-bar style="width: 50px;height: 200px;" id="part-hue-handle" data-hue="280"></ui-color-hue-bar>
         <hr>
-        <ui-color-picker-hue style="width: 200px;height: 50px;" id="part-bg" data-hue="180"></ui-color-picker-hue>
+        <ui-color-hue-bar style="width: 200px;height: 30px;" id="part-bg" data-hue="180"></ui-color-hue-bar>
         <hr>
-        <ui-color-picker-hue style="width: 50px;height: 500px;"></ui-color-picker-hue>
+        <ui-color-hue-bar style="width: 30px;height: 500px;"  class="part-hue-icon" data-hue="180"></ui-color-hue-bar>
         <hr>
-        <ui-color-picker-hue style="width: 100%;height: 20px;" data-dir="horizontal"></ui-color-picker-hue>
-        
-
-
-
+        <ui-color-hue-bar style="width: 100%;height: 20px;" data-dir="horizontal" data-hue="180"></ui-color-hue-bar>
+        <hr>
+        <ui-color-hue-bar style="width: 100%;height: 30px;" class="part-hue-icon" data-dir="horizontal" data-hue="180"></ui-color-hue-bar>
     </div>
     
 </body>
