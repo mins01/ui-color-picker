@@ -60,17 +60,21 @@
             align-items: center;
         }
         .part-hue-icon::part(hue-icon){
-            --border-width:8px;
-            border-width: 0px var(--border-width,0px);
-            border-color: #fff #000 #000 #fff;
+            --border-width: 8px;
+            border-width: var(--border-width, 0px);
+            border-color: #fff0 #000 #0000 #fff;
             border-style: solid;
-            box-sizing: border-box;
-            height: 4px;
+            box-sizing: content-box;
+            height: 0px;
+        }
+        .part-hue-icon[data-dir="horizontal"]::part(hue-handle){
+            flex-direction: column;
         }
         .part-hue-icon[data-dir="horizontal"]::part(hue-icon){
-            width: 4px;
-            height: 100%;
-            border-width: var(--border-width,0px) 0px;
+            height: auto;
+            flex: 1;
+            border-color: #fff #0000 #000 #fff0;
+            width: 0px;
         }
     </style>
     

@@ -118,14 +118,14 @@ export default class UiColorHueBarElement extends HTMLElement {
                     user-select: none;
                     touch-action: none;
                     display: block;
-                    min-width: 20px;
-                    min-height: 20px;
+                    min-width: 10px;
+                    min-height: 10px;
                     cursor: ns-resize
                 }
                 :host([data-dir="horizontal"]){
                     cursor: ew-resize
                 }
-                :host::part(track){
+                :host::part(bar){
                     width: 100%;
                     height: 100%;
                     position: relative;
@@ -200,7 +200,7 @@ export default class UiColorHueBarElement extends HTMLElement {
                 }
 
             </style>
-            <div part="track">
+            <div part="bar">
                 <div part="bg"></div>
                 <div part="hue-indicator">
                     <div part="hue-handle">

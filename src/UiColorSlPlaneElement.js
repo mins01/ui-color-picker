@@ -40,10 +40,6 @@ export default class UiColorSlPlaneElement extends HTMLElement {
         this._s = Math.max(0, Math.min(1, value)); // 0~1 clamp      
 
         this.style.setProperty('--s', this._s);
-        const attr = this.saturation
-        if (this.getAttribute('data-saturation') !== attr) {
-            this.setAttribute('data-saturation', attr);
-        }
     }
     get saturation() { return (this._s*100).toFixed(2).replace(/\.?0+$/, '')+'%'; }
     set saturation(value) { this.s = value; }
@@ -61,11 +57,6 @@ export default class UiColorSlPlaneElement extends HTMLElement {
         this._l = Math.max(0, Math.min(1, value)); // 0~1 clamp
 
         this.style.setProperty('--l', this._l);
-        const attr = this.lightness
-
-        if (this.getAttribute('data-lightness') !== attr) {
-            this.setAttribute('data-lightness', attr);
-        }
     }
     get lightness() { return (this._l*100).toFixed(2).replace(/\.?0+$/, '')+'%'; }
     set lightness(value) { this.l = value; }
@@ -93,9 +84,9 @@ export default class UiColorSlPlaneElement extends HTMLElement {
     /** 속성 변경 시 호출 */
     attributeChangedCallback(name, oldValue, newValue) {
         if(oldValue === newValue) return;
-        if(name=='data-hue') this.h = Number(newValue);
-        if(name=='data-saturation') this.s = newValue;
-        if(name=='data-lightness') this.l = newValue;
+        if(name=='hue') this.h = newValue;
+        if(name=='saturation') this.s = newValue;
+        if(name=='lightness') this.l = newValue;
         // if (oldValue !== newValue) { this.render(); }
     }
 
@@ -114,7 +105,7 @@ export default class UiColorSlPlaneElement extends HTMLElement {
 
     /** 감시할 속성 목록 */
     static get observedAttributes() {
-        return ['data-hue', 'data-saturation', 'data-lightness'];
+        return ['hue', 'saturation', 'lightness'];
     }
 
     #getSLFromEvent(event){
@@ -198,88 +189,66 @@ export default class UiColorSlPlaneElement extends HTMLElement {
                     --h: 0;
                     --s: 0;
                     --l: 0;
-                    --hue: calc( var(--h,0) * 1deg );
-                    --h-percent: calc( var(--h,0) / 360 * 100% );
-                    --s-percent: calc( var(--s,0) * 100% );
-                    --l-percent: calc( ( 1 - var(--l,0) ) * 100% );
+                    --hue: var(--h,0);
+                    --h-position: calc( var(--h,0) / 360 * 100% );
+                    --s-position: calc( var(--s,0) * 100% );
+                    --l-position: calc( ( 1 - var(--l,0) ) * 100% );
                     user-select: none;
-                    touch-action: none;
                     display: block;
-                    min-width: 20px;
-                    min-height: 20px;
+                    min-width: 10px;
+                    min-height: 10px;
                     cursor: crosshair;
                 }
-                :host .wrap{
+                :host::part(plane){
                     width: 100%;
                     height: 100%;
                     position: relative;
                     overflow: hidden;
                 }
-                :host .bg{
+                :host::part(bg){
                     pointer-events: none;
                     position: absolute;
                     inset:0px;
 
-                    /*background:
-                    linear-gradient(to top, black, transparent),
-                    linear-gradient(to right, white, hsl(var(--hue,0), 100%, 50%));*/
                     background:linear-gradient(to bottom, hsl(0, 0%, 100%) 0%, hsla(0, 0%, 100%, 0) 50%, hsla(0, 0%, 0%, 0) 50%, hsl(0, 0%, 0%) 100%),
 	                linear-gradient(to right, hsla(0, 0%, 50%, 1) 0%, hsla(0, 0%, 50%, 0) 100%),
                     hsl(var(--hue,0) 100% 50%);
                 }
-
-
-                :host .saturation-reference-wrap , :host .lightness-reference-wrap{
+                
+                :host::part(sl-indicator) {
                     position: absolute;
-                    top: var(--l-percent, 0%);
-                    transform: translateY(-50%);
-                    left: 0;
-                    width: 100%;
-                    height: 4px;
-                    min-width: 0;
-                    min-height: 4px;
-                    
+                    top: var(--l-position, 0%);
+                    left: var(--s-position, 0%);
+                    width: 8px;
+                    height: 8px;
+
+                    transform: translate(-50%, -50%);
                     display: flex;
                     justify-content: center;
                     align-items: center;
                     overflow: visible;
-                    box-sizing: content-box;
                 }
-                :host .lightness-reference-wrap{
-                    flex-direction: column;
-                    top: 0;
-                    left: var(--s-percent, 0%);
-                    transform: translateX(-50%);
-                    width: 4px;
-                    height: 100%;
-                    min-width: 4px;
-                    min-height: 0;
-                }
-                :host .saturation-reference-line, :host .lightness-reference-line{
+                :host::part(sl-handle){
                     width: 100%;
                     height: 100%;
-                    box-sizing: content-box;
-                    border: 1px solid rgba(255, 255, 255, 0.75);
-                    border-width: 2px 0px;
-                    box-shadow: 0 0px 15px 1px rgba(0, 0, 0, 0.75);
-                    mix-blend-mode: darken;
+                    border:4px solid rgba(255, 255, 255, 0.75);
+                    border-radius: 50%;
+                    border-color:rgba(255, 255, 255, 1) rgba(0,0,0, 1)  rgba(255, 255, 255, 1) rgba(0,0,0, 1);
+                    flex: 0 0 100%;
                 }
-                :host .lightness-reference-line{
-                    border-width: 0px 2px;
+                :host::part(sl-icon){
+                    width: 100%;
+                    height: 100%;
                 }
-
             </style>
-            <div class="wrap">
-                <div class="bg">
+            <div part="plane">
+                <div part="bg">
                 </div>
-                
-                <div class="saturation-reference-wrap">
-                    <div class="saturation-reference-line"></div>
+                <div part="sl-indicator">
+                    <div part="sl-handle">
+                        <div part="sl-icon"></div>
+                    </div>
                 </div>
-                <div class="lightness-reference-wrap">
-                    <div class="lightness-reference-line"></div>
-                </div>
-
                 <slot></slot>
             </div>
         `;
