@@ -231,7 +231,7 @@ export default class UiColorSlPlaneElement extends HTMLElement {
                 :host::part(sl-handle){
                     width: 100%;
                     height: 100%;
-                    border:4px solid rgba(255, 255, 255, 0.75);
+                    border:2px solid rgba(255, 255, 255, 0.75);
                     border-radius: 50%;
                     border-color:rgba(255, 255, 255, 1) rgba(0,0,0, 1)  rgba(255, 255, 255, 1) rgba(0,0,0, 1);
                     flex: 0 0 100%;
