@@ -37,6 +37,8 @@
     
     <!-- //meta og -->
     <script type="module">
+        import UiColorElement from '../src/UiColorElement.js';
+        UiColorElement.defineCustomElement();
         import UiColorHueBarElement from '../src/UiColorHueBarElement.js';
         UiColorHueBarElement.defineCustomElement();
         import UiColorSlPlaneElement from '../src/UiColorSlPlaneElement.js';
@@ -48,7 +50,15 @@
         // document.addEventListener('input-sl', (event) => { console.log(event,event.target.h,event.target.s,event.target.l) });
         // document.addEventListener('change-sl', (event) => { console.log(event.type,event.target.h,event.target.s,event.target.l) });
     </script>
-    
+    <style>
+        ui-color-picker .histories{
+            background-color: #abc;
+            
+        }
+        ui-color-picker .histories ui-color{
+            width:20px;height: 20px;;
+        }
+    </style>
 </head>
 
 <body>
@@ -56,14 +66,19 @@
         <h1>Test - UiColorPickerElement</h1>
         <hr>
 
-        <ui-color-picker id="target" style="max-width: 500px;height: 500px;" onclick="console.log(this.pendingColor.toRgbString());" value="#aabbcc">
+        <ui-color-picker id="picker" style="max-width: 500px;height: 500px;" onclick="console.log(this.pendingColor.toRgbString());" value="#aabbcc">
             <div class="d-flex flex-column gap-3">
                 <div class="d-flex gap-1" style="width: 100%;height: auto; aspect-ratio: 6/3;">
                     <ui-color-sl-plane class="rounded border border-1 overflow-hidden" style="flex: 1 0 auto;"></ui-color-sl-plane>
                     <ui-color-hue-bar class="rounded border border-1 overflow-hidden" style="flex: 0 0 30px;"></ui-color-hue-bar>
                 </div>
-                <div>
-    111
+                <div class="histories d-flex gap-1 flex-wrap p-1">
+                    <ui-color class="rounded" value="#000" onclick="this.closest('ui-color-picker').value = this.value;"></ui-color>
+                    <ui-color class="rounded" value="#fff" onclick="this.closest('ui-color-picker').value = this.value;"></ui-color>
+                    <ui-color class="rounded" value="#f00" onclick="this.closest('ui-color-picker').value = this.value;"></ui-color>
+                    <ui-color class="rounded"></ui-color>
+                    <ui-color class="rounded"></ui-color>
+                    <ui-color class="rounded"></ui-color>
                 </div>
             </div>
         </ui-color-picker>
