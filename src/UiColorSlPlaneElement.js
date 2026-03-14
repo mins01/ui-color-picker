@@ -1,8 +1,8 @@
-import UiColorPickerHueElement from "./UiColorPickerHueElement.js";
+// import UiColorPickerHueElement from "./UiColorPickerHueElement.js";
 import Color from "../third_party/js-color/v2/src/Color.js";
-export default class UiColorPickerSaturationLightnessElement extends UiColorPickerHueElement {
+export default class UiColorSlPlaneElement extends HTMLElement {
     /** @type {string} 커스텀 엘리먼트 태그명 */
-    static tagName = 'ui-color-picker-saturation-lightness';
+    static tagName = 'ui-color-sl-plane';
 
     /** 커스텀 엘리먼트 등록 */
     static defineCustomElement(tagName = this.tagName) {
@@ -14,7 +14,20 @@ export default class UiColorPickerSaturationLightnessElement extends UiColorPick
 
 
 
-    // _h = 0; // hue (0~360)
+
+    _h = 0; // hue (0~360)
+    get h() { return this._h; }
+    set h(value) { 
+        this._h = Number(value); 
+        this.style.setProperty('--h', this._h);
+        const attr = Math.round(this._h);
+        if (this.getAttribute('data-hue') !== attr) {
+            this.setAttribute('data-hue', attr);
+        }
+    }
+
+    get hue() { return Math.round(this._h); }
+    set hue(value) { this.h = value; }
 
     _s = 0; // saturation (0~1)
     get s() { return this._s; }
@@ -61,21 +74,21 @@ export default class UiColorPickerSaturationLightnessElement extends UiColorPick
     /** 생성자: Shadow DOM 초기화 */
     constructor() {
         super();
-        // this.attachShadow({ mode: 'open' });
-        // this.addEventListener('pointerdown', this.onpointerdown.bind(this));
-        // this.addEventListener('pointermove', this.onpointermove.bind(this));
-        // this.addEventListener('pointerup', this.onpointerup.bind(this));
-        // this.addEventListener('pointercancel', this.onpointercancel.bind(this));
+        this.attachShadow({ mode: 'open' });
+        this.addEventListener('pointerdown', this.onpointerdown.bind(this));
+        this.addEventListener('pointermove', this.onpointermove.bind(this));
+        this.addEventListener('pointerup', this.onpointerup.bind(this));
+        this.addEventListener('pointercancel', this.onpointercancel.bind(this));
     }
 
     /** DOM에 추가될 때 호출 */
-    // connectedCallback() {
-    //     this.render();
-    // }
+    connectedCallback() {
+        this.render();
+    }
 
     /** DOM에서 제거될 때 호출 */
-    // disconnectedCallback() {
-    // }
+    disconnectedCallback() {
+    }
 
     /** 속성 변경 시 호출 */
     attributeChangedCallback(name, oldValue, newValue) {
@@ -91,6 +104,11 @@ export default class UiColorPickerSaturationLightnessElement extends UiColorPick
         this.h = hsl.h;
         this.s = hsl.s;
         this.l = hsl.l;
+    }
+    toColor(){
+        const color = new Color()
+        color.setHsla(this.h, this.s, this.l);
+        return color;
     }
 
     /** 감시할 속성 목록 */
