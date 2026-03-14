@@ -172,26 +172,24 @@ export default class UiColorPickerHueElement extends HTMLElement {
                     min-height: 0;
                 }
                 :host .reference-line{
+                    --border-width: 2px;
                     width: 100%;
                     height: 100%;
                     box-sizing: content-box;
                     border: 1px solid rgba(255, 255, 255, 0.75);
-                    border-width: 2px 0px;
-                    box-shadow: 0 0px 15px 1px rgba(0, 0, 0, 0.75);
-                    mix-blend-mode: darken;
+                    border-width: var(--border-width) 0px;
                 }
                 :host([data-dir="horizontal"]) .reference-line{
-                    border-width: 0px 2px;
+                    border-width: 0px var(--border-width);
                 }
 
             </style>
             <div class="wrap">
-                <div class="bg">
+                <div class="bg" part="bg">
                 </div>
-                <div class="reference-wrap">
-                    <div class="reference-line"></div>
+                <div class="reference-wrap"  part="reference-wrap">
+                    <div class="reference-line" part="reference-line"></div>
                 </div>
-                
                 <slot></slot>
             </div>
         `;
