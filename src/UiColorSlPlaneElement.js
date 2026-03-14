@@ -110,6 +110,7 @@ export default class UiColorSlPlaneElement extends HTMLElement {
         color.setHsla(this.h, this.s, this.l);
         return color;
     }
+    toHsl(){ return {h: this.h, s: this.s, l: this.l}; }
 
     /** 감시할 속성 목록 */
     static get observedAttributes() {
@@ -134,7 +135,7 @@ export default class UiColorSlPlaneElement extends HTMLElement {
         if (s === this.s && l === this.l) return;
         this.s = s;
         this.l = l;
-        this.dispatchEvent(new Event('input-saturation-lightness', { bubbles: true,cancelable: true }));
+        this.dispatchEvent(new Event('input-sl', { bubbles: true,cancelable: true }));
 
     }
 
@@ -144,7 +145,7 @@ export default class UiColorSlPlaneElement extends HTMLElement {
         if (s === this.s && l === this.l) return;
         this.s = s;
         this.l = l;
-        this.dispatchEvent(new Event('input-saturation-lightness', { bubbles: true,cancelable: true }));
+        this.dispatchEvent(new Event('input-sl', { bubbles: true,cancelable: true }));
     }
 
     onpointerup(event) {
@@ -157,7 +158,7 @@ export default class UiColorSlPlaneElement extends HTMLElement {
         }
         this._sFromDown = null
         this._lFromDown = null
-        this.dispatchEvent(new Event('change-saturation-lightness', { bubbles: true,cancelable: true }));
+        this.dispatchEvent(new Event('change-sl', { bubbles: true,cancelable: true }));
     }
 
     onpointercancel(event) {
@@ -165,16 +166,18 @@ export default class UiColorSlPlaneElement extends HTMLElement {
     }
 
     [Symbol.toPrimitive](hint) {
-        
         if (hint === 'number'){
             const color = this.toColor()
             return color.toRgbNumber();
         } 
-        if (hint === 'string') return this.toString()
-        return this.toString()
+        if (hint === 'string') return this.toHslString()
+        return this.toHslString()
     }
-    toString() { 
+    toHslString() { 
         return `hsl(${this.hue}, ${this.saturation} ${this.lightness})`;
+    }
+    toString(){
+        return this.toHslString()
     }
 
     toColor(){

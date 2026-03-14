@@ -42,8 +42,8 @@
         UiColorSlPlaneElement.defineCustomElement();
     </script>
     <script>
-        document.addEventListener('input-saturation-lightness', (event) => { console.log(event.type,event.target.h,event.target.s,event.target.l) });
-        document.addEventListener('change-saturation-lightness', (event) => { console.log(event.type,event.target.h,event.target.s,event.target.l) });
+        document.addEventListener('input-sl', (event) => { console.log(event.type,event.target.h,event.target.s,event.target.l) });
+        document.addEventListener('change-sl', (event) => { console.log(event.type,event.target.h,event.target.s,event.target.l) });
     </script>
     
 </head>
@@ -56,7 +56,8 @@
         <ui-color-sl-plane id="target" style="width: 500px;height: 300px;" data-hue="90" data-saturation="0.7" data-lightness="0.3"></ui-color-sl-plane>
         <div class="my-3">
             <input type="range" min="0" max="360" step="1" value="90" oninput="document.querySelector('#target').h = this.value">
-            <button type="button" class="btn btn-primary" onclick="alert(document.querySelector('#target').toString())">toString()</button>
+            <button type="button" class="btn btn-primary" onclick="alert(JSON.stringify(document.querySelector('#target').toHsl()))">toHsl()</button>
+            <button type="button" class="btn btn-primary" onclick="alert(document.querySelector('#target').toString())">toHslString()</button>
             <button type="button" class="btn btn-primary" onclick="alert(JSON.stringify(document.querySelector('#target').toColor().toHsl()))">.toColor().toHsl()</button>
             <button type="button" class="btn btn-primary" onclick="alert(document.querySelector('#target').toColor().toHslString())">.toColor().toHslString()</button>
         </div>
