@@ -114,13 +114,22 @@ export default class UiColorPickerHueElement extends HTMLElement {
             <style>
                 :host {
                     --h: 0;
-                    --h-percent: calc( var(--h,0) / 360 * 100% );
+                    --h-position: calc( var(--h,0) / 360 * 100% );
                     user-select: none;
                     touch-action: none;
                     display: block;
                     min-width: 20px;
                     min-height: 20px;
-                    cursor: crosshair;
+                    cursor: ns-resize
+                }
+                :host([data-dir="horizontal"]){
+                    cursor: ew-resize
+                }
+                :host::part(track){
+                    width: 100%;
+                    height: 100%;
+                    position: relative;
+                    overflow: hidden;
                 }
                 :host::part(bg){
                     pointer-events: none;
@@ -128,29 +137,29 @@ export default class UiColorPickerHueElement extends HTMLElement {
                     inset:0px;
                     --bg-diriction: to bottom;
                     background: linear-gradient(var(--bg-diriction),
-                        hsl(0, 100%, 50%),
-                        hsl(60, 100%, 50%),
-                        hsl(120, 100%, 50%),
-                        hsl(180, 100%, 50%),
-                        hsl(240, 100%, 50%),
-                        hsl(300, 100%, 50%),
-                        hsl(360, 100%, 50%)
+                        hsl(0,100%,50%),
+                        hsl(30,100%,50%),
+                        hsl(60,100%,50%),
+                        hsl(90,100%,50%),
+                        hsl(120,100%,50%),
+                        hsl(150,100%,50%),
+                        hsl(180,100%,50%),
+                        hsl(210,100%,50%),
+                        hsl(240,100%,50%),
+                        hsl(270,100%,50%),
+                        hsl(300,100%,50%),
+                        hsl(330,100%,50%),
+                        hsl(360,100%,50%)
                     );
                 }
                 :host([data-dir="horizontal"])::part(bg){
                     --bg-diriction: to right;
                 }
-                :host::part(track){
-                    z-index: 1;
-                    width: 100%;
-                    height: 100%;
-                    position: relative;
-                    overflow: hidden;
-                }
+
                 :host::part(hue-indicator){
                     z-index: 2;
                     position: absolute;
-                    top: var(--h-percent, 0%);
+                    top: var(--h-position, 0%);
                     transform: translateY(-50%);
                     left: 0;
                     width: 100%;
@@ -166,7 +175,7 @@ export default class UiColorPickerHueElement extends HTMLElement {
                 :host([data-dir="horizontal"])::part(hue-indicator){
                     flex-direction: column;
                     top: 0;
-                    left: var(--h-percent, 0%);
+                    left: var(--h-position, 0%);
                     transform: translateX(-50%);
                     width: 1%;
                     height: 100%;
@@ -178,8 +187,9 @@ export default class UiColorPickerHueElement extends HTMLElement {
                     width: 100%;
                     height: 100%;
                     box-sizing: content-box;
-                    border: 1px solid rgba(255, 255, 255, 0.75);
+                    border: 1px solid rgba(255, 255, 255, 1);
                     border-width: var(--border-width) 0px;
+                    box-shadow:0 0 0 1px rgba(0,0,0,0.75);
                 }
                 :host([data-dir="horizontal"])::part(hue-handle){
                     border-width: 0px var(--border-width);
@@ -187,8 +197,7 @@ export default class UiColorPickerHueElement extends HTMLElement {
 
             </style>
             <div part="track">
-                <div part="bg">
-                </div>
+                <div part="bg"></div>
                 <div part="hue-indicator">
                     <div part="hue-handle"></div>
                 </div>
