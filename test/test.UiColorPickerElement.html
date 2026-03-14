@@ -1,55 +1,63 @@
 <!doctype html>
 <html lang="ko" >
 <head>
-    <title>ui-color-picker</title>
+    <title>Test - UiColorPickerElement</title>
     <meta charset="utf-8">
     <meta http-equiv="Content-Script-Type" content="text/javascript">
     <meta http-equiv="Content-Style-Type" content="text/css">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="shortcut icon" href="http://www.mins01.com/favicon.ico">
+    <link rel="shortcut icon" href="http://www.mins01.com/favicon.ico"> 
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <script src="/js/ForGoogle.js"></script>
     <!-- google analytics -->
     <script>if(window.ForGoogle){ ForGoogle.analytics() }else{ console.log("failure : ForGoogle.analytics()");}</script>
-
+    
 
     <!-- jquery 관련 -->
     <!-- <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script> -->
 
     <!-- 부트스트랩 5.3.x -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 
     <!-- vue.js -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
-
+    
     <!-- meta og -->
-
-    <meta property="og:title" content="ui-color-picker">
-    <meta property="og:description" content="ui-color-picker">
+    
+    <meta property="og:title" content="Test - UiColorPickerElement">
+    <meta property="og:description" content="Test - UiColorPickerElement">
     <meta property="og:image" content="http://www.mins01.com/img/logo.gif">
     <meta property="og:image:width" content="190">
     <meta property="og:image:height" content="70" />
-    <meta property="og:site_name" content="ui-color-picker" />
+    <meta property="og:site_name" content="Test - UiColorPickerElement" />
     <meta property="og:type" content="website">
-
+    
     <!-- //meta og -->
-
-
+    
+    <script type="module">
+        import UiColorPickerElement from '../src/UiColorPickerElement.js';
+        UiColorPickerElement.defineCustomElement();
+    </script>
+    <script>
+        document.addEventListener('input-sl', (event) => { console.log(event.type,event.target.h,event.target.s,event.target.l) });
+        document.addEventListener('change-sl', (event) => { console.log(event.type,event.target.h,event.target.s,event.target.l) });
+    </script>
+    
 </head>
+
 <body>
-    <div class="container">
-        <h1>ui-color-picker</h1>
+    <div class="container" id="container0">
+        <h1>Test - UiColorPickerElement</h1>
         <hr>
-        <ul class="list-group">
-            <li class="list-group-item"><a href="test/test.UiColorHueBarElement.html">test.UiColorHueBarElement.html</li>
-            <li class="list-group-item"><a href="test/test.UiColorSlPlaneElement.html">test.UiColorSlPlaneElement.html</li>
-            <li class="list-group-item"><a href="test/test.UiColorPickerElement.html">test.UiColorPickerElement.html</li>
-            <li class="list-group-item">항목 2</li>
-            <li class="list-group-item">항목 3</li>
-        </ul>
+
+        <ui-color-picker id="target" style="width: 500px;height: 500px;" onclick="console.log(this.value);" value="#aabbcc">
+            11
+        </ui-color-picker>
+        
     </div>
+    
 </body>
 </html>
