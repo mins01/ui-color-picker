@@ -58,7 +58,7 @@ export default class UiColorPickerElement extends HTMLElement {
         this.pendingColor.setColor(this.selectedColor);
         this.render();
         this.syncSelectedColor();
-        this.syncPartColorFprSelected();
+        this.syncPartColorForSelected();
         this.syncPendingColor();
     }
 
@@ -94,7 +94,8 @@ export default class UiColorPickerElement extends HTMLElement {
      * ========================= */
 
     setColor(color) {
-        this.selectedColor.setColor(color);
+        this.setPendingColor(color)
+        this.setSelectedColor(color)
     }
     setPendingColor(color) {
         this.pendingColor.setColor(color);
@@ -120,7 +121,7 @@ export default class UiColorPickerElement extends HTMLElement {
             this.syncToElement(this.selectedColor,el);
         })
     }
-    syncPartColorFprSelected() {
+    syncPartColorForSelected() {
         document.querySelectorAll('.sync-part-color').forEach((el) => {
             this.syncToElement(this.selectedColor,el);
         })
@@ -158,7 +159,7 @@ export default class UiColorPickerElement extends HTMLElement {
         this.dispatchEvent(new Event('confirm-color-picker', { bubbles: true, cancelable: true }));
     }
     cancel() {
-        if(!this.pendingColor.equals(this.selectedColor)) this.syncPartColorFprSelected();
+        if(!this.pendingColor.equals(this.selectedColor)) this.syncPartColorForSelected();
         this.pendingColor.setColor(this.selectedColor);
         this.syncPendingColor()
         this.syncSelectedColor()

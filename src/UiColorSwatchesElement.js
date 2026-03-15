@@ -109,6 +109,7 @@ export default class UiColorSwatchesElement extends HTMLElement {
         if(!swatch || swatch.classList.contains('locked')) return
         swatch?.classList?.toggle('pinned');
         this.renderSorted()
+        this.autoSaveStorage();
     }
     renderSorted(){ // 색상 정렬
         this.querySelectorAll('.swatch.locked').forEach(swatch=>this.append(swatch))
