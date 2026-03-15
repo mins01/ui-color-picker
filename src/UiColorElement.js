@@ -52,10 +52,7 @@ export default class UiColorElement extends HTMLElement {
     attributeChangedCallback(name, oldValue, newValue) {
         if (oldValue === newValue) return;
 
-        if (name === 'value') {
-            this.value = newValue;
-            console.log(name, newValue, this.value);
-        }
+        if (name === 'value') { this.value = newValue; }
     }
 
     /* =========================

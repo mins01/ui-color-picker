@@ -12,10 +12,11 @@ export default class UiColorSwatchesElement extends HTMLElement {
     static swatchClassName ="swatch"
     static maxlength = 10;
     static storageKey = 'ui-color-swatches';
+    static autoSave = false;
 
     /** 감시할 속성 목록 */
     static get observedAttributes() {
-        return ['value','maxlength'];
+        return ['value','maxlength','storage-key','auto-save'];
     }
 
     /** 커스텀 엘리먼트 등록 */
@@ -51,23 +52,29 @@ export default class UiColorSwatchesElement extends HTMLElement {
 
     connectedCallback() {
         this.render();
+        if(this.autoSave) this.loadStorage();
         this.renderSorted()
         this.trim()
-        console.log(this.maxlength);
-        
     }
 
     disconnectedCallback() {}
 
     attributeChangedCallback(name, oldValue, newValue) {
-        console.log('xxxxxxxxxxxxx',name);
         if (oldValue === newValue) return;
         
-        if(name == 'value') this.value = newValue;
-        if(name == 'maxlength') {
+        if(name === 'value') this.value = newValue;
+        if(name === 'maxlength') {
             this.maxlength = Number(newValue);
             this.trim()
         }
+        if(name === 'storage-key') {
+            this.storageKey = newValue;
+        }
+        if(name === 'auto-save') {
+            this.autoSave = Boolean(newValue);
+            console.log(newValue,Boolean(newValue));
+        }
+        
     }
 
     /* =========================
@@ -112,17 +119,21 @@ export default class UiColorSwatchesElement extends HTMLElement {
     }
     addSwatch(color,{locked=false,pinned=false,recent=true}={}){
         let swatch = null
+        let addedSwatch = null
         if(!this.hasColor(color)){
-            swatch = this.createSwatch(color,{locked,pinned,recent});
-            if(swatch){
+            addedSwatch = this.createSwatch(color,{locked,pinned,recent});
+            if(addedSwatch){
                 const firstNotPinned = this.querySelector('.swatch:not(.pinned)');
-                if(firstNotPinned) firstNotPinned.before(swatch);
-                else this.append(swatch);   
+                if(firstNotPinned) firstNotPinned.before(addedSwatch);
+                else this.append(addedSwatch);   
                 this.trim()
             }
         }
         this.selectColor(color)
         this.renderSorted()
+        if(addedSwatch){
+            if(this.autoSave) this.saveStorage()
+        }
         return swatch;
     }
     createSwatch(color,{locked=false,pinned=false,recent=true}={}){ // 색상 생성
@@ -187,6 +198,8 @@ export default class UiColorSwatchesElement extends HTMLElement {
 
     saveStorage(){ // 색상 저장
         localStorage.setItem(this.storageKey,JSON.stringify(this));
+        console.log('saveStorage',this.storageKey);
+        
     }
     loadStorage(){ // 색상 로드
         const data = JSON.parse(localStorage.getItem(this.storageKey));
@@ -201,6 +214,7 @@ export default class UiColorSwatchesElement extends HTMLElement {
         }
         this.renderSorted()
         this.trim()
+        console.log('loadStorage',this.storageKey);
     }
     toJSON(){
         const data = {swatches:[]}
@@ -213,7 +227,6 @@ export default class UiColorSwatchesElement extends HTMLElement {
                 recent:swatch.classList.contains('recent'),
                 color:swatch.color.clone()
             });
-            console.log(swatch.color.toString());
         }
         return data;
     }

@@ -7,13 +7,13 @@
     <meta http-equiv="Content-Style-Type" content="text/css">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="shortcut icon" href="http://www.mins01.com/favicon.ico"> 
+    <link rel="shortcut icon" href="http://www.mins01.com/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <script src="/js/ForGoogle.js"></script>
     <!-- google analytics -->
     <script>if(window.ForGoogle){ ForGoogle.analytics() }else{ console.log("failure : ForGoogle.analytics()");}</script>
-    
+
 
     <!-- jquery 관련 -->
     <!-- <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script> -->
@@ -24,9 +24,9 @@
 
     <!-- vue.js -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
-    
+
     <!-- meta og -->
-    
+
     <meta property="og:title" content="Test - UiColorSwatchesElement">
     <meta property="og:description" content="Test - UiColorSwatchesElement">
     <meta property="og:image" content="http://www.mins01.com/img/logo.gif">
@@ -34,9 +34,9 @@
     <meta property="og:image:height" content="70" />
     <meta property="og:site_name" content="Test - UiColorSwatchesElement" />
     <meta property="og:type" content="website">
-    
+
     <!-- //meta og -->
-    
+
     <script type="module">
         import Color from "../../third_party/js-color/v2/src/Color.js";
         window.Color = Color;
@@ -81,7 +81,7 @@
             justify-content: flex-end;
             align-items: flex-end;
         }
-        
+
         .swatch.selected{}
         .swatch.selected::before{
             content: '';
@@ -98,9 +98,9 @@
     <div class="container" id="container0">
         <h1>Test - UiColorSwatchesElement</h1>
         <hr>
-        <ui-color-swatches  style="width: 400px;--font-size:40px" class="swatches d-flex gap-1 flex-wrap" 
+        <ui-color-swatches  style="width: 400px;--font-size:40px" class="swatches d-flex gap-1 flex-wrap"
             maxlength="5"
-            onclick="if(event.target.classList.contains('swatch')){console.log(event.target.value); this.selectColor(event.target.color)}" 
+            onclick="if(event.target.classList.contains('swatch')){console.log(event.target.value); this.selectColor(event.target.color)}"
             ondblclick="if(event.target.classList.contains('swatch')){console.log(event.target.value); this.togglePinSwatch(event.target)}"
             value="#aabbcc"
             >
@@ -117,8 +117,15 @@
             <ui-color class="swatch recent" value="#cb1"  >삭제</ui-color>
         </ui-color-swatches>
         <hr>
-        <ui-color-swatches id="swatches" style="width: 400px;" class="swatches d-flex gap-1 flex-wrap" 
-            onclick="if(event.target.classList.contains('swatch')){console.log(event.target.value); this.selectColor(event.target.color)}" 
+        <ui-color-swatches
+            id="swatches"
+            maxlength="15"
+            storage-key="swatches-test"
+            auto-save="0"
+
+            style="width: 400px;"
+            class="swatches d-flex gap-1 flex-wrap"
+            onclick="if(event.target.classList.contains('swatch')){console.log(event.target.value); this.selectColor(event.target.color)}"
             ondblclick="if(event.target.classList.contains('swatch')){console.log(event.target.value); this.togglePinSwatch(event.target)}"
             >
             <ui-color class="swatch locked" value="#ffcc00"  ></ui-color>
@@ -136,33 +143,37 @@
             <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').getSelectedSwatch()?.remove()">getSelectedSwatch()?.remove() 선택된 색 삭제</button>
             <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').replaceChildren()">초기화</button>
             <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').clearSwatches()">clearSwatches() 초기화(locked 제외)</button>
-            
+
             <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').saveStorage()">saveStorage() 저장</button>
-            <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').loadStorage()">loadStorage() 로드</button>            
+            <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').loadStorage()">loadStorage() 로드</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').autoSave=false">autoSave=false</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').autoSave=true">autoSave=true</button>
         </div>
         <script>
-            window.addEventListener('load', (event) => { 
+            window.addEventListener('load', (event) => {
                 const swatches = document.getElementById('swatches')
                 swatches.maxRecentSwatches = 5;
-                swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
-                swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
-                swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
-                swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
-                swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
-                swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
-                swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
-                swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
-                swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
-                swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
-                swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
-                swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
-                swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
-                swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
-                swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                // swatches.autoSave = false;
+                // swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                // swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                // swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                // swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                // swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                // swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                // swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                // swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                // swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                // swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                // swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                // swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                // swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                // swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                // swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                // swatches.autoSave = true;
 
             });
         </script>
     </div>
-    
+
 </body>
 </html>
