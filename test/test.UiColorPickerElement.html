@@ -43,15 +43,20 @@
         UiColorHueBarElement.defineCustomElement();
         import UiColorSlPlaneElement from '../src/UiColorSlPlaneElement.js';
         UiColorSlPlaneElement.defineCustomElement();
+        import UiColorSwatchesElement from '../src/UiColorSwatchesElement.js';
+        UiColorSwatchesElement.defineCustomElement();
         import UiColorPickerElement from '../src/UiColorPickerElement.js';
         UiColorPickerElement.defineCustomElement();
+        
     </script>
     <script>
         // document.addEventListener('input-sl', (event) => { console.log(event,event.target.h,event.target.s,event.target.l) });
         // document.addEventListener('change-sl', (event) => { console.log(event.type,event.target.h,event.target.s,event.target.l) });
 
 
-        document.addEventListener('confirm-color-picker', (event) => { console.log(event.type,event.target.color.toRgbString()) });
+        document.addEventListener('confirm-color-picker', (event) => { 
+            console.log(event.type,event.target.color.toRgbString())
+        });
         document.addEventListener('cancel-color-picker', (event) => { console.log(event.type,event.target.color.toRgbString()) });
         
     </script>
@@ -93,6 +98,53 @@
         }
 
     </style>
+    <style>
+        .swatches{
+            --font-size:16px;
+            --border-radius: 4px;
+        }
+        .swatch{
+            width: calc( var(--font-size,20px) * 2 );
+            height: calc( var(--font-size,20px) * 2 );
+            border-radius: var(--border-radius);
+            user-select: none;
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .swatch.locked{}
+        .swatch.locked::after{
+            content: '🔒';
+            font-size: calc( var(--font-size) * 0.8 );
+            position: absolute;
+            inset: 0;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-end;
+        }
+        .swatch.pinned{}
+        .swatch.pinned::after{
+            content: '📌';
+            font-size:  calc( var(--font-size) * 0.8 );
+            position: absolute;
+            inset: 0;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-end;
+        }
+        
+        .swatch.selected{}
+        .swatch.selected::before{
+            content: '';
+            inset: 0;
+            border-radius: var(--border-radius);
+            position: absolute;
+            box-sizing: border-box;
+            border:2px solid #000
+        }
+    </style>
 </head>
 
 <body>
@@ -103,8 +155,8 @@
         <ui-color-picker id="picker" style="max-width: 400px;" onclick="console.log(this.pendingColor.toRgbString());" value="#aabbcc">
             <div class="d-flex flex-column gap-2">
                 <div class="d-flex gap-1" style="width: 100%;height: auto; aspect-ratio: 6/3;">
-                    <ui-color-sl-plane class="sync-hue-bar sync-part-selected-color rounded border border-1 overflow-hidden" style="flex: 1 0 auto; aspect-ratio: 1/1;"></ui-color-sl-plane>
-                    <ui-color-hue-bar class="rounded border sync-part-selected-color border-1 overflow-hidden" style="flex: 0 0 30px;"></ui-color-hue-bar>
+                    <ui-color-sl-plane class="sync-hue-bar sync-part-color rounded border border-1 overflow-hidden" style="flex: 1 0 auto; aspect-ratio: 1/1;"></ui-color-sl-plane>
+                    <ui-color-hue-bar class="rounded border sync-part-color border-1 overflow-hidden" style="flex: 0 0 30px;"></ui-color-hue-bar>
                 </div>
                 <div class="d-flex flex-wrap gap-2">
                     <div class="d-flex gap-1 col">
@@ -116,11 +168,14 @@
                         <button type="button" class="btn btn-secondary btn-sm col" onclick="this.closest('ui-color-picker').cancel()" >Cancel</button>
                     </div>
                 </div>
-                <div class="swatches d-flex gap-1 flex-wrap p-1" onclick="this.closest('ui-color-picker').syncPendingColor(event.target.color);">
-                    <ui-color class="btn static swatch" value="#000"></ui-color>
-                    <ui-color class="btn static swatch" value="#fff"></ui-color>
-                    <ui-color class="btn static swatch" value="#f00"></ui-color>
-                </div>
+                <ui-color-swatches class="sync-selected-color swatches d-flex flex-wrap gap-1" 
+                    onclick="if(event.target.classList.contains('swatch')){this.selectColor(event.target.color); this.closest('ui-color-picker').setPendingColor(event.target.color);}"
+                    ondblclick="if(event.target.classList.contains('swatch')){console.log(event.target.value); this.togglePinSwatch(event.target)}"
+                    >
+                    <ui-color class="swatch locked" value="#ffcc00"  ></ui-color>
+
+                </ui-color-swatches>
+                
             </div>
         </ui-color-picker>
         

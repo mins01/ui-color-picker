@@ -57,7 +57,7 @@ export default class UiColorPickerElement extends HTMLElement {
         this.pendingColor.setColor(this.selectedColor);
         this.render();
         this.syncSelectedColor();
-        this.syncPartSelectedColor();
+        this.syncPartColorFprSelected();
         this.syncPendingColor();
     }
 
@@ -95,6 +95,11 @@ export default class UiColorPickerElement extends HTMLElement {
     setColor(color) {
         this.selectedColor.setColor(color);
     }
+    setPendingColor(color) {
+        this.pendingColor.setColor(color);
+        this.syncPendingColor();
+        this.syncPartColorForPending();
+    }
 
     toColor() {
         return this.selectedColor.clone();
@@ -109,14 +114,18 @@ export default class UiColorPickerElement extends HTMLElement {
             el.setColor(this.selectedColor);
         })
     }
-    syncPartSelectedColor() {
-        document.querySelectorAll('.sync-part-selected-color').forEach((el) => {
+    syncPartColorFprSelected() {
+        document.querySelectorAll('.sync-part-color').forEach((el) => {
             el.setColor(this.selectedColor);
         })
     }
-    syncPendingColor(color) {
-        if(color){this.pendingColor.setColor(color)}
+    syncPendingColor() {
         document.querySelectorAll('.sync-pending-color').forEach((el) => {
+            el.setColor(this.pendingColor);
+        })
+    }
+    syncPartColorForPending(){
+        document.querySelectorAll('.sync-part-color').forEach((el) => {
             el.setColor(this.pendingColor);
         })
     }
@@ -132,12 +141,9 @@ export default class UiColorPickerElement extends HTMLElement {
         this.selectedColor.setColor(this.pendingColor);
         this.syncSelectedColor()
         this.dispatchEvent(new Event('confirm-color-picker', { bubbles: true, cancelable: true }));
-
-        this.addSwatch(this.selectedColor);
-        this.selectSwatch(this.selectedColor)
     }
     cancel() {
-        if(!this.pendingColor.equals(this.selectedColor)) this.syncPartSelectedColor();
+        if(!this.pendingColor.equals(this.selectedColor)) this.syncPartColorFprSelected();
         this.pendingColor.setColor(this.selectedColor);
         this.syncPendingColor()
         
