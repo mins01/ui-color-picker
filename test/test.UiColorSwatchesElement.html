@@ -47,7 +47,10 @@
     </script>
     <style>
         .swatch{width: 20px;height: 20px;}
+        .swatch.fixed{transform: scale(0.75) rotate(45deg);}
         .swatch.pinned{border-radius: 50%;}
+        .swatch.selected{border:2px solid #000;}
+        
     </style>    
 </head>
 
@@ -55,31 +58,43 @@
     <div class="container" id="container0">
         <h1>Test - UiColorSwatchesElement</h1>
         <hr>
-        <ui-color-swatches id="swatches" style="width: 400px;" class="d-flex gap-1 flex-wrap" onclick="if(event.target.classList.contains('swatch')){alert(event.target.value)}" >
+        <ui-color-swatches id="swatches" style="width: 400px;" class="d-flex gap-1 flex-wrap" 
+            onclick="if(event.target.classList.contains('swatch')){console.log(event.target.value); this.selectColor(event.target.color)}" 
+            ondblclick="if(event.target.classList.contains('swatch')){console.log(event.target.value); this.togglePinSwatch(event.target)}"
+            >
+            <ui-color class="swatch fixed" value="#ffcc00"  ></ui-color>
             <ui-color class="swatch pinned" value="#aabbcc"  ></ui-color>
             <ui-color class="swatch recent" value="#cba"  ></ui-color>
         </ui-color-swatches>
         <hr>
-        <button type="button" class="btn btn-primary" onclick="document.getElementById('swatches').addSwatch(Color.fromString('#aa00cc'))">add #aa00cc</button>
-        <button type="button" class="btn btn-primary" onclick="document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1))">렌덤 최근색(trim 됨)</button>
-        <button type="button" class="btn btn-primary" onclick="document.getElementById('swatches').addPinned(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1))">랜덤 고정색(trim 안됨)</button>
+        <div class="d-flex flex-wrap gap-1">
+            <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').addFixed(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1))">랜덤 fixed 추가(trim 안됨)</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').addPinned(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1))">랜덤 pinned 추가(trim 안됨)</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1))">렌덤 recent 추가(trim 됨)</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').addColor(Color.fromString('#aa00cc'))">최근 색 추가 #aa00cc(같은 색은 중복 추가 안됨)</button>
+
+            <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').getSelectedSwatch()?.remove()">선택된 색 삭제</button>
+
+        </div>
         <script>
             window.addEventListener('load', (event) => { 
-                document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
-                document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
-                document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
-                document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
-                document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
-                document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
-                document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
-                document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
-                document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
-                document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
-                document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
-                document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
-                document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
-                document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
-                document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                const swatches = document.getElementById('swatches')
+                swatches.maxRecentSwatches = 5;
+                swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                swatches.addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
 
             });
         </script>

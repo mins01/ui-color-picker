@@ -49,6 +49,7 @@ export default class UiColorSwatchesElement extends HTMLElement {
 
     connectedCallback() {
         this.render();
+        this.renderSorted()
     }
 
     disconnectedCallback() {}
@@ -60,23 +61,44 @@ export default class UiColorSwatchesElement extends HTMLElement {
     /* =========================
      * public API
      * ========================= */
-    addSwatch(color,{pinned=false,recent=true}={}){ 
-        if(this.hasSwatch(color)) return;
-        const swatch = window.document.createElement('ui-color');
-        swatch.setColor(color);
-        swatch.className = this.swatchClassName
-        swatch.classList.add('swatch');
-        if(pinned) swatch.classList.add('pinned');
-        if(recent) swatch.classList.add('recent');
-
-        const firstNotPinned = this.querySelector('.swatch:not(.pinned)');
-        if(firstNotPinned) firstNotPinned.before(swatch);
-        else this.appendChild(swatch);
-
-        this.trimNotPinned()
+    selectColor(color){ // 색상 선택
+        const swatches = this.querySelectorAll('.swatch');
+        for (const swatch of swatches) {
+            swatch.color.equals(color)?swatch.classList.add('selected'):swatch.classList.remove('selected')
+        }
+    }
+    getSelectedSwatch(){
+        return this.querySelector('.swatch.selected')
+    }
+    togglePinSwatch(swatch){ // 고정 색상 변경
+        swatch?.classList?.toggle('pinned');
+        this.renderSorted()
+    }
+    renderSorted(){ // 색상 정렬
+        this.querySelectorAll('.swatch.fixed').forEach(swatch=>this.append(swatch))
+        this.querySelectorAll('.swatch.pinned').forEach(swatch=>this.append(swatch))
+        this.querySelectorAll('.swatch:not(.fixed):not(.pinned)').forEach(swatch=>this.append(swatch))
         
     }
-    hasSwatch(color){ // 색상 중복 금지
+    addSwatch(color,{fixed=false,pinned=false,recent=true}={}){ 
+        if(!this.hasColor(color)){
+            const swatch = window.document.createElement('ui-color');
+            swatch.setColor(color);
+            swatch.className = this.swatchClassName
+            swatch.classList.add('swatch');
+            if(fixed) swatch.classList.add('fixed');
+            if(pinned) swatch.classList.add('pinned');
+            if(recent) swatch.classList.add('recent');
+    
+            const firstNotPinned = this.querySelector('.swatch:not(.pinned)');
+            if(firstNotPinned) firstNotPinned.before(swatch);
+            else this.append(swatch);   
+            this.trimNotPinned()
+        }
+        this.selectColor(color)
+        this.renderSorted()
+    }
+    hasColor(color){ // 색상 중복 금지
         const swatches = this.querySelectorAll('.swatch');
         for (const swatch of swatches) {
             if(swatch.color.equals(color)){
@@ -85,7 +107,7 @@ export default class UiColorSwatchesElement extends HTMLElement {
         }
         return false;
     }
-    removeSwatch(color){ // 색상 삭제
+    removeColor(color){ // 색상 삭제
         const swatches = this.querySelectorAll('.swatch');
         for (const swatch of swatches) {
             if(swatch.color.equals(color)){
@@ -94,15 +116,19 @@ export default class UiColorSwatchesElement extends HTMLElement {
         }
     }
 
-    addPinned(color){ // 고정 색상 추가
-        return this.addSwatch(color,{pinned:true,recent:false})
+    addFixed(color){ // 고정 색상 추가
+        return this.addSwatch(color,{fixed:true,pinned:false,recent:false})
     }
+    addPinned(color){ // 사용자 고정 색상 추가
+        return this.addSwatch(color,{fixed:false,pinned:true,recent:false})
+    }
+    
     addRecent(color){ // 최근 색상 추가
-        return this.addSwatch(color,{pinned:false,recent:true})
+        return this.addSwatch(color,{fixed:false,pinned:false,recent:true})
     }
     
     trimNotPinned(max=this.maxRecentSwatches){ // 최근 색상 수 제한
-        const notPinneds = this.querySelectorAll('.swatch:not(.pinned)');
+        const notPinneds = this.querySelectorAll('.swatch:not(.pinned):not(.fixed)');
         if(notPinneds.length > max){
             notPinneds[notPinneds.length-1].remove();
         }
