@@ -1,109 +1,130 @@
 import Color from "../third_party/js-color/v2/src/Color.js";
+
 export default class UiColorElement extends HTMLElement {
-    /** @type {string} 커스텀 엘리먼트 태그명 */
+
+    /* =========================
+     * static
+     * ========================= */
+
+    /** 커스텀 엘리먼트 태그명 */
     static tagName = 'ui-color';
+
+    /** 감시할 속성 목록 */
+    static get observedAttributes() {
+        return ['value'];
+    }
 
     /** 커스텀 엘리먼트 등록 */
     static defineCustomElement(tagName = this.tagName) {
         if (!customElements.get(tagName)) {
             customElements.define(tagName, this);
-            console.log('defineCustomElement',tagName);
-            
+            console.log('defineCustomElement', tagName);
         }
     }
 
-    
-    
-
-
+    /* =========================
+     * fields
+     * ========================= */
 
     color = new Color();
-    
-    /** 생성자: Shadow DOM 초기화 */
+
+    /* =========================
+     * constructor
+     * ========================= */
+
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
         this.syncStyle();
     }
 
+    /* =========================
+     * lifecycle
+     * ========================= */
 
-    /** 감시할 속성 목록 */
-    static get observedAttributes() {
-        return ['value'];
-    }
-    
-    /** DOM에 추가될 때 호출 */
     connectedCallback() {
         this.render();
     }
 
-    /** DOM에서 제거될 때 호출 */
-    disconnectedCallback() {
-    }
+    disconnectedCallback() {}
 
-    /** 속성 변경 시 호출 */
     attributeChangedCallback(name, oldValue, newValue) {
-        
-        
-        if(oldValue === newValue) return;
-        if(name=='value'){
+        if (oldValue === newValue) return;
+
+        if (name === 'value') {
             this.value = newValue;
-            console.log(name,newValue,this.value);
+            console.log(name, newValue, this.value);
         }
-        // if (oldValue !== newValue) { this.render(); }
     }
 
-    syncStyle(){
-        this.style.setProperty('--color', this.color.toRgbaString());
+    /* =========================
+     * getter / setter
+     * ========================= */
+
+    set value(value) {
+        const color = Color.fromString(value);
+        this.setColor(color);
     }
+
+    get value() {
+        return this.color.toRgbString();
+    }
+
+    /* =========================
+     * public API
+     * ========================= */
 
     setColor(color) {
         this.color.setColor(color);
         this.syncStyle();
     }
-    setRgba(r,g,b,a=null){ 
-        this.color.setRgba(r,g,b,a);
+
+    setRgba(r, g, b, a = null) {
+        this.color.setRgba(r, g, b, a);
         this.syncStyle();
     }
-    
 
-    set value(value) { 
-        const color = Color.fromString(value)
-        this.setColor(color);
-    }
-    get value() { return this.color.toRgbString(); }
-
-    /** 감시할 속성 목록 */
-    static get observedAttributes() {
-        return ['value'];
+    toColor() {
+        return this.color.clone();
     }
 
-    
+    /* =========================
+     * string / conversion
+     * ========================= */
+
+    toString(type = Color.toStringType) {
+        return this.color.toString(type);
+    }
+
+    /* =========================
+     * primitive / serialization
+     * ========================= */
+
     [Symbol.toPrimitive](hint) {
-        if (hint === 'number'){
-            const color = this.toColor()
+        if (hint === 'number') {
+            const color = this.toColor();
             return color.toRgbNumber();
-        } 
-        if (hint === 'string') return this.toHslString()
-        return this.toHslString()
+        }
+        if (hint === 'string') return this.toHslString();
+        return this.toHslString();
     }
-
-    toColor(){
-        return this.color.clone()
-    }
-    toHslString() { 
-        return `hsl(${this.hue}, ${this.saturation} ${this.lightness})`;
-    }
-    toString(type=Color.toStringType){
-        return this.color.toString(type)
-    }
-
 
     toJSON() {
         return this.color.toJSON();
     }
 
-    /** Shadow DOM 렌더링 */
+    /* =========================
+     * internal
+     * ========================= */
+
+    syncStyle() {
+        this.style.setProperty('--color', this.color.toRgbaString());
+    }
+
+    /* =========================
+     * render
+     * ========================= */
+
     render() {
         this.shadowRoot.innerHTML = `
             <style>

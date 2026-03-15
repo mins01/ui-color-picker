@@ -49,15 +49,50 @@
     <script>
         // document.addEventListener('input-sl', (event) => { console.log(event,event.target.h,event.target.s,event.target.l) });
         // document.addEventListener('change-sl', (event) => { console.log(event.type,event.target.h,event.target.s,event.target.l) });
+
+
+        document.addEventListener('confirm-color-picker', (event) => { console.log(event.type,event.target.color.toRgbString()) });
+        document.addEventListener('cancel-color-picker', (event) => { console.log(event.type,event.target.color.toRgbString()) });
+        
     </script>
     <style>
+        ui-color.btn{
+            --bs-btn-bg: var(--color);;
+            --bs-btn-border-color: var(--color);;
+            
+            --bs-btn-hover-bg: var(--color);;
+            --bs-btn-hover-border-color: var(--color);;
+            --bs-btn-focus-shadow-rgb: 49, 132, 253;
+            --bs-btn-active-color: #fff;
+            --bs-btn-active-bg: var(--color);;
+            --bs-btn-active-border-color: var(--color);;
+            
+            --bs-btn-disabled-color: #fff;
+            --bs-btn-disabled-bg: var(--color);;
+            --bs-btn-disabled-border-color: var(--color);;
+        }
+        ui-color-picker{
+            font-size: 16px;
+            --clickable-size:32px;
+        }
+        ui-color-picker .btn,
+        ui-color-picker ui-color{
+            height: var(--clickable-size);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding:0px
+        }
         ui-color-picker .histories{
             background-color: #abc;
             
         }
         ui-color-picker .histories ui-color{
-            width:20px;height: 20px;;
+            width: var(--clickable-size);
+            height: var(--clickable-size);
+            
         }
+
     </style>
 </head>
 
@@ -66,19 +101,29 @@
         <h1>Test - UiColorPickerElement</h1>
         <hr>
 
-        <ui-color-picker id="picker" style="max-width: 500px;height: 500px;" onclick="console.log(this.pendingColor.toRgbString());" value="#aabbcc">
-            <div class="d-flex flex-column gap-3">
+        <ui-color-picker id="picker" style="max-width: 400px;" onclick="console.log(this.pendingColor.toRgbString());" value="#aabbcc">
+            <div class="d-flex flex-column gap-2">
                 <div class="d-flex gap-1" style="width: 100%;height: auto; aspect-ratio: 6/3;">
-                    <ui-color-sl-plane class="rounded border border-1 overflow-hidden" style="flex: 1 0 auto;"></ui-color-sl-plane>
-                    <ui-color-hue-bar class="rounded border border-1 overflow-hidden" style="flex: 0 0 30px;"></ui-color-hue-bar>
+                    <ui-color-sl-plane class="sync-hue-bar sync-part-selected-color rounded border border-1 overflow-hidden" style="flex: 1 0 auto; aspect-ratio: 1/1;"></ui-color-sl-plane>
+                    <ui-color-hue-bar class="rounded border sync-part-selected-color border-1 overflow-hidden" style="flex: 0 0 30px;"></ui-color-hue-bar>
+                </div>
+                <div class="d-flex flex-wrap gap-2">
+                    <div class="d-flex gap-1 col">
+                        <ui-color class="sync-selected-color sync-hue-bar rounded-pill border d-flex justify-content-center align-items-center user-select-none col"><div style="text-shadow: 0px 0px 2px #000; color: #fff;">Selected</div></ui-color>
+                        <ui-color class="sync-pending-color rounded-pill border d-flex justify-content-center align-items-center user-select-none col" value="#fff"><div style="text-shadow: 0px 0px 2px #000; color: #fff;">Pending</div></ui-color>
+                    </div>
+                    <div class="d-flex gap-1 col">
+                        <button type="button" class="btn btn-primary btn-sm col" onclick="this.closest('ui-color-picker').confirm()">Confirm</button>
+                        <button type="button" class="btn btn-secondary btn-sm col" onclick="this.closest('ui-color-picker').cancel()" >Cancel</button>
+                    </div>
                 </div>
                 <div class="histories d-flex gap-1 flex-wrap p-1">
-                    <ui-color class="rounded" value="#000" onclick="this.closest('ui-color-picker').value = this.value;"></ui-color>
-                    <ui-color class="rounded" value="#fff" onclick="this.closest('ui-color-picker').value = this.value;"></ui-color>
-                    <ui-color class="rounded" value="#f00" onclick="this.closest('ui-color-picker').value = this.value;"></ui-color>
-                    <ui-color class="rounded"></ui-color>
-                    <ui-color class="rounded"></ui-color>
-                    <ui-color class="rounded"></ui-color>
+                    <ui-color class="btn static" value="#000" onclick="this.closest('ui-color-picker').syncPendingColor(this.color);"></ui-color>
+                    <ui-color class="btn static" value="#fff" onclick="this.closest('ui-color-picker').syncPendingColor(this.color);"></ui-color>
+                    <ui-color class="btn static" value="#f00" onclick="this.closest('ui-color-picker').syncPendingColor(this.color);"></ui-color>
+                    <ui-color class="btn static"></ui-color>
+                    <ui-color class="btn static"></ui-color>
+                    <ui-color class="btn static"></ui-color>
                 </div>
             </div>
         </ui-color-picker>

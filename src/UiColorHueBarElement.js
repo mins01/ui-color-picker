@@ -1,6 +1,16 @@
 export default class UiColorHueBarElement extends HTMLElement {
-    /** @type {string} 커스텀 엘리먼트 태그명 */
+
+    /* =========================
+     * static
+     * ========================= */
+
+    /** 커스텀 엘리먼트 태그명 */
     static tagName = 'ui-color-hue-bar';
+
+    /** 감시할 속성 목록 */
+    static get observedAttributes() {
+        return ['data-hue'];
+    }
 
     /** 커스텀 엘리먼트 등록 */
     static defineCustomElement(tagName = this.tagName) {
@@ -9,94 +19,148 @@ export default class UiColorHueBarElement extends HTMLElement {
         }
     }
 
-    _h = 0; // hue
-    get h() { return this._h; }
-    set h(value) { 
-        this._h = Number(value); 
+    /* =========================
+     * fields
+     * ========================= */
+
+    _h = 0;
+    _hFromDown = null;
+
+    /* =========================
+     * getter / setter
+     * ========================= */
+
+    get h() { 
+        return this._h; 
+    }
+
+    set h(value) {
+        this._h = Number(value);
         this.style.setProperty('--h', this._h);
+
         const attr = Math.round(this._h);
         if (this.getAttribute('data-hue') !== attr) {
             this.setAttribute('data-hue', attr);
         }
     }
 
-    get hue() { return Math.round(this._h); }
-    set hue(value) { this.h = value; }
-    
-    /** 생성자: Shadow DOM 초기화 */
+    get hue() {
+        return Math.round(this._h);
+    }
+
+    set hue(value) {
+        this.h = value;
+    }
+
+    /* =========================
+     * constructor
+     * ========================= */
+
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
+
         this.addEventListener('pointerdown', this.onpointerdown.bind(this));
         this.addEventListener('pointermove', this.onpointermove.bind(this));
         this.addEventListener('pointerup', this.onpointerup.bind(this));
         this.addEventListener('pointercancel', this.onpointercancel.bind(this));
     }
 
-    /** DOM에 추가될 때 호출 */
+    /* =========================
+     * lifecycle
+     * ========================= */
+
     connectedCallback() {
         this.render();
     }
 
-    /** DOM에서 제거될 때 호출 */
-    disconnectedCallback() {
+    disconnectedCallback() {}
+
+    /* =========================
+     * attribute
+     * ========================= */
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        if (oldValue === newValue) return;
+
+        if (name === 'data-hue') {
+            this.h = Number(newValue);
+        }
     }
 
-    /** 속성 변경 시 호출 */
-    attributeChangedCallback(name, oldValue, newValue) {
-        if(oldValue === newValue) return;
-        if(name=='data-hue') this.h = Number(newValue);
-        // if (oldValue !== newValue) { this.render(); }
-    }
+    /* =========================
+     * public API
+     * ========================= */
 
     setColor(color) {
-        const hsl = color.toHsl()
+        const hsl = color.toHsl();
         this.h = hsl.h;
     }
 
-    /** 감시할 속성 목록 */
-    static get observedAttributes() {
-        return ['data-hue'];
+    /* =========================
+     * internal utilities
+     * ========================= */
+
+    _getHFromEvent(event) {
+        return this.dataset.dir === 'horizontal'
+            ? (Math.max(0, Math.min(1, event.offsetX / this.offsetWidth)) * 360)
+            : (Math.max(0, Math.min(1, event.offsetY / this.offsetHeight)) * 360);
     }
 
-    _getHFromEvent(event){
-        return this.dataset.dir=='horizontal'
-            ?(Math.max(0, Math.min(1, event.offsetX / this.offsetWidth))*360)
-            :(Math.max(0, Math.min(1, event.offsetY / this.offsetHeight))*360)
-    }
-    _hFromDown = null
+    /* =========================
+     * pointer events
+     * ========================= */
+
     onpointerdown(event) {
         this.setPointerCapture(event.pointerId);
-        this._hFromDown = this.h;
-        const h = this._getHFromEvent(event)
-        if (h === this.h) return;
-        this.h = h;
-        this.dispatchEvent(new Event('input-hue', { bubbles: true,cancelable: true }));
 
+        this._hFromDown = this.h;
+
+        const h = this._getHFromEvent(event);
+        if (h === this.h) return;
+
+        this.h = h;
+
+        this.dispatchEvent(
+            new Event('input-hue', { bubbles: true, cancelable: true })
+        );
     }
 
     onpointermove(event) {
         if (!this.hasPointerCapture(event.pointerId)) return;
-        const h = this._getHFromEvent(event)
+
+        const h = this._getHFromEvent(event);
         if (h === this.h) return;
+
         this.h = h;
-        this.dispatchEvent(new Event('input-hue', { bubbles: true,cancelable: true }));
+
+        this.dispatchEvent(
+            new Event('input-hue', { bubbles: true, cancelable: true })
+        );
     }
 
     onpointerup(event) {
         this.releasePointerCapture(event.pointerId);
-        // console.log(this.h ,'===', this._hFromDown);
-        if (this.h === this._hFromDown){
-            this._hFromDown = null    
+
+        if (this.h === this._hFromDown) {
+            this._hFromDown = null;
             return;
-        } 
-        this._hFromDown = null       
-        this.dispatchEvent(new Event('change-hue', { bubbles: true,cancelable: true }));
+        }
+
+        this._hFromDown = null;
+
+        this.dispatchEvent(
+            new Event('change-hue', { bubbles: true, cancelable: true })
+        );
     }
 
     onpointercancel(event) {
         return this.onpointerup(event);
     }
+
+    /* =========================
+     * primitive / serialization
+     * ========================= */
 
     [Symbol.toPrimitive](hint) {
         if (hint === 'number') return this._h;
@@ -108,6 +172,10 @@ export default class UiColorHueBarElement extends HTMLElement {
         return { h: this._h };
     }
 
+    /* =========================
+     * render
+     * ========================= */
+  
     /** Shadow DOM 렌더링 */
     render() {
         this.shadowRoot.innerHTML = `

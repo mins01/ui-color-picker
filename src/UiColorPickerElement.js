@@ -1,7 +1,18 @@
 import Color from "../third_party/js-color/v2/src/Color.js";
+
 export default class UiColorPickerElement extends HTMLElement {
-    /** @type {string} 커스텀 엘리먼트 태그명 */
+
+    /* =========================
+     * static
+     * ========================= */
+
+    /** 커스텀 엘리먼트 태그명 */
     static tagName = 'ui-color-picker';
+
+    /** 감시할 속성 목록 */
+    static get observedAttributes() {
+        return ['value'];
+    }
 
     /** 커스텀 엘리먼트 등록 */
     static defineCustomElement(tagName = this.tagName) {
@@ -10,107 +21,195 @@ export default class UiColorPickerElement extends HTMLElement {
         }
     }
 
-    /** @type {Color} 현재 색 */
-    color = new Color(0,0,0,1); //현재 색
+    /* =========================
+     * fields
+     * ========================= */
 
-    /** @type {Color} 선택중인 색 */
-    pendingColor = new Color(0,0,0,1); //선택중인 색
+    /** 현재 색 */
+    selectedColor = new Color(0,0,0,1)
+    color = this.selectedColor; // alias of selectedColor
 
-    /** 생성자: Shadow DOM 초기화 */
+    /** 선택중인 색 */
+    pendingColor = new Color(0,0,0,1);
+
+    /* =========================
+     * constructor
+     * ========================= */
+
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
+
         this.addEventListener('input-sl', this.oninputSl.bind(this));
         this.addEventListener('change-sl', this.onchangeSl.bind(this));
         this.addEventListener('input-hue', this.oninputHue.bind(this));
         this.addEventListener('change-hue', this.onchangeHue.bind(this));
     }
 
-    oninputHue(event){
+    /* =========================
+     * lifecycle
+     * ========================= */
+
+    connectedCallback() {
+        
+        this.pendingColor.setColor(this.selectedColor);
+        this.render();
+        this.syncSelectedColor();
+        this.syncPartSelectedColor();
+        this.syncPendingColor();
+    }
+
+    disconnectedCallback() {}
+
+    /* =========================
+     * attribute
+     * ========================= */
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        if (oldValue === newValue) return;
+
+        if (name === 'value') {
+            this.value = newValue;
+        }
+    }
+
+    /* =========================
+     * getter / setter
+     * ========================= */
+
+    set value(value) {
+        this.selectedColor.setString(value);
+        this.syncSelectedColor()
+    }
+
+    get value() {
+        return this.selectedColor.toRgbString();
+    }
+
+    /* =========================
+     * public API
+     * ========================= */
+
+    setColor(color) {
+        this.selectedColor.setColor(color);
+    }
+
+    toColor() {
+        return this.selectedColor.clone();
+    }
+
+    toHsl() {
+        return this.selectedColor.toHsl();
+    }
+
+    syncSelectedColor() {
+        document.querySelectorAll('.sync-selected-color').forEach((el) => {
+            el.setColor(this.selectedColor);
+        })
+    }
+    syncPartSelectedColor() {
+        document.querySelectorAll('.sync-part-selected-color').forEach((el) => {
+            el.setColor(this.selectedColor);
+        })
+    }
+    syncPendingColor(color) {
+        if(color){this.pendingColor.setColor(color)}
+        document.querySelectorAll('.sync-pending-color').forEach((el) => {
+            el.setColor(this.pendingColor);
+        })
+    }
+    syncHueBar(target) {
+        console.log(target.h);
+        
+        document.querySelectorAll('.sync-hue-bar').forEach((el) => {
+            el.h = target.h;
+        })
+    }
+
+    confirm() {
+        this.selectedColor.setColor(this.pendingColor);
+        this.syncSelectedColor()
+        this.dispatchEvent(new Event('confirm-color-picker', { bubbles: true, cancelable: true }));
+    }
+    cancel() {
+        if(!this.pendingColor.equals(this.selectedColor)) this.syncPartSelectedColor();
+        this.pendingColor.setColor(this.selectedColor);
+        this.syncPendingColor()
+        
+        this.dispatchEvent(new Event('cancel-color-picker', { bubbles: true, cancelable: true }));
+    }
+
+    /* =========================
+     * event handlers
+     * ========================= */
+
+    oninputHue(event) {
         const target = event.target;
+
         const hsl = this.pendingColor.toHsl();
         hsl.h = target.h;
+
         this.pendingColor.setHsla(hsl.h, hsl.s, hsl.l);
-        console.log(event.type,this.pendingColor.toRgbString(),this.pendingColor.toHslString());
+        this.syncHueBar(target)
+        this.syncPendingColor();
     }
-    onchangeHue(event){
+
+    onchangeHue(event) {
         return this.oninputHue(event);
     }
-    oninputSl(event){
+
+    oninputSl(event) {
         const target = event.target;
+
         const hsl = this.pendingColor.toHsl();
         hsl.s = target.s;
         hsl.l = target.l;
+
         this.pendingColor.setHsla(hsl.h, hsl.s, hsl.l);
-        console.log(event.type,this.pendingColor.toRgbString(),this.pendingColor.toHslString());
-        
+        this.syncPendingColor();
     }
-    onchangeSl(event){
+
+    onchangeSl(event) {
         return this.oninputSl(event);
     }
 
-    /** DOM에 추가될 때 호출 */
-    connectedCallback() {
-        this.render();
-    }
+    /* =========================
+     * conversion / util
+     * ========================= */
 
-    /** DOM에서 제거될 때 호출 */
-    disconnectedCallback() {
-    }
-
-    /** 속성 변경 시 호출 */
-    attributeChangedCallback(name, oldValue, newValue) {
-        if(oldValue === newValue) return;
-        if(name=='value') this.value = newValue;
-        // if (oldValue !== newValue) { this.render(); }
-    }
-
-    setColor(color) {
-        this.color.setColor(color);
-    }
-    toColor(){
-        return this.color.clone()
-    }
-    toHsl(){ return this.color.toHsl(); }
-
-
-    
-
-    set value(value) { 
-        this.color.setString(value);
-    }
-    get value() { return this.color.toRgbString(); }
-
-    /** 감시할 속성 목록 */
-    static get observedAttributes() {
-        return ['value'];
-    }
-
-    
-    [Symbol.toPrimitive](hint) {
-        if (hint === 'number'){
-            const color = this.toColor()
-            return color.toRgbNumber();
-        } 
-        if (hint === 'string') return this.toHslString()
-        return this.toHslString()
-    }
-    toHslString() { 
+    toHslString() {
         return `hsl(${this.hue}, ${this.saturation} ${this.lightness})`;
     }
-    toString(type=Color.toStringType){
-        return this.color.toString(type)
+
+    toString(type = Color.toStringType) {
+        return this.selectedColor.toString(type);
     }
 
-    toColor(){
-        return this.color.clone()
+    /* =========================
+     * primitive / serialization
+     * ========================= */
+
+    [Symbol.toPrimitive](hint) {
+        if (hint === 'number') {
+            const color = this.toColor();
+            return color.toRgbNumber();
+        }
+
+        if (hint === 'string') {
+            return this.toHslString();
+        }
+
+        return this.toHslString();
     }
 
     toJSON() {
-        return this.color.toJSON();
+        return this.selectedColor.toJSON();
     }
 
-    /** Shadow DOM 렌더링 */
+    /* =========================
+     * render
+     * ========================= */
+
     render() {
         this.shadowRoot.innerHTML = `
             <style>
