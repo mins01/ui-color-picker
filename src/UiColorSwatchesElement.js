@@ -13,10 +13,12 @@ export default class UiColorSwatchesElement extends HTMLElement {
     static maxlength = 10;
     static storageKey = 'ui-color-swatches';
     static autoSave = false;
+    static autoLoad = false;
+    
 
     /** 감시할 속성 목록 */
     static get observedAttributes() {
-        return ['value','maxlength','storage-key','auto-save'];
+        return ['value','maxlength','storage-key','auto-save','auto-load'];
     }
 
     /** 커스텀 엘리먼트 등록 */
@@ -52,7 +54,7 @@ export default class UiColorSwatchesElement extends HTMLElement {
 
     connectedCallback() {
         this.render();
-        if(this.autoSave) this.loadStorage();
+        this.autoLoadStorage();
         this.renderSorted()
         this.trim()
     }
@@ -67,13 +69,10 @@ export default class UiColorSwatchesElement extends HTMLElement {
             this.maxlength = Number(newValue);
             this.trim()
         }
-        if(name === 'storage-key') {
-            this.storageKey = newValue;
-        }
-        if(name === 'auto-save') {
-            this.autoSave = Boolean(newValue);
-            console.log(newValue,Boolean(newValue));
-        }
+        if(name === 'storage-key') { this.storageKey = newValue; }
+        if(name === 'auto-save') { this.autoSave = Boolean(newValue); }
+        if(name === 'auto-load') { this.autoLoad = Boolean(newValue); }
+        
         
     }
 
@@ -132,7 +131,7 @@ export default class UiColorSwatchesElement extends HTMLElement {
         this.selectColor(color)
         this.renderSorted()
         if(addedSwatch){
-            if(this.autoSave) this.saveStorage()
+            this.autoSaveStorage();
         }
         return swatch;
     }
@@ -196,10 +195,18 @@ export default class UiColorSwatchesElement extends HTMLElement {
     }
 
 
+    autoSaveStorage(){ // 자동 색상 저장
+        if(!this.autoSave) return;
+        this.saveStorage();
+    }
     saveStorage(){ // 색상 저장
         localStorage.setItem(this.storageKey,JSON.stringify(this));
         console.log('saveStorage',this.storageKey);
         
+    }
+    autoLoadStorage(){ // 자동 로드
+        if(!this.autoLoad) return;
+        this.loadStorage();
     }
     loadStorage(){ // 색상 로드
         const data = JSON.parse(localStorage.getItem(this.storageKey));
