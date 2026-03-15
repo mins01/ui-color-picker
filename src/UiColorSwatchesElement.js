@@ -87,7 +87,8 @@ export default class UiColorSwatchesElement extends HTMLElement {
      * public API
      * ========================= */
     setColor(color){ // 색상 변경
-        this.selectColor(color);
+        // this.selectColor(color);
+        this.addRecent(color);
     }
     selectColor(color){ // 색상 선택
         const swatches = this.querySelectorAll('.swatch');

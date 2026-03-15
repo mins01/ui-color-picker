@@ -105,7 +105,7 @@
             ondblclick="if(event.target.classList.contains('swatch')){console.log(event.target.value); this.togglePinSwatch(event.target)}"
             value="#aabbcc"
             >
-            <ui-color class="swatch locked" value="#ffcc00"  >유지</ui-color>
+            <ui-color class="swatch locked" value="#ff00ff"  >유지</ui-color>
             <ui-color class="swatch pinned" value="#aabbcc"  >선택유지</ui-color>
             <ui-color class="swatch recent" value="#cba"  >유지</ui-color>
             <ui-color class="swatch recent" value="#cba"  >유지</ui-color>
@@ -128,17 +128,18 @@
         </ui-color-swatches>
         <hr>
         <div class="d-flex flex-wrap gap-1">
-            <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').addlocked(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1))">랜덤 fixed 추가(trim 안됨)</button>
-            <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').addPinned(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1))">랜덤 pinned 추가(trim 안됨)</button>
-            <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1))">렌덤 recent 추가(trim 됨)</button>
-            <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').addRecent(Color.fromString('#aa00cc'))">최근 색 추가 #aa00cc(같은 색은 중복 추가 안됨)</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').addlocked(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1))">addlocked(랜덤) (trim 안됨)</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').addPinned(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1))">addPinned(랜덤) (trim 안됨)</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1))">addRecent(랜덤) (trim 됨)</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').addRecent(Color.fromString('#aa00cc'))">addRecent(#aa00cc) (같은 색은 중복 추가 안됨)</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').setColor(Color.fromString('#aa00cc'))">setColor(#aa00cc) (다른 요소 연동용)</button>
 
-            <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').getSelectedSwatch()?.remove()">선택된 색 삭제</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').getSelectedSwatch()?.remove()">getSelectedSwatch()?.remove() 선택된 색 삭제</button>
             <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').replaceChildren()">초기화</button>
-            <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').clearSwatches()">초기화(locked 제외)</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').clearSwatches()">clearSwatches() 초기화(locked 제외)</button>
             
-            <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').saveStorage()">저장</button>
-            <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').loadStorage()">로드</button>            
+            <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').saveStorage()">saveStorage() 저장</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').loadStorage()">loadStorage() 로드</button>            
         </div>
         <script>
             window.addEventListener('load', (event) => { 
