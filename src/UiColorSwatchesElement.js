@@ -10,12 +10,12 @@ export default class UiColorSwatchesElement extends HTMLElement {
     static tagName = 'ui-color-swatches';
 
     static swatchClassName ="swatch"
-    static maxRecentSwatches = 10;
+    static maxlength = 10;
     static storageKey = 'ui-color-swatches';
 
     /** 감시할 속성 목록 */
     static get observedAttributes() {
-        return ['value'];
+        return ['value','maxlength'];
     }
 
     /** 커스텀 엘리먼트 등록 */
@@ -32,7 +32,7 @@ export default class UiColorSwatchesElement extends HTMLElement {
 
     color = new Color();
     swatchClassName = UiColorSwatchesElement.swatchClassName
-    maxRecentSwatches = UiColorSwatchesElement.maxRecentSwatches
+    maxlength = UiColorSwatchesElement.maxlength
     storageKey = UiColorSwatchesElement.storageKey
 
     /* =========================
@@ -52,17 +52,43 @@ export default class UiColorSwatchesElement extends HTMLElement {
     connectedCallback() {
         this.render();
         this.renderSorted()
+        this.trim()
+        console.log(this.maxlength);
+        
     }
 
     disconnectedCallback() {}
 
     attributeChangedCallback(name, oldValue, newValue) {
+        console.log('xxxxxxxxxxxxx',name);
         if (oldValue === newValue) return;
+        
+        if(name == 'value') this.value = newValue;
+        if(name == 'maxlength') {
+            this.maxlength = Number(newValue);
+            this.trim()
+        }
+    }
+
+    /* =========================
+     * getter / setter
+     * ========================= */
+
+    set value(value) {
+        const color = Color.fromString(value);
+        this.selectColor(color);
+    }
+
+    get value() {
+        return this.getSelectedSwatch()?.color?.toRgbString();
     }
 
     /* =========================
      * public API
      * ========================= */
+    setColor(color){ // 색상 변경
+        this.selectColor(color);
+    }
     selectColor(color){ // 색상 선택
         const swatches = this.querySelectorAll('.swatch');
         for (const swatch of swatches) {
@@ -83,7 +109,7 @@ export default class UiColorSwatchesElement extends HTMLElement {
         this.querySelectorAll('.swatch:not(.locked):not(.pinned)').forEach(swatch=>this.append(swatch))
         
     }
-    addSwatch(color,{locked=false,pinned=false,recent=true}={},autoSelected=true){
+    addSwatch(color,{locked=false,pinned=false,recent=true}={}){
         let swatch = null
         if(!this.hasColor(color)){
             swatch = this.createSwatch(color,{locked,pinned,recent});
@@ -91,11 +117,10 @@ export default class UiColorSwatchesElement extends HTMLElement {
                 const firstNotPinned = this.querySelector('.swatch:not(.pinned)');
                 if(firstNotPinned) firstNotPinned.before(swatch);
                 else this.append(swatch);   
-                this.trimNotLocked()
+                this.trim()
             }
-   
         }
-        if(autoSelected) this.selectColor(color)
+        this.selectColor(color)
         this.renderSorted()
         return swatch;
     }
@@ -108,7 +133,6 @@ export default class UiColorSwatchesElement extends HTMLElement {
         if(pinned) swatch.classList.add('pinned');
         // if(recent) swatch.classList.add('recent');
         return swatch;
-
     }
     clearSwatches(){ // 색상 삭제
         const swatches = this.querySelectorAll('.swatch:not(.locked)');
@@ -146,12 +170,11 @@ export default class UiColorSwatchesElement extends HTMLElement {
         return this.addSwatch(color,{locked:false,pinned:false,recent:true})
     }
     
-    trimNotLocked(max=this.maxRecentSwatches){ // 최근 색상 수 제한
+    trim(maxlength=this.maxlength){ // 최근 색상 수 제한
         const withPinneds = this.querySelectorAll('.swatch:not(.locked)');
-        if(withPinneds.length > max){
-            const diff = withPinneds.length - max;
+        if(withPinneds.length > maxlength){
+            const diff = withPinneds.length - maxlength;
             const recents = this.querySelectorAll('.swatch:not(.pinned):not(.locked)');
-            console.log(recents,max);
             
             if(!recents.length) return false;
             for (let i = 0; i < diff && i < recents.length; i++) {
@@ -176,7 +199,7 @@ export default class UiColorSwatchesElement extends HTMLElement {
             }
         }
         this.renderSorted()
-        this.trimNotLocked()
+        this.trim()
     }
     toJSON(){
         const data = {swatches:[]}

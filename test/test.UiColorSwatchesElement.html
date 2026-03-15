@@ -54,27 +54,32 @@
             width: calc( var(--font-size,20px) * 2 );
             height: calc( var(--font-size,20px) * 2 );
             border-radius: var(--border-radius);
-            display: flex;
-            justify-content: flex-end;
-            align-items: flex-end;
+            user-select: none;
             position: relative;
             cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .swatch.locked{}
         .swatch.locked::after{
             content: '🔒';
             font-size: calc( var(--font-size) * 0.8 );
             position: absolute;
-            right: 0;
-            bottom: 0;
+            inset: 0;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-end;
         }
         .swatch.pinned{}
         .swatch.pinned::after{
             content: '📌';
             font-size:  calc( var(--font-size) * 0.8 );
             position: absolute;
-            right: 0;
-            bottom: 0;
+            inset: 0;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-end;
         }
         
         .swatch.selected{}
@@ -95,12 +100,22 @@
         <h1>Test - UiColorSwatchesElement</h1>
         <hr>
         <ui-color-swatches  style="width: 400px;--font-size:40px" class="swatches d-flex gap-1 flex-wrap" 
+            maxlength="5"
             onclick="if(event.target.classList.contains('swatch')){console.log(event.target.value); this.selectColor(event.target.color)}" 
             ondblclick="if(event.target.classList.contains('swatch')){console.log(event.target.value); this.togglePinSwatch(event.target)}"
+            value="#aabbcc"
             >
-            <ui-color class="swatch locked" value="#ffcc00"  ></ui-color>
-            <ui-color class="swatch pinned" value="#aabbcc"  ></ui-color>
-            <ui-color class="swatch recent" value="#cba"  ></ui-color>
+            <ui-color class="swatch locked" value="#ffcc00"  >유지</ui-color>
+            <ui-color class="swatch pinned" value="#aabbcc"  >선택유지</ui-color>
+            <ui-color class="swatch recent" value="#cba"  >유지</ui-color>
+            <ui-color class="swatch recent" value="#cba"  >유지</ui-color>
+            <ui-color class="swatch recent" value="#cbb"  >유지</ui-color>
+            <ui-color class="swatch recent" value="#cbd"  >유지</ui-color>
+            <ui-color class="swatch recent" value="#cb8"  >삭제</ui-color>
+            <ui-color class="swatch recent" value="#cb7"  >삭제</ui-color>
+            <ui-color class="swatch recent" value="#cb6"  >삭제</ui-color>
+            <ui-color class="swatch recent" value="#cb3"  >삭제</ui-color>
+            <ui-color class="swatch recent" value="#cb1"  >삭제</ui-color>
         </ui-color-swatches>
         <hr>
         <ui-color-swatches id="swatches" style="width: 400px;" class="swatches d-flex gap-1 flex-wrap" 
@@ -113,7 +128,7 @@
         </ui-color-swatches>
         <hr>
         <div class="d-flex flex-wrap gap-1">
-            <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').addFixed(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1))">랜덤 fixed 추가(trim 안됨)</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').addlocked(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1))">랜덤 fixed 추가(trim 안됨)</button>
             <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').addPinned(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1))">랜덤 pinned 추가(trim 안됨)</button>
             <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1))">렌덤 recent 추가(trim 됨)</button>
             <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').addRecent(Color.fromString('#aa00cc'))">최근 색 추가 #aa00cc(같은 색은 중복 추가 안됨)</button>
