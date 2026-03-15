@@ -102,6 +102,12 @@
         .swatches{
             --font-size:16px;
             --border-radius: 4px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(calc( var(--font-size,20px) * 2 ), 1fr)); 
+            gap: 4px;
+            align-items: center;
+            justify-items: center;
+            justify-content: start;
         }
         .swatch{
             width: calc( var(--font-size,20px) * 2 );
@@ -113,6 +119,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            border: 1px solid #ccc;
+
         }
         .swatch.locked{}
         .swatch.locked::after{
@@ -134,11 +142,11 @@
             justify-content: flex-end;
             align-items: flex-end;
         }
-        
+
         .swatch.selected{}
         .swatch.selected::before{
             content: '';
-            inset: 0;
+            inset: -1px;
             border-radius: var(--border-radius);
             position: absolute;
             box-sizing: border-box;
@@ -168,13 +176,30 @@
                         <button type="button" class="btn btn-secondary btn-sm col" onclick="this.closest('ui-color-picker').cancel()" >Cancel</button>
                     </div>
                 </div>
-                <ui-color-swatches class="sync-selected-color swatches d-flex flex-wrap gap-1" 
-                    onclick="if(event.target.classList.contains('swatch')){this.selectColor(event.target.color); this.closest('ui-color-picker').setPendingColor(event.target.color);}"
-                    ondblclick="if(event.target.classList.contains('swatch')){console.log(event.target.value); this.togglePinSwatch(event.target)}"
-                    >
-                    <ui-color class="swatch locked" value="#ffcc00"  ></ui-color>
+                <div class="overflow-auto" style="height: 200px;">
+                    <ui-color-swatches 
+                        maxlength="40"
+                        storage-key="color-picker-test"
+                        auto-save="1"
+                        auto-load="1"
+                        class="sync-selected-color swatches " 
+                        onclick="if(event.target.classList.contains('swatch')){this.selectColor(event.target.color); this.closest('ui-color-picker').setPendingColor(event.target.color);}"
+                        ondblclick="if(event.target.classList.contains('swatch')){console.log(event.target.value); this.togglePinSwatch(event.target)}"
+                        >
+                        <ui-color class="swatch locked" value="#000000"></ui-color> <!-- black -->
+                        <ui-color class="swatch locked" value="#FFFFFF"></ui-color> <!-- white -->
+    
+                        <ui-color class="swatch locked" value="#FF0000"></ui-color> <!-- red -->
+                        <ui-color class="swatch locked" value="#00FF00"></ui-color> <!-- green -->
+                        <ui-color class="swatch locked" value="#0000FF"></ui-color> <!-- blue -->
+    
+                        <ui-color class="swatch locked" value="#FFFF00"></ui-color> <!-- yellow -->
+                        <ui-color class="swatch locked" value="#00FFFF"></ui-color> <!-- cyan -->
+                        <ui-color class="swatch locked" value="#FF00FF"></ui-color> <!-- magenta -->
+    
+                    </ui-color-swatches>
 
-                </ui-color-swatches>
+                </div>
                 
             </div>
         </ui-color-picker>

@@ -49,6 +49,12 @@
         .swatches{
             --font-size:16px;
             --border-radius: 4px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(calc( var(--font-size,20px) * 2 ), 1fr)); 
+            gap: 4px;
+            align-items: center;
+            justify-items: center;
+            justify-content: start;
         }
         .swatch{
             width: calc( var(--font-size,20px) * 2 );
@@ -60,6 +66,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            border: 1px solid #ccc;
+
         }
         .swatch.locked{}
         .swatch.locked::after{
@@ -85,7 +93,7 @@
         .swatch.selected{}
         .swatch.selected::before{
             content: '';
-            inset: 0;
+            inset: -1px;
             border-radius: var(--border-radius);
             position: absolute;
             box-sizing: border-box;
@@ -98,7 +106,7 @@
     <div class="container" id="container0">
         <h1>Test - UiColorSwatchesElement</h1>
         <hr>
-        <ui-color-swatches  style="width: 400px;--font-size:40px" class="swatches d-flex gap-1 flex-wrap"
+        <ui-color-swatches  style="max-width: 400px;--font-size:40px" class="swatches"
             maxlength="5"
             onclick="if(event.target.classList.contains('swatch')){console.log(event.target.value); this.selectColor(event.target.color)}"
             ondblclick="if(event.target.classList.contains('swatch')){console.log(event.target.value); this.togglePinSwatch(event.target)}"
@@ -124,11 +132,13 @@
             auto-save="1"
             auto-load="1"
 
-            style="width: 400px;"
-            class="swatches d-flex gap-1 flex-wrap"
+            style="max-width: 400px;"
+            class="swatches"
             onclick="if(event.target.classList.contains('swatch')){console.log(event.target.value); this.selectColor(event.target.color)}"
             ondblclick="if(event.target.classList.contains('swatch')){console.log(event.target.value); this.togglePinSwatch(event.target)}"
             >
+            <ui-color class="swatch locked" value="#000"  ></ui-color>
+            <ui-color class="swatch locked" value="#fff"  ></ui-color>
             <ui-color class="swatch locked" value="#ffcc00"  ></ui-color>
             <ui-color class="swatch pinned" value="#aabbcc"  ></ui-color>
             <ui-color class="swatch recent" value="#cba"  ></ui-color>
