@@ -46,6 +46,7 @@ export default class UiColorPickerElement extends HTMLElement {
         this.addEventListener('change-sl', this.onchangeSl.bind(this));
         this.addEventListener('input-hue', this.oninputHue.bind(this));
         this.addEventListener('change-hue', this.onchangeHue.bind(this));
+        this.addEventListener('input', this.oninput.bind(this));
     }
 
     /* =========================
@@ -100,6 +101,11 @@ export default class UiColorPickerElement extends HTMLElement {
         this.syncPendingColor();
         this.syncPartColorForPending();
     }
+    setSelectedColor(color) {
+        this.selectedColor.setColor(color);
+        this.syncSelectedColor();
+        this.syncPartColorForSelected();
+    }
 
     toColor() {
         return this.selectedColor.clone();
@@ -111,30 +117,39 @@ export default class UiColorPickerElement extends HTMLElement {
 
     syncSelectedColor() {
         document.querySelectorAll('.sync-selected-color').forEach((el) => {
-            el.setColor(this.selectedColor);
+            this.syncToElement(this.selectedColor,el);
         })
     }
     syncPartColorFprSelected() {
         document.querySelectorAll('.sync-part-color').forEach((el) => {
-            el.setColor(this.selectedColor);
+            this.syncToElement(this.selectedColor,el);
         })
     }
     syncPendingColor() {
         document.querySelectorAll('.sync-pending-color').forEach((el) => {
-            el.setColor(this.pendingColor);
+            this.syncToElement(this.pendingColor,el);
         })
     }
     syncPartColorForPending(){
         document.querySelectorAll('.sync-part-color').forEach((el) => {
-            el.setColor(this.pendingColor);
+            this.syncToElement(this.pendingColor,el);
         })
     }
     syncHueBar(target) {
-        console.log(target.h);
-        
+        console.log(target.h);    
         document.querySelectorAll('.sync-hue-bar').forEach((el) => {
             el.h = target.h;
         })
+    }
+
+    syncToElement(color,toElement){
+        if(toElement.setColor) toElement.setColor(color);
+        if ('value' in toElement) { 
+            const str = color.toString(toElement.dataset.toStringType);
+            console.log(str);
+            
+            if(toElement.value !== str) toElement.value = str;
+        }
     }
 
     confirm() {
@@ -146,43 +161,11 @@ export default class UiColorPickerElement extends HTMLElement {
         if(!this.pendingColor.equals(this.selectedColor)) this.syncPartColorFprSelected();
         this.pendingColor.setColor(this.selectedColor);
         this.syncPendingColor()
+        this.syncSelectedColor()
         
         this.dispatchEvent(new Event('cancel-color-picker', { bubbles: true, cancelable: true }));
     }
 
-    selectSwatch(color) {
-        const swatches = this.querySelectorAll('.swatches .swatch');
-        for (const swatch of swatches) {
-            swatch.classList.remove('selected');
-            if(swatch.color.equals(color)){
-                swatch.classList.add('selected');
-            }
-        }
-    }
-    addSwatch(color) {
-        const swatch = window.document.createElement('ui-color');
-        swatch.classList.add('swatch');
-        swatch.classList.add('recent');
-        swatch.setColor(color);
-        // this.querySelector('.swatches').appendChild(swatch);
-        
-        const swatches = this.querySelectorAll('.swatches .swatch');
-        for (const swatch of swatches) {
-            if(swatch.color.equals(color)){ // 색상 중복 금지
-                return;
-            }
-        }
-
-        const recents = this.querySelectorAll('.swatches .swatch.recent');
-        if(swatches.length > this.maxSwatches){
-            recents[0].remove();
-        }
-        if(!recents.length){
-            this.querySelector('.swatches').appendChild(swatch);
-        }else{
-            recents[0].before(swatch);
-        }
-    }
 
     /* =========================
      * event handlers
@@ -195,8 +178,8 @@ export default class UiColorPickerElement extends HTMLElement {
         hsl.h = target.h;
 
         this.pendingColor.setHsla(hsl.h, hsl.s, hsl.l);
-        this.syncHueBar(target)
         this.syncPendingColor();
+        this.syncHueBar(target);
     }
 
     onchangeHue(event) {
@@ -216,6 +199,24 @@ export default class UiColorPickerElement extends HTMLElement {
 
     onchangeSl(event) {
         return this.oninputSl(event);
+    }
+
+    oninput(event) {
+        const target = event.target;
+        if(!target.dataset.setColor) return;
+
+        const color = Color.fromString(target.value);
+        if(!color) return
+        console.log(target.value,color);
+        
+
+        if(target.dataset.setColor ==='pendingColor') {
+            this.setPendingColor(color);
+        }else if(target.dataset.setColor ==='selectedColor') {
+            this.setSelectedColor(color);
+        }
+        
+        this.syncPendingColor();
     }
 
     /* =========================
