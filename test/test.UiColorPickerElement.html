@@ -143,14 +143,20 @@
             align-items: flex-end;
         }
 
-        .swatch.selected{}
+        .swatch.selected{
+            border:1px solid #fff;
+            box-shadow:0 0 0 1px #000;
+        }
         .swatch.selected::before{
-            content: '';
-            inset: -1px;
+            content: '✔️';
+            inset: 0px;
             border-radius: var(--border-radius);
             position: absolute;
             box-sizing: border-box;
-            border:2px solid #000
+            /* border:2px solid #000; */
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
     </style>
 </head>
@@ -166,17 +172,19 @@
                     <ui-color-sl-plane class="sync-hue-bar sync-part-color rounded border border-1 overflow-hidden" style="flex: 1 0 auto; aspect-ratio: 1/1;"></ui-color-sl-plane>
                     <ui-color-hue-bar class="rounded border sync-part-color border-1 overflow-hidden" style="flex: 0 0 30px;"></ui-color-hue-bar>
                 </div>
-                <div class="d-flex flex-wrap gap-2">
-                    <div class="d-flex gap-1 col">
-                        <ui-color class="sync-selected-color sync-hue-bar rounded-pill border d-flex justify-content-center align-items-center user-select-none col"><div style="text-shadow: 0px 0px 2px #000; color: #fff;">Selected</div></ui-color>
-                        <ui-color class="sync-pending-color rounded-pill border d-flex justify-content-center align-items-center user-select-none col" value="#fff"><div style="text-shadow: 0px 0px 2px #000; color: #fff;">Pending</div></ui-color>
-                    </div>
-                    <div class="d-flex gap-1 col">
-                        <button type="button" class="btn btn-primary btn-sm col" onclick="this.closest('ui-color-picker').confirm()">Confirm</button>
-                        <button type="button" class="btn btn-secondary btn-sm col" onclick="this.closest('ui-color-picker').cancel()" >Cancel</button>
+                <div class="p-1">
+                    <div class="d-flex flex-wrap gap-2">
+                        <div class="d-flex gap-1 col">
+                            <ui-color class="sync-selected-color sync-hue-bar rounded-pill border d-flex justify-content-center align-items-center user-select-none col"><div style="text-shadow: 0px 0px 2px #000; color: #fff;">Selected</div></ui-color>
+                            <ui-color class="sync-pending-color rounded-pill border d-flex justify-content-center align-items-center user-select-none col" value="#fff"><div style="text-shadow: 0px 0px 2px #000; color: #fff;">Pending</div></ui-color>
+                        </div>
+                        <div class="d-flex gap-1 col">
+                            <button type="button" class="btn btn-primary btn-sm col" onclick="this.closest('ui-color-picker').confirm()">Confirm</button>
+                            <button type="button" class="btn btn-secondary btn-sm col" onclick="this.closest('ui-color-picker').cancel()" >Cancel</button>
+                        </div>
                     </div>
                 </div>
-                <div class="overflow-auto" style="height: 200px;">
+                <div class="overflow-auto p-1" style="height: 200px;">
                     <ui-color-swatches 
                         maxlength="40"
                         storage-key="color-picker-test"

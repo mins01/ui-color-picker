@@ -90,14 +90,20 @@
             align-items: flex-end;
         }
 
-        .swatch.selected{}
+        .swatch.selected{
+            border:1px solid #fff;
+            box-shadow:0 0 0 1px #000;
+        }
         .swatch.selected::before{
-            content: '';
-            inset: -1px;
+            content: '✔️';
+            inset: 0px;
             border-radius: var(--border-radius);
             position: absolute;
             box-sizing: border-box;
-            border:2px solid #000
+            /* border:2px solid #000; */
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
     </style>
 </head>
