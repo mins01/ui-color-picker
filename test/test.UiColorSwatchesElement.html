@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ko" >
+<head>
+    <title>Test - UiColorSwatchesElement</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Script-Type" content="text/javascript">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="http://www.mins01.com/favicon.ico"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="/js/ForGoogle.js"></script>
+    <!-- google analytics -->
+    <script>if(window.ForGoogle){ ForGoogle.analytics() }else{ console.log("failure : ForGoogle.analytics()");}</script>
+    
+
+    <!-- jquery 관련 -->
+    <!-- <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script> -->
+
+    <!-- 부트스트랩 5.3.x -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+    <!-- vue.js -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+    
+    <!-- meta og -->
+    
+    <meta property="og:title" content="Test - UiColorSwatchesElement">
+    <meta property="og:description" content="Test - UiColorSwatchesElement">
+    <meta property="og:image" content="http://www.mins01.com/img/logo.gif">
+    <meta property="og:image:width" content="190">
+    <meta property="og:image:height" content="70" />
+    <meta property="og:site_name" content="Test - UiColorSwatchesElement" />
+    <meta property="og:type" content="website">
+    
+    <!-- //meta og -->
+    
+    <script type="module">
+        import Color from "../../third_party/js-color/v2/src/Color.js";
+        window.Color = Color;
+        import UiColorElement from '../src/UiColorElement.js';
+        UiColorElement.defineCustomElement();
+        import UiColorSwatchesElement from '../src/UiColorSwatchesElement.js';
+        UiColorSwatchesElement.defineCustomElement();
+    </script>
+    <style>
+        .swatch{width: 20px;height: 20px;}
+        .swatch.pinned{border-radius: 50%;}
+    </style>    
+</head>
+
+<body>
+    <div class="container" id="container0">
+        <h1>Test - UiColorSwatchesElement</h1>
+        <hr>
+        <ui-color-swatches id="swatches" style="width: 400px;" class="d-flex gap-1 flex-wrap" onclick="if(event.target.classList.contains('swatch')){alert(event.target.value)}" >
+            <ui-color class="swatch pinned" value="#aabbcc"  ></ui-color>
+            <ui-color class="swatch recent" value="#cba"  ></ui-color>
+        </ui-color-swatches>
+        <hr>
+        <button type="button" class="btn btn-primary" onclick="document.getElementById('swatches').addSwatch(Color.fromString('#aa00cc'))">add #aa00cc</button>
+        <button type="button" class="btn btn-primary" onclick="document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1))">렌덤 최근색(trim 됨)</button>
+        <button type="button" class="btn btn-primary" onclick="document.getElementById('swatches').addPinned(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1))">랜덤 고정색(trim 안됨)</button>
+        <script>
+            window.addEventListener('load', (event) => { 
+                document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+                document.getElementById('swatches').addRecent(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1));
+
+            });
+        </script>
+    </div>
+    
+</body>
+</html>
