@@ -87,10 +87,9 @@
             background-color: #abc;
             
         }
-        ui-color-picker .histories ui-color{
+        ui-color-picker .swatches .swatch{
             width: var(--clickable-size);
             height: var(--clickable-size);
-            
         }
 
     </style>
@@ -117,13 +116,10 @@
                         <button type="button" class="btn btn-secondary btn-sm col" onclick="this.closest('ui-color-picker').cancel()" >Cancel</button>
                     </div>
                 </div>
-                <div class="histories d-flex gap-1 flex-wrap p-1">
-                    <ui-color class="btn static" value="#000" onclick="this.closest('ui-color-picker').syncPendingColor(this.color);"></ui-color>
-                    <ui-color class="btn static" value="#fff" onclick="this.closest('ui-color-picker').syncPendingColor(this.color);"></ui-color>
-                    <ui-color class="btn static" value="#f00" onclick="this.closest('ui-color-picker').syncPendingColor(this.color);"></ui-color>
-                    <ui-color class="btn static"></ui-color>
-                    <ui-color class="btn static"></ui-color>
-                    <ui-color class="btn static"></ui-color>
+                <div class="swatches d-flex gap-1 flex-wrap p-1" onclick="this.closest('ui-color-picker').syncPendingColor(event.target.color);">
+                    <ui-color class="btn static swatch" value="#000"></ui-color>
+                    <ui-color class="btn static swatch" value="#fff"></ui-color>
+                    <ui-color class="btn static swatch" value="#f00"></ui-color>
                 </div>
             </div>
         </ui-color-picker>

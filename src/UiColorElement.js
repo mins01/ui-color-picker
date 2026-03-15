@@ -35,7 +35,7 @@ export default class UiColorElement extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
-        this.syncStyle();
+        
     }
 
     /* =========================
@@ -44,6 +44,7 @@ export default class UiColorElement extends HTMLElement {
 
     connectedCallback() {
         this.render();
+        this.syncStyle();
     }
 
     disconnectedCallback() {}

@@ -32,6 +32,8 @@ export default class UiColorPickerElement extends HTMLElement {
     /** 선택중인 색 */
     pendingColor = new Color(0,0,0,1);
 
+    maxSwatches = 30;
+
     /* =========================
      * constructor
      * ========================= */
@@ -130,6 +132,9 @@ export default class UiColorPickerElement extends HTMLElement {
         this.selectedColor.setColor(this.pendingColor);
         this.syncSelectedColor()
         this.dispatchEvent(new Event('confirm-color-picker', { bubbles: true, cancelable: true }));
+
+        this.addSwatch(this.selectedColor);
+        this.selectSwatch(this.selectedColor)
     }
     cancel() {
         if(!this.pendingColor.equals(this.selectedColor)) this.syncPartSelectedColor();
@@ -137,6 +142,40 @@ export default class UiColorPickerElement extends HTMLElement {
         this.syncPendingColor()
         
         this.dispatchEvent(new Event('cancel-color-picker', { bubbles: true, cancelable: true }));
+    }
+
+    selectSwatch(color) {
+        const swatches = this.querySelectorAll('.swatches .swatch');
+        for (const swatch of swatches) {
+            swatch.classList.remove('selected');
+            if(swatch.color.equals(color)){
+                swatch.classList.add('selected');
+            }
+        }
+    }
+    addSwatch(color) {
+        const swatch = window.document.createElement('ui-color');
+        swatch.classList.add('swatch');
+        swatch.classList.add('recent');
+        swatch.setColor(color);
+        // this.querySelector('.swatches').appendChild(swatch);
+        
+        const swatches = this.querySelectorAll('.swatches .swatch');
+        for (const swatch of swatches) {
+            if(swatch.color.equals(color)){ // 색상 중복 금지
+                return;
+            }
+        }
+
+        const recents = this.querySelectorAll('.swatches .swatch.recent');
+        if(swatches.length > this.maxSwatches){
+            recents[0].remove();
+        }
+        if(!recents.length){
+            this.querySelector('.swatches').appendChild(swatch);
+        }else{
+            recents[0].before(swatch);
+        }
     }
 
     /* =========================
