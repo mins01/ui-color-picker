@@ -43,15 +43,14 @@ export default class UiColorElement extends HTMLElement {
      * ========================= */
 
     connectedCallback() {
-        this.render();
-        this.syncStyle();
+        if (!this.shadowRoot.firstChild) this.render(); 
+        this._syncStyle();
     }
 
-    disconnectedCallback() {}
+    // disconnectedCallback() {}
 
     attributeChangedCallback(name, oldValue, newValue) {
         if (oldValue === newValue) return;
-
         if (name === 'value') { this.value = newValue; }
     }
 
@@ -61,11 +60,11 @@ export default class UiColorElement extends HTMLElement {
 
     set value(value) {
         const color = Color.fromString(value);
-        this.setColor(color);
+        if(color) this.setColor(color);
     }
 
     get value() {
-        return this.color.toRgbString();
+        return this.toString();
     }
 
     /* =========================
@@ -73,13 +72,16 @@ export default class UiColorElement extends HTMLElement {
      * ========================= */
 
     setColor(color) {
+        if(!color) return;
+        if(!this.color.equals(color)) return;
         this.color.setColor(color);
-        this.syncStyle();
+        this._syncStyle();
+        this.dispatchEvent(new Event('change-color', { bubbles: true }));
     }
 
     setRgba(r, g, b, a = null) {
-        this.color.setRgba(r, g, b, a);
-        this.syncStyle();
+        const color = Color.fromRgba(r, g, b, a)
+        this.setColor(color)
     }
 
     toColor() {
@@ -90,7 +92,7 @@ export default class UiColorElement extends HTMLElement {
      * string / conversion
      * ========================= */
 
-    toString(type = Color.toStringType) {
+    toString(type = this.color.toStringType) {
         return this.color.toString(type);
     }
 
@@ -99,12 +101,9 @@ export default class UiColorElement extends HTMLElement {
      * ========================= */
 
     [Symbol.toPrimitive](hint) {
-        if (hint === 'number') {
-            const color = this.toColor();
-            return color.toRgbNumber();
-        }
-        if (hint === 'string') return this.toHslString();
-        return this.toHslString();
+        if (hint === 'number') { return this.color.toRgbNumber(); }
+        if (hint === 'string') return this.toString();
+        return this.toString();
     }
 
     toJSON() {
@@ -115,8 +114,8 @@ export default class UiColorElement extends HTMLElement {
      * internal
      * ========================= */
 
-    syncStyle() {
-        this.style.setProperty('--color', this.color.toRgbaString());
+    _syncStyle() {
+        this.style.setProperty('--color', this.color.toRgbString());
     }
 
     /* =========================

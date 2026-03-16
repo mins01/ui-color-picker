@@ -86,6 +86,7 @@ export default class UiColorHueBarElement extends HTMLElement {
      * ========================= */
 
     setColor(color) {
+        if(!color) return;
         const hsl = color.toHsl();
         this.h = hsl.h;
     }
@@ -199,8 +200,8 @@ export default class UiColorHueBarElement extends HTMLElement {
                     pointer-events: none;
                     position: absolute;
                     inset:0px;
-                    --bg-diriction: to bottom;
-                    background: linear-gradient(var(--bg-diriction),
+                    --bg-direction: to bottom;
+                    background: linear-gradient(var(--bg-direction),
                         hsl(0,100%,50%),
                         hsl(30,100%,50%),
                         hsl(60,100%,50%),
@@ -217,7 +218,7 @@ export default class UiColorHueBarElement extends HTMLElement {
                     );
                 }
                 :host([data-dir="horizontal"])::part(bg){
-                    --bg-diriction: to right;
+                    --bg-direction: to right;
                 }
 
                 :host::part(hue-indicator){

@@ -118,6 +118,7 @@ export default class UiColorSlPlaneElement extends HTMLElement {
      * ========================= */
 
     setColor(color) {
+        if(!color) return;
         const { h, s, l } = color.toHsl();
         this.setHsl(h,s,l);
     }
@@ -272,7 +273,6 @@ export default class UiColorSlPlaneElement extends HTMLElement {
     /* =========================
      * render
      * ========================= */
-
         render() {
         this.shadowRoot.innerHTML = `
             <style>

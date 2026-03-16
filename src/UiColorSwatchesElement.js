@@ -53,10 +53,13 @@ export default class UiColorSwatchesElement extends HTMLElement {
      * ========================= */
 
     connectedCallback() {
-        this.render();
-        this.autoLoadStorage();
-        this.renderSorted()
-        this.trim()
+        if (!this.shadowRoot.firstChild){
+            this.render();
+            this.autoLoadStorage();
+            this.renderSorted()
+            this.trim()
+        }
+            
     }
 
     disconnectedCallback() {}
@@ -93,6 +96,7 @@ export default class UiColorSwatchesElement extends HTMLElement {
      * public API
      * ========================= */
     setColor(color){ // 색상 변경
+        if(!color) return;
         // this.selectColor(color);
         this.addRecent(color);
     }
@@ -210,8 +214,13 @@ export default class UiColorSwatchesElement extends HTMLElement {
         this.loadStorage();
     }
     loadStorage(){ // 색상 로드
-        const data = JSON.parse(localStorage.getItem(this.storageKey));
-        if(!data) return;
+        try {
+            const data = JSON.parse(localStorage.getItem(this.storageKey));
+        } catch (error) {
+            console.error(error);
+            return false;
+        }
+        if(!data) return false;
         const d = [];
         for (const swatch of data.swatches) {           
             const color = Color.fromColor(swatch.color);
@@ -223,6 +232,7 @@ export default class UiColorSwatchesElement extends HTMLElement {
         this.renderSorted()
         this.trim()
         console.log('loadStorage',this.storageKey);
+        return true;
     }
     toJSON(){
         const data = {swatches:[]}

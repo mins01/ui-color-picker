@@ -94,6 +94,7 @@ export default class UiColorPickerElement extends HTMLElement {
      * ========================= */
 
     setColor(color) {
+        if(!color) return;
         this.setPendingColor(color)
         this.setSelectedColor(color)
     }
