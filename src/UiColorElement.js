@@ -73,7 +73,7 @@ export default class UiColorElement extends HTMLElement {
 
     setColor(color) {
         if(!color) return;
-        if(!this.color.equals(color)) return;
+        if(this.color.equals(color)) return;
         this.color.setColor(color);
         this._syncStyle();
         this.dispatchEvent(new Event('change-color', { bubbles: true }));
