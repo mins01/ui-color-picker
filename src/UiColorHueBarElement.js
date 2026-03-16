@@ -184,6 +184,9 @@ export default class UiColorHueBarElement extends HTMLElement {
                     min-height: 10px;
                     cursor: ns-resize
                 }
+                ::slotted(*) {
+                    pointer-events: none;
+                }
                 :host([data-dir="horizontal"]){
                     cursor: ew-resize
                 }
