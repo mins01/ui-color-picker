@@ -9,7 +9,7 @@ export default class UiColorSlPlaneElement extends HTMLElement {
     static tagName = 'ui-color-sl-plane';
 
     static get observedAttributes() {
-        return ['hue', 'saturation', 'lightness'];
+        return ['hue', 'saturation', 'lightness', 'value'];
     }
 
     static defineCustomElement(tagName = this.tagName) {
@@ -35,8 +35,7 @@ export default class UiColorSlPlaneElement extends HTMLElement {
 
     get h() { return this._h; }
     set h(value) {
-        this._h = Number(value);
-        this.style.setProperty('--h', this._h);
+        return this.setHsl(value,null,null);
     }
 
     get hue() { return Math.round(this._h); }
@@ -44,45 +43,35 @@ export default class UiColorSlPlaneElement extends HTMLElement {
 
     get s() { return this._s; }
     set s(value) {
-
-        if (typeof value === 'string' && value.endsWith('%')) {
-            value = parseFloat(value) / 100;
-        } else {
-            value = Number(value);
-        }
-
-        this._s = Math.max(0, Math.min(1, value));
-        this.style.setProperty('--s', this._s);
+        return this.setHsl(null,value,null);
     }
 
     get saturation() {
-        return (this._s * 100)
-            .toFixed(2)
-            .replace(/\.?0+$/, '') + '%';
+        return Math.round(this._s * 100)+'%';
     }
 
     set saturation(value) { this.s = value; }
 
     get l() { return this._l; }
     set l(value) {
-
-        if (typeof value === 'string' && value.endsWith('%')) {
-            value = parseFloat(value) / 100;
-        } else {
-            value = Number(value);
-        }
-
-        this._l = Math.max(0, Math.min(1, value));
-        this.style.setProperty('--l', this._l);
+        return this.setHsl(null,null,value);
     }
 
     get lightness() {
-        return (this._l * 100)
-            .toFixed(2)
-            .replace(/\.?0+$/, '') + '%';
+        return Math.round(this._l * 100)+'%';
     }
 
     set lightness(value) { this.l = value; }
+
+
+    set value(value) {
+        const color = Color.fromString(value)
+        this.setColor(color)
+    }
+
+    get value() {
+        return this.toHslString();
+    }
 
     /* =========================
      * constructor
@@ -104,7 +93,8 @@ export default class UiColorSlPlaneElement extends HTMLElement {
      * ========================= */
 
     connectedCallback() {
-        this.render();
+        if (!this.shadowRoot.firstChild) this.render(); 
+        this._syncStyle();
     }
 
     disconnectedCallback() {}
@@ -120,6 +110,7 @@ export default class UiColorSlPlaneElement extends HTMLElement {
         if (name === 'hue') this.h = newValue;
         if (name === 'saturation') this.s = newValue;
         if (name === 'lightness') this.l = newValue;
+        if (name === 'value') this.value = newValue;
     }
 
     /* =========================
@@ -127,11 +118,29 @@ export default class UiColorSlPlaneElement extends HTMLElement {
      * ========================= */
 
     setColor(color) {
-        const hsl = color.toHsl();
+        const { h, s, l } = color.toHsl();
+        this.setHsl(h,s,l);
+    }
+    setHsl(h=null,s=null,l=null){
+        if(h !== null) this._h = Number(h);
+        if(s !== null){
+            if (typeof s === 'string' && s.endsWith('%')) {
+                s = parseFloat(s) / 100;
+            } else {
+                s = Number(s);
+            }
+            this._s = Math.max(0, Math.min(1, s));
+        }
+        if(l !== null){
+            if (typeof l === 'string' && l.endsWith('%')) {
+                l = parseFloat(l) / 100;
+            } else {
+                l = Number(l);
+            }
+            this._l = Math.max(0, Math.min(1, l));
+        }
+        this._syncStyle();
 
-        this.h = hsl.h;
-        this.s = hsl.s;
-        this.l = hsl.l;
     }
 
     toColor() {
@@ -142,9 +151,9 @@ export default class UiColorSlPlaneElement extends HTMLElement {
 
     toHsl() {
         return {
-            h: this.h,
-            s: this.s,
-            l: this.l
+            h: this._h,
+            s: this._s,
+            l: this._l
         };
     }
 
@@ -157,6 +166,11 @@ export default class UiColorSlPlaneElement extends HTMLElement {
             s: Math.max(0, Math.min(1, event.offsetX / this.offsetWidth)),
             l: 1 - Math.max(0, Math.min(1, event.offsetY / this.offsetHeight))
         };
+    }
+    _syncStyle(){
+        this.style.setProperty('--h', this._h);
+        this.style.setProperty('--s', this._s);
+        this.style.setProperty('--l', this._l);
     }
 
     /* =========================
@@ -226,7 +240,7 @@ export default class UiColorSlPlaneElement extends HTMLElement {
      * ========================= */
 
     toHslString() {
-        return `hsl(${this.hue}, ${this.saturation} ${this.lightness})`;
+        return `hsl(${this.hue}, ${this.saturation}, ${this.lightness})`;
     }
 
     toString() {
@@ -238,20 +252,18 @@ export default class UiColorSlPlaneElement extends HTMLElement {
      * ========================= */
 
     [Symbol.toPrimitive](hint) {
-
         if (hint === 'number') {
             return this.toColor().toRgbNumber();
         }
-
         if (hint === 'string') {
             return this.toHslString();
         }
-
         return this.toHslString();
     }
 
     toJSON() {
         return {
+            h: this._h,
             s: this._s,
             l: this._l
         };
@@ -268,7 +280,6 @@ export default class UiColorSlPlaneElement extends HTMLElement {
                     --h: 0;
                     --s: 0;
                     --l: 0;
-                    --hue: var(--h,0);
                     --h-position: calc( var(--h,0) / 360 * 100% );
                     --s-position: calc( var(--s,0) * 100% );
                     --l-position: calc( ( 1 - var(--l,0) ) * 100% );
@@ -284,6 +295,7 @@ export default class UiColorSlPlaneElement extends HTMLElement {
                     height: 100%;
                     position: relative;
                     overflow: hidden;
+                    pointer-events: none;
                 }
                 :host::part(bg){
                     pointer-events: none;
@@ -292,7 +304,7 @@ export default class UiColorSlPlaneElement extends HTMLElement {
 
                     background:linear-gradient(to bottom, hsl(0, 0%, 100%) 0%, hsla(0, 0%, 100%, 0) 50%, hsla(0, 0%, 0%, 0) 50%, hsl(0, 0%, 0%) 100%),
 	                linear-gradient(to right, hsla(0, 0%, 50%, 1) 0%, hsla(0, 0%, 50%, 0) 100%),
-                    hsl(var(--hue,0) 100% 50%);
+                    hsl(var(--h,0) 100% 50%);
                 }
                 
                 :host::part(sl-indicator) {
