@@ -47,35 +47,17 @@
     </script>
 
     <style>
-        #part-hue-handle::part(hue-handle) { 
-            border-color: #000a; 
-            --border-width:100vh;
+        .custom-hue-icon{
+            width: 100%;
+            height: 8px;
+            box-shadow: 0px 0px 0px 1px #fff ,0px 0px 8px 2px #000;
+            flex:0 0 auto;
         }
-        #part-bg::part(bg) { background: hsl(var(--h,0), 100%, 50%);}
-        .part-hue-icon::part(hue-handle){
-            border-width: 0px;
-            box-shadow: none;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        ui-color-hue-bar[data-dir="horizontal"] .custom-hue-icon{
+            width: 8px;
+            height: 100%;
         }
-        .part-hue-icon::part(hue-icon){
-            --border-width: 8px;
-            border-width: var(--border-width, 0px);
-            border-color: #fff0 #000 #0000 #fff;
-            border-style: solid;
-            box-sizing: content-box;
-            height: 0px;
-        }
-        .part-hue-icon[data-dir="horizontal"]::part(hue-handle){
-            flex-direction: column;
-        }
-        .part-hue-icon[data-dir="horizontal"]::part(hue-icon){
-            height: auto;
-            flex: 1;
-            border-color: #fff #0000 #000 #fff0;
-            width: 0px;
-        }
+        
     </style>
     
 </head>
@@ -84,17 +66,24 @@
     <div class="container py-3" id="container0">
         <h1>Test - UiColorHueBarElement</h1>
         <hr>
-        <ui-color-hue-bar style="width: 300px;height: 400px;"></ui-color-hue-bar>
-        <hr>
-        <ui-color-hue-bar style="width: 50px;height: 200px;" id="part-hue-handle" hue="280"></ui-color-hue-bar>
+        <ui-color-hue-bar style="width: 300px;height: 400px;" hue="120"></ui-color-hue-bar>
+        
         <hr>
         <ui-color-hue-bar style="width: 200px;height: 30px;" id="part-bg" hue="180"></ui-color-hue-bar>
         <hr>
-        <ui-color-hue-bar style="width: 30px;height: 500px;"  class="part-hue-icon" hue="180"></ui-color-hue-bar>
+        <ui-color-hue-bar style="width: 30px;height: 500px;" hue="180"></ui-color-hue-bar>
         <hr>
-        <ui-color-hue-bar style="width: 100%;height: 20px;" data-dir="horizontal" hue="180"></ui-color-hue-bar>
+        <ui-color-hue-bar style="width: 100%;height: 20px;--icon-width:4px 20px" data-dir="horizontal" hue="180"></ui-color-hue-bar>
         <hr>
-        <ui-color-hue-bar style="width: 100%;height: 30px;" class="part-hue-icon" data-dir="horizontal" hue="180"></ui-color-hue-bar>
+        <ui-color-hue-bar style="width: 100%;height: 30px;" data-dir="horizontal" hue="180"></ui-color-hue-bar>
+        <hr>
+        <ui-color-hue-bar style="width: 50px;height: 200px;" hue="280">
+            <div slot="hue-icon" class="custom-hue-icon"></div>
+        </ui-color-hue-bar>
+        <hr>
+        <ui-color-hue-bar style="width: 200px;height: 50px;" hue="280" data-dir="horizontal">
+            <div slot="hue-icon" class="custom-hue-icon"></div>
+        </ui-color-hue-bar>
     </div>
     
 </body>

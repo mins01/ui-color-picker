@@ -176,6 +176,7 @@ export default class UiColorHueBarElement extends HTMLElement {
                 :host {
                     --h: 0;
                     --h-position: calc( var(--h,0) / 360 * 100% );
+                    --icon-width: 8px;
                     user-select: none;
                     touch-action: none;
                     display: block;
@@ -228,10 +229,7 @@ export default class UiColorHueBarElement extends HTMLElement {
                     min-width: 0;
                     min-height: 4px;
 
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    overflow: visible;
+                    
                 }
                 :host([data-dir="horizontal"])::part(hue-indicator){
                     flex-direction: column;
@@ -244,19 +242,37 @@ export default class UiColorHueBarElement extends HTMLElement {
                     min-height: 0;
                 }
                 :host::part(hue-handle){
-                    --border-width: 2px;
                     width: 100%;
                     height: 100%;
-                    box-sizing: content-box;
-                    border: 1px solid rgba(255, 255, 255, 1);
-                    border-width: var(--border-width) 0px;
-                    box-shadow:0 0 0 1px rgba(0,0,0,0.75);
+
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    overflow: visible;
                 }
-                :host([data-dir="horizontal"])::part(hue-handle){
-                    border-width: 0px var(--border-width);
-                }
-                :host::part(hue-icon){
+
+                :host .default-hue-icon{
                     width: 100%;
+                    height: 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    box-sizing: content-box;
+                }
+                :host .default-hue-icon::before {
+                    content: ' ';
+                    border: 8px solid #fff;
+                    border-width: var(--icon-width);
+                    display: block;
+                    box-sizing: border-box;
+                    border-color: transparent #000 transparent #fff;
+                    width: 100%;
+                    height: 0%;
+
+                }
+                :host([data-dir="horizontal"]) .default-hue-icon::before{
+                    border-color: #fff transparent #000 transparent;
+                    width: 0%;
                     height: 100%;
                 }
 
@@ -264,8 +280,11 @@ export default class UiColorHueBarElement extends HTMLElement {
             <div part="bar">
                 <div part="bg"></div>
                 <div part="hue-indicator">
+                        
                     <div part="hue-handle">
-                        <div part="hue-icon"></div>
+                        <slot name="hue-icon">
+                            <div class="default-hue-icon"></div>
+                        </slot>
                     </div>
                 </div>
                 <slot></slot>
