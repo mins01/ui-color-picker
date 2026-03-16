@@ -82,10 +82,10 @@ export default class UiColorSlPlaneElement extends HTMLElement {
 
         this.attachShadow({ mode: 'open' });
 
-        this.addEventListener('pointerdown', this.onpointerdown.bind(this));
-        this.addEventListener('pointermove', this.onpointermove.bind(this));
-        this.addEventListener('pointerup', this.onpointerup.bind(this));
-        this.addEventListener('pointercancel', this.onpointercancel.bind(this));
+        this.addEventListener('pointerdown', this.handlePointerdown);
+        this.addEventListener('pointermove', this.handlePointermove);
+        this.addEventListener('pointerup', this.handlePointerup);
+        this.addEventListener('pointercancel', this.handlePointercancel);
     }
 
     /* =========================
@@ -178,7 +178,7 @@ export default class UiColorSlPlaneElement extends HTMLElement {
      * pointer events
      * ========================= */
 
-    onpointerdown(event) {
+    handlePointerdown(event) {
 
         this.setPointerCapture(event.pointerId);
 
@@ -197,7 +197,7 @@ export default class UiColorSlPlaneElement extends HTMLElement {
         );
     }
 
-    onpointermove(event) {
+    handlePointermove(event) {
 
         if (!this.hasPointerCapture(event.pointerId)) return;
 
@@ -213,7 +213,7 @@ export default class UiColorSlPlaneElement extends HTMLElement {
         );
     }
 
-    onpointerup(event) {
+    handlePointerup(event) {
 
         this.releasePointerCapture(event.pointerId);
 
@@ -232,8 +232,8 @@ export default class UiColorSlPlaneElement extends HTMLElement {
         );
     }
 
-    onpointercancel(event) {
-        return this.onpointerup(event);
+    handlePointercancel(event) {
+        return this.handlePointerup(event);
     }
 
     /* =========================

@@ -30,8 +30,8 @@ export default class UiColorHueBarElement extends HTMLElement {
      * getter / setter
      * ========================= */
 
-    get h() { 
-        return this._h; 
+    get h() {
+        return this._h;
     }
 
     set h(value) {
@@ -55,10 +55,10 @@ export default class UiColorHueBarElement extends HTMLElement {
         super();
         this.attachShadow({ mode: 'open' });
 
-        this.addEventListener('pointerdown', this.onpointerdown.bind(this));
-        this.addEventListener('pointermove', this.onpointermove.bind(this));
-        this.addEventListener('pointerup', this.onpointerup.bind(this));
-        this.addEventListener('pointercancel', this.onpointercancel.bind(this));
+        this.addEventListener('pointerdown', this.handlePointerdown);
+        this.addEventListener('pointermove', this.handlePointermove);
+        this.addEventListener('pointerup', this.handlePointerup);
+        this.addEventListener('pointercancel', this.handlePointercancel);
     }
 
     /* =========================
@@ -66,7 +66,7 @@ export default class UiColorHueBarElement extends HTMLElement {
      * ========================= */
 
     connectedCallback() {
-        if (!this.shadowRoot.firstChild) this.render(); 
+        if (!this.shadowRoot.firstChild) this.render();
         this._syncStyle();
     }
 
@@ -108,51 +108,41 @@ export default class UiColorHueBarElement extends HTMLElement {
      * pointer events
      * ========================= */
 
-    onpointerdown(event) {
+    handlePointerdown(event) {
         this.setPointerCapture(event.pointerId);
-
         this._hFromDown = this.h;
-
         const h = this._getHFromEvent(event);
         if (h === this.h) return;
-
         this.h = h;
-
         this.dispatchEvent(
             new Event('input-hue', { bubbles: true, cancelable: true })
         );
     }
 
-    onpointermove(event) {
+    handlePointermove(event) {
         if (!this.hasPointerCapture(event.pointerId)) return;
-
         const h = this._getHFromEvent(event);
         if (h === this.h) return;
-
         this.h = h;
-
         this.dispatchEvent(
             new Event('input-hue', { bubbles: true, cancelable: true })
         );
     }
 
-    onpointerup(event) {
+    handlePointerup(event) {
         this.releasePointerCapture(event.pointerId);
-
         if (this.h === this._hFromDown) {
             this._hFromDown = null;
             return;
         }
-
         this._hFromDown = null;
-
         this.dispatchEvent(
             new Event('change-hue', { bubbles: true, cancelable: true })
         );
     }
 
-    onpointercancel(event) {
-        return this.onpointerup(event);
+    handlePointercancel(event) {
+        return this.handlePointerup(event);
     }
 
     /* =========================
@@ -172,7 +162,7 @@ export default class UiColorHueBarElement extends HTMLElement {
     /* =========================
      * render
      * ========================= */
-  
+
     /** Shadow DOM 렌더링 */
     render() {
         this.shadowRoot.innerHTML = `
@@ -231,7 +221,7 @@ export default class UiColorHueBarElement extends HTMLElement {
                     height: 1%;
                     min-width: 0;
                     min-height: 4px;
-                    
+
                     display: flex;
                     justify-content: center;
                     align-items: center;

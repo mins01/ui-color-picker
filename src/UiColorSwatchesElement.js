@@ -59,7 +59,7 @@ export default class UiColorSwatchesElement extends HTMLElement {
             this.autoLoadStorage();
             this.renderSorted()
             this.trim()
-            this.addEventListener('dblclick',this.handleBblclick);
+            this.addEventListener('dblclick',this.handleDblclick);
         }
             
     }
@@ -259,7 +259,7 @@ export default class UiColorSwatchesElement extends HTMLElement {
     /* =========================
      * pointer events
      * ========================= */
-    handleBblclick(event){
+    handleDblclick(event){
         const target = event.target.closest('.swatch');
         if(!target) return;
         if(!this.togglePinOnDblclick) return;
