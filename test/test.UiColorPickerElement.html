@@ -207,7 +207,7 @@
                             auto-load="1"
                             class="sync-selected-color swatches " 
                             onclick="if(event.target.classList.contains('swatch')){this.selectColor(event.target.color); this.closest('ui-color-picker').setPendingColor(event.target.color);}"
-                            ondblclick="if(event.target.classList.contains('swatch')){console.log(event.target.value); this.togglePinSwatch(event.target)}"
+                            ondblclick="if(event.target.classList.contains('swatch')){console.log(event.target.value); this.toggleSwatchPin(event.target)}"
                             >
                             <ui-color class="swatch locked" value="#000000"></ui-color> <!-- black -->
                             <ui-color class="swatch locked" value="#FFFFFF"></ui-color> <!-- white -->

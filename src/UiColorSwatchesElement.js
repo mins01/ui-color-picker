@@ -18,7 +18,7 @@ export default class UiColorSwatchesElement extends HTMLElement {
 
     /** 감시할 속성 목록 */
     static get observedAttributes() {
-        return ['value','maxlength','storage-key','auto-save','auto-load'];
+        return ['value','maxlength','storage-key','auto-save','auto-load','toggle-pin-on-dblclick'];
     }
 
     /** 커스텀 엘리먼트 등록 */
@@ -37,6 +37,7 @@ export default class UiColorSwatchesElement extends HTMLElement {
     swatchClassName = UiColorSwatchesElement.swatchClassName
     maxlength = UiColorSwatchesElement.maxlength
     storageKey = UiColorSwatchesElement.storageKey
+    togglePinOnDblclick = false
 
     /* =========================
      * constructor
@@ -58,6 +59,7 @@ export default class UiColorSwatchesElement extends HTMLElement {
             this.autoLoadStorage();
             this.renderSorted()
             this.trim()
+            this.addEventListener('dblclick',this.handleBblclick);
         }
             
     }
@@ -73,8 +75,9 @@ export default class UiColorSwatchesElement extends HTMLElement {
             this.trim()
         }
         if(name === 'storage-key') { this.storageKey = newValue; }
-        if(name === 'auto-save') { this.autoSave = Boolean(newValue); }
-        if(name === 'auto-load') { this.autoLoad = Boolean(newValue); }
+        if(name === 'auto-save') { this.autoSave = newValue !== null && newValue !== 'false'; }
+        if(name === 'auto-load') { this.autoLoad = newValue !== null && newValue !== 'false'; }
+        if(name === 'toggle-pin-on-dblclick') { this.togglePinOnDblclick = newValue !== null && newValue !== 'false'; }
         
         
     }
@@ -109,11 +112,14 @@ export default class UiColorSwatchesElement extends HTMLElement {
     getSelectedSwatch(){
         return this.querySelector('.swatch.selected')
     }
-    togglePinSwatch(swatch){ // 고정 색상 변경
+    toggleSwatchPin(swatch){ // 고정 색상 변경
         if(!swatch || swatch.classList.contains('locked')) return
         swatch?.classList?.toggle('pinned');
         this.renderSorted()
         this.autoSaveStorage();
+        swatch.dispatchEvent(
+            new Event('toggle-pin-swatch', { bubbles: true, cancelable: true })
+        );
     }
     renderSorted(){ // 색상 정렬
         this.querySelectorAll('.swatch.locked').forEach(swatch=>this.append(swatch))
@@ -214,8 +220,9 @@ export default class UiColorSwatchesElement extends HTMLElement {
         this.loadStorage();
     }
     loadStorage(){ // 색상 로드
+        let data = null
         try {
-            const data = JSON.parse(localStorage.getItem(this.storageKey));
+            data = JSON.parse(localStorage.getItem(this.storageKey));
         } catch (error) {
             console.error(error);
             return false;
@@ -247,6 +254,16 @@ export default class UiColorSwatchesElement extends HTMLElement {
             });
         }
         return data;
+    }
+
+    /* =========================
+     * pointer events
+     * ========================= */
+    handleBblclick(event){
+        const target = event.target.closest('.swatch');
+        if(!target) return;
+        if(!this.togglePinOnDblclick) return;
+        this.toggleSwatchPin(target)
     }
 
     /* =========================

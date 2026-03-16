@@ -106,6 +106,12 @@
             align-items: center;
         }
     </style>
+    <script>
+        window.addEventListener('toggle-pin-swatch',(event)=>{
+            console.log(event.type,event.target.toString());
+            
+        })
+    </script>
 </head>
 
 <body>
@@ -115,7 +121,7 @@
         <ui-color-swatches  style="max-width: 400px;--font-size:40px" class="swatches"
             maxlength="5"
             onclick="if(event.target.classList.contains('swatch')){console.log(event.target.value); this.selectColor(event.target.color)}"
-            ondblclick="if(event.target.classList.contains('swatch')){console.log(event.target.value); this.togglePinSwatch(event.target)}"
+            ondblclick="if(event.target.classList.contains('swatch')){console.log(event.target.value); this.toggleSwatchPin(event.target)}"
             value="#aabbcc"
             >
             <ui-color class="swatch locked" value="#ff00ff"  >유지</ui-color>
@@ -137,11 +143,11 @@
             storage-key="swatches-test"
             auto-save="1"
             auto-load="1"
-
+            toggle-pin-on-dblclick
             style="max-width: 400px;"
             class="swatches"
             onclick="if(event.target.classList.contains('swatch')){console.log(event.target.value); this.selectColor(event.target.color)}"
-            ondblclick="if(event.target.classList.contains('swatch')){console.log(event.target.value); this.togglePinSwatch(event.target)}"
+            xondblclick="if(event.target.classList.contains('swatch')){console.log(event.target.value); this.toggleSwatchPin(event.target)}"
             >
             <ui-color class="swatch locked" value="#000"  ></ui-color>
             <ui-color class="swatch locked" value="#fff"  ></ui-color>
@@ -149,6 +155,7 @@
             <ui-color class="swatch pinned" value="#aabbcc"  ></ui-color>
             <ui-color class="swatch recent" value="#cba"  ></ui-color>
         </ui-color-swatches>
+        <div class="form-text">toggle-pin-on-dblclick: 더블클릭으로 색을 핀고정 할 수 있다.</div>
         <hr>
         <div class="d-flex flex-wrap gap-1">
             <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').addlocked(Color.fromRgba(Math.random()*255,Math.random()*255,Math.random()*255,1))">addlocked(랜덤) (trim 안됨)</button>
