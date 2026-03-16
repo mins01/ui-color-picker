@@ -41,12 +41,6 @@ export default class UiColorPickerElement extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
-
-        this.addEventListener('input-sl', this.oninputSl.bind(this));
-        this.addEventListener('change-sl', this.onchangeSl.bind(this));
-        this.addEventListener('input-hue', this.oninputHue.bind(this));
-        this.addEventListener('change-hue', this.onchangeHue.bind(this));
-        this.addEventListener('input', this.oninput.bind(this));
     }
 
     /* =========================
@@ -54,15 +48,28 @@ export default class UiColorPickerElement extends HTMLElement {
      * ========================= */
 
     connectedCallback() {
-        
         this.pendingColor.setColor(this.selectedColor);
-        this.render();
+        if (!this.shadowRoot.firstChild){
+            this.render();
+        }
         this.syncSelectedColor();
         this.syncPartColorForSelected();
         this.syncPendingColor();
+
+        this.addEventListener('input-sl', this.handleInputSl);
+        this.addEventListener('change-sl', this.handleChangeSl);
+        this.addEventListener('input-hue', this.handleInputHue);
+        this.addEventListener('change-hue', this.handleChangeHue);
+        this.addEventListener('input', this.handleInput);
     }
 
-    disconnectedCallback() {}
+    disconnectedCallback() {
+        this.removeEventListener('input-sl', this.handleInputSl);
+        this.removeEventListener('change-sl', this.handleChangeSl);
+        this.removeEventListener('input-hue', this.handleInputHue);
+        this.removeEventListener('change-hue', this.handleChangeHue);
+        this.removeEventListener('input', this.handleInput);
+    }
 
     /* =========================
      * attribute
@@ -173,7 +180,7 @@ export default class UiColorPickerElement extends HTMLElement {
      * event handlers
      * ========================= */
 
-    oninputHue(event) {
+    handleInputHue(event) {
         const target = event.target;
 
         const hsl = this.pendingColor.toHsl();
@@ -184,11 +191,11 @@ export default class UiColorPickerElement extends HTMLElement {
         this.syncHueBar(target);
     }
 
-    onchangeHue(event) {
-        return this.oninputHue(event);
+    handleChangeHue(event) {
+        return this.handleInputHue(event);
     }
 
-    oninputSl(event) {
+    handleInputSl(event) {
         const target = event.target;
 
         const hsl = this.pendingColor.toHsl();
@@ -199,11 +206,11 @@ export default class UiColorPickerElement extends HTMLElement {
         this.syncPendingColor();
     }
 
-    onchangeSl(event) {
-        return this.oninputSl(event);
+    handleChangeSl(event) {
+        return this.handleInputSl(event);
     }
 
-    oninput(event) {
+    handleInput(event) {
         const target = event.target;
         if(!target.dataset.setColor) return;
 
