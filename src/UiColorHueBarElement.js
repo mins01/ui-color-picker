@@ -9,7 +9,7 @@ export default class UiColorHueBarElement extends HTMLElement {
 
     /** 감시할 속성 목록 */
     static get observedAttributes() {
-        return ['data-hue'];
+        return ['hue'];
     }
 
     /** 커스텀 엘리먼트 등록 */
@@ -36,12 +36,7 @@ export default class UiColorHueBarElement extends HTMLElement {
 
     set h(value) {
         this._h = Number(value);
-        this.style.setProperty('--h', this._h);
-
-        const attr = Math.round(this._h);
-        if (this.getAttribute('data-hue') !== attr) {
-            this.setAttribute('data-hue', attr);
-        }
+        this._syncStyle()
     }
 
     get hue() {
@@ -71,10 +66,11 @@ export default class UiColorHueBarElement extends HTMLElement {
      * ========================= */
 
     connectedCallback() {
-        this.render();
+        if (!this.shadowRoot.firstChild) this.render(); 
+        this._syncStyle();
     }
 
-    disconnectedCallback() {}
+    // disconnectedCallback() {}
 
     /* =========================
      * attribute
@@ -82,10 +78,7 @@ export default class UiColorHueBarElement extends HTMLElement {
 
     attributeChangedCallback(name, oldValue, newValue) {
         if (oldValue === newValue) return;
-
-        if (name === 'data-hue') {
-            this.h = Number(newValue);
-        }
+        if (name === 'hue') { this.h = newValue; }
     }
 
     /* =========================
@@ -107,6 +100,9 @@ export default class UiColorHueBarElement extends HTMLElement {
             : (Math.max(0, Math.min(1, event.offsetY / this.offsetHeight)) * 360);
     }
 
+    _syncStyle(){
+        this.style.setProperty('--h', this._h);
+    }
     /* =========================
      * pointer events
      * ========================= */
