@@ -65,14 +65,13 @@ export default class UiColorHueBarElement extends HTMLElement {
         if (!this.shadowRoot.firstChild) this.render();
         this._syncStyle();
         this.addEventListener('pointerdown', this.handlePointerdown);
-        this.addEventListener('pointermove', this.handlePointermove);
+        
         this.addEventListener('pointerup', this.handlePointerup);
         this.addEventListener('pointercancel', this.handlePointercancel);
     }
 
     disconnectedCallback() {
         this.removeEventListener('pointerdown', this.handlePointerdown);
-        this.removeEventListener('pointermove', this.handlePointermove);
         this.removeEventListener('pointerup', this.handlePointerup);
         this.removeEventListener('pointercancel', this.handlePointercancel);
     }
@@ -114,6 +113,7 @@ export default class UiColorHueBarElement extends HTMLElement {
      * ========================= */
 
     handlePointerdown(event) {
+        this.addEventListener('pointermove', this.handlePointermove);
         this.setPointerCapture(event.pointerId);
         this._hFromDown = this.h;
         const h = this._getHFromEvent(event);
@@ -135,6 +135,7 @@ export default class UiColorHueBarElement extends HTMLElement {
     }
 
     handlePointerup(event) {
+        this.removeEventListener('pointermove', this.handlePointermove);
         this.releasePointerCapture(event.pointerId);
         if (this.h === this._hFromDown) {
             this._hFromDown = null;

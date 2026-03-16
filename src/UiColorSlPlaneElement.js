@@ -91,14 +91,13 @@ export default class UiColorSlPlaneElement extends HTMLElement {
         this._syncStyle();
 
         this.addEventListener('pointerdown', this.handlePointerdown);
-        this.addEventListener('pointermove', this.handlePointermove);
+        
         this.addEventListener('pointerup', this.handlePointerup);
         this.addEventListener('pointercancel', this.handlePointercancel);
     }
 
     disconnectedCallback() {
         this.removeEventListener('pointerdown', this.handlePointerdown);
-        this.removeEventListener('pointermove', this.handlePointermove);
         this.removeEventListener('pointerup', this.handlePointerup);
         this.removeEventListener('pointercancel', this.handlePointercancel);
     }
@@ -183,8 +182,9 @@ export default class UiColorSlPlaneElement extends HTMLElement {
      * ========================= */
 
     handlePointerdown(event) {
-
+        
         this.setPointerCapture(event.pointerId);
+        this.addEventListener('pointermove', this.handlePointermove);
 
         this._sFromDown = this.s;
         this._lFromDown = this.l;
@@ -199,27 +199,24 @@ export default class UiColorSlPlaneElement extends HTMLElement {
         this.dispatchEvent(
             new Event('input-sl', { bubbles: true, cancelable: true })
         );
+        
     }
 
     handlePointermove(event) {
-
         if (!this.hasPointerCapture(event.pointerId)) return;
-
         const { s, l } = this.#getSLFromEvent(event);
-
         if (s === this.s && l === this.l) return;
-
         this.s = s;
         this.l = l;
-
         this.dispatchEvent(
             new Event('input-sl', { bubbles: true, cancelable: true })
         );
     }
 
     handlePointerup(event) {
-
+        
         this.releasePointerCapture(event.pointerId);
+        this.removeEventListener('pointermove', this.handlePointermove);
 
         if (this.s === this._sFromDown && this.l === this._lFromDown) {
 
@@ -234,6 +231,7 @@ export default class UiColorSlPlaneElement extends HTMLElement {
         this.dispatchEvent(
             new Event('change-sl', { bubbles: true, cancelable: true })
         );
+        
     }
 
     handlePointercancel(event) {
