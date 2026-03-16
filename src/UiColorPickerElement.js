@@ -61,6 +61,7 @@ export default class UiColorPickerElement extends HTMLElement {
         this.addEventListener('input-hue', this.handleInputHue);
         this.addEventListener('change-hue', this.handleChangeHue);
         this.addEventListener('input', this.handleInput);
+        this.addEventListener('change', this.handleChange);
     }
 
     disconnectedCallback() {
@@ -69,6 +70,8 @@ export default class UiColorPickerElement extends HTMLElement {
         this.removeEventListener('input-hue', this.handleInputHue);
         this.removeEventListener('change-hue', this.handleChangeHue);
         this.removeEventListener('input', this.handleInput);
+        this.removeEventListener('change', this.handleChange);
+
     }
 
     /* =========================
@@ -217,16 +220,40 @@ export default class UiColorPickerElement extends HTMLElement {
         const color = Color.fromString(target.value);
         if(!color) return
         console.log(target.value,color);
-        
 
         if(target.dataset.setColor ==='pendingColor') {
-            this.setPendingColor(color);
+            // this.setPendingColor(color);
+            this.pendingColor.setColor(color);
+            // this.syncPendingColor();
+            this.syncPartColorForPending();
         }else if(target.dataset.setColor ==='selectedColor') {
-            this.setSelectedColor(color);
+            // this.setSelectedColor(color);
+            this.selectedColor.setColor(color);
+            // this.syncPendingColor();
+            this.syncPartColorForSelected();
         }
-        
-        this.syncPendingColor();
     }
+
+    handleChange(event) {
+        const target = event.target;
+        if(!target.dataset.setColor) return;
+
+        const color = Color.fromString(target.value);
+        if(!color){
+                if(target.dataset.setColor ==='pendingColor') {
+                    this.syncPendingColor();
+                }else if(target.dataset.setColor ==='selectedColor') {
+                    this.syncPendingColor();
+                }
+        }else{
+            if(target.dataset.setColor ==='pendingColor') {
+                this.setPendingColor(color);            
+            }else if(target.dataset.setColor ==='selectedColor') {
+                this.setSelectedColor(color);
+            }
+        }
+
+    }    
 
     /* =========================
      * conversion / util
