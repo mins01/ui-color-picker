@@ -292,6 +292,9 @@ export default class UiColorSlPlaneElement extends HTMLElement {
                     min-height: 10px;
                     cursor: crosshair;
                 }
+                ::slotted(*) {
+                    pointer-events: none;
+                }
                 :host::part(plane){
                     width: 100%;
                     height: 100%;
@@ -321,18 +324,25 @@ export default class UiColorSlPlaneElement extends HTMLElement {
                     justify-content: center;
                     align-items: center;
                     overflow: visible;
+
+                    --border-color: hsl(0,0%,calc( clamp(0, (0.5 - var(--l)) * 1000, 1) * 100%) );
                 }
                 :host::part(sl-handle){
                     width: 100%;
                     height: 100%;
-                    border:2px solid rgba(255, 255, 255, 0.75);
-                    border-radius: 50%;
-                    border-color:rgba(255, 255, 255, 1) rgba(0,0,0, 1)  rgba(255, 255, 255, 1) rgba(0,0,0, 1);
                     flex: 0 0 100%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    overflow: visible;
                 }
-                :host::part(sl-icon){
+                :host .default-icon{
+                    flex: 0 0 100%;
+                    border:2px solid var(--border-color);
+                    border-radius: 50%;
                     width: 100%;
                     height: 100%;
+                    display: block;
                 }
             </style>
             <div part="plane">
@@ -340,7 +350,9 @@ export default class UiColorSlPlaneElement extends HTMLElement {
                 </div>
                 <div part="sl-indicator">
                     <div part="sl-handle">
-                        <div part="sl-icon"></div>
+                        <slot name="sl-icon">
+                            <div class="default-icon"></div>
+                        </slot>
                     </div>
                 </div>
                 <slot></slot>
