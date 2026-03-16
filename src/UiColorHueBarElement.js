@@ -55,10 +55,6 @@ export default class UiColorHueBarElement extends HTMLElement {
         super();
         this.attachShadow({ mode: 'open' });
 
-        this.addEventListener('pointerdown', this.handlePointerdown);
-        this.addEventListener('pointermove', this.handlePointermove);
-        this.addEventListener('pointerup', this.handlePointerup);
-        this.addEventListener('pointercancel', this.handlePointercancel);
     }
 
     /* =========================
@@ -68,9 +64,18 @@ export default class UiColorHueBarElement extends HTMLElement {
     connectedCallback() {
         if (!this.shadowRoot.firstChild) this.render();
         this._syncStyle();
+        this.addEventListener('pointerdown', this.handlePointerdown);
+        this.addEventListener('pointermove', this.handlePointermove);
+        this.addEventListener('pointerup', this.handlePointerup);
+        this.addEventListener('pointercancel', this.handlePointercancel);
     }
 
-    // disconnectedCallback() {}
+    disconnectedCallback() {
+        this.removeEventListener('pointerdown', this.handlePointerdown);
+        this.removeEventListener('pointermove', this.handlePointermove);
+        this.removeEventListener('pointerup', this.handlePointerup);
+        this.removeEventListener('pointercancel', this.handlePointercancel);
+    }
 
     /* =========================
      * attribute
