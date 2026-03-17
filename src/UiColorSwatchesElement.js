@@ -118,8 +118,7 @@ export default class UiColorSwatchesElement extends HTMLElement {
         for (const swatch of swatches) {
             swatch.color.equals(color)?swatch.classList.add('selected'):swatch.classList.remove('selected')
         }
-        
-        this.dispatchEvent( new Event('select-color-swatch', { bubbles: true, cancelable: true }) );
+        if(this.color) this.dispatchEvent( new Event('select-color-swatch', { bubbles: true, cancelable: true }) );
     }
     getSelectedSwatch(){
         return this.querySelector('.swatch.selected')

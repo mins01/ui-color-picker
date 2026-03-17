@@ -49,7 +49,7 @@
     </script>
     <script>
         window.addEventListener('toggle-pin-swatch',(event)=>{ console.log(event.type,event.target.toString()); })
-        window.addEventListener('select-color-swatch',(event)=>{ console.log(event.type,event.target.getSelectedSwatch().toString()); })
+        window.addEventListener('select-color-swatch',(event)=>{ console.log(event.type,event.target.getSelectedSwatch()?.toString()); })
         window.addEventListener('click-swatch',(event)=>{ console.log(event.type,event.target.toString()); })
         window.addEventListener('add-swatch',(event)=>{ console.log(event.type,event.target.toString()); })
         
