@@ -324,21 +324,12 @@ export default class UiColorSlPlaneElement extends HTMLElement {
                     justify-content: center;
                     align-items: center;
                     overflow: visible;
-
-                    --icon-color: hsl(0,0%,calc( clamp(0, (0.5 - var(--l)) * 1000, 1) * 100%) );
+                    
                 }
-                :host::part(sl-handle){
-                    width: 100%;
-                    height: 100%;
+                :host .default-sl-handle{
+                    --handle-color:hsl(0,0%,calc( clamp(0, (0.5 - var(--l)) * 1000, 1) * 100%) );
                     flex: 0 0 100%;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    overflow: visible;
-                }
-                :host .default-sl-icon{
-                    flex: 0 0 100%;
-                    border:2px solid var(--icon-color);
+                    border:2px solid var(--handle-color);
                     border-radius: 50%;
                     width: 100%;
                     height: 100%;
@@ -349,11 +340,9 @@ export default class UiColorSlPlaneElement extends HTMLElement {
                 <div part="bg">
                 </div>
                 <div part="sl-indicator">
-                    <div part="sl-handle">
-                        <slot name="sl-icon">
-                            <div class="default-sl-icon"></div>
-                        </slot>
-                    </div>
+                    <slot name="sl-handle">
+                        <div class="default-sl-handle"></div>
+                    </slot>
                 </div>
                 <slot></slot>
             </div>

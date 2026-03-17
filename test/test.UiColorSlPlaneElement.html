@@ -47,28 +47,29 @@
     </script>
     
     <style>
-        #custom-icon .custom-sl-icon{
+        #custom-handle .custom-sl-handle{
+            --handle-color:hsl(var(--h),50%,calc( clamp(0.2, (0.5 - var(--l)) * 1000, 0.8) * 100%) );
             position: relative;
             overflow: visible;
             width: 20px;
             height: 20px;
             flex:0 0 auto;
         }
-        #custom-icon .custom-sl-icon::before , #custom-icon .custom-sl-icon::after{
+        #custom-handle .custom-sl-handle::before , #custom-handle .custom-sl-handle::after{
             position: absolute;
             content: '';
             height: 100%;
             width: 0px;
             border: 4px solid #fff;
-            border-color: var(--icon-color) transparent;;
+            border-color: var(--handle-color) transparent;;
             top: 50%;
             left: 50%;
             transform: translate(-50%,-50%);
         }
-        #custom-icon .custom-sl-icon::after{
+        #custom-handle .custom-sl-handle::after{
             height: 0px;
             width: 100%;
-            border-color: transparent var(--icon-color);
+            border-color: transparent var(--handle-color);
         }
     </style>
 </head>
@@ -89,9 +90,12 @@
             <button type="button" class="btn btn-primary" onclick="alert(document.querySelector('#target').toColor().toHslString())">.toColor().toHslString()</button>
         </div>
         <hr>
-        <ui-color-sl-plane id="custom-icon"  class="mx-auto border" style="max-width: 800px;height: 300px;" value="#aabbcc" >
-            <div slot="sl-icon" class="custom-sl-icon"></div>
+        <ui-color-sl-plane id="custom-handle"  class="mx-auto border" style="max-width: 800px;height: 300px;" value="#aabbcc" >
+            <div slot="sl-handle" class="custom-sl-handle"></div>
         </ui-color-sl-plane>
+        <div class="my-3">
+            <input type="range" min="0" max="360" step="1" value="90" oninput="document.querySelector('#custom-handle').h = this.value">
+        </div>
 
     </div>
     
