@@ -65,7 +65,7 @@ export default class UiColorHueBarElement extends HTMLElement {
         if (!this.shadowRoot.firstChild) this.render();
         this._syncStyle();
         this.addEventListener('pointerdown', this.handlePointerdown);
-        
+
         this.addEventListener('pointerup', this.handlePointerup);
         this.addEventListener('pointercancel', this.handlePointercancel);
     }
@@ -194,7 +194,6 @@ export default class UiColorHueBarElement extends HTMLElement {
                     width: 100%;
                     height: 100%;
                     position: relative;
-                    overflow: hidden;
                 }
                 :host::part(bg){
                     pointer-events: none;
@@ -230,9 +229,7 @@ export default class UiColorHueBarElement extends HTMLElement {
                     width: 100%;
                     height: 1%;
                     min-width: 0;
-                    min-height: 4px;
-
-                    
+                    min-height: 8px;
                 }
                 :host([data-dir="horizontal"])::part(hue-indicator){
                     flex-direction: column;
@@ -241,7 +238,7 @@ export default class UiColorHueBarElement extends HTMLElement {
                     transform: translateX(-50%);
                     width: 1%;
                     height: 100%;
-                    min-width: 4px;
+                    min-width: 8px;
                     min-height: 0;
                 }
                 :host::part(hue-handle){
@@ -254,41 +251,22 @@ export default class UiColorHueBarElement extends HTMLElement {
                     overflow: visible;
                 }
 
-                :host .default-hue-icon{
+                :host .default-hue-handle{
                     width: 100%;
                     height: 100%;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    box-sizing: content-box;
+                    border-radius:100px;
+                    box-shadow: 0 0 0px 2px #fff, 0 0 0px 4px #000;
+                    background-color:hsl(var(--h),100%,50%);
                 }
-                :host .default-hue-icon::before {
-                    content: ' ';
-                    border: 8px solid #fff;
-                    border-width: var(--icon-width);
-                    display: block;
-                    box-sizing: border-box;
-                    border-color: transparent #000 transparent #fff;
-                    width: 100%;
-                    height: 0%;
 
-                }
-                :host([data-dir="horizontal"]) .default-hue-icon::before{
-                    border-color: #fff transparent #000 transparent;
-                    width: 0%;
-                    height: 100%;
-                }
 
             </style>
             <div part="bar">
                 <div part="bg"></div>
                 <div part="hue-indicator">
-                        
-                    <div part="hue-handle">
-                        <slot name="hue-icon">
-                            <div class="default-hue-icon"></div>
-                        </slot>
-                    </div>
+                    <slot name="hue-handle">
+                        <div class="default-hue-handle"></div>
+                    </slot>
                 </div>
                 <slot></slot>
             </div>
