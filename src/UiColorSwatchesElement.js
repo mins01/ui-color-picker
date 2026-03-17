@@ -34,7 +34,7 @@ export default class UiColorSwatchesElement extends HTMLElement {
      * fields
      * ========================= */
 
-    color = new Color();
+    // color = new Color();
     swatchClassName = UiColorSwatchesElement.swatchClassName
     maxlength = UiColorSwatchesElement.maxlength
     storageKey = UiColorSwatchesElement.storageKey
@@ -98,7 +98,11 @@ export default class UiColorSwatchesElement extends HTMLElement {
     }
 
     get value() {
-        return this.getSelectedSwatch()?.color?.toRgbString();
+        return this.color?.toRgbString();
+    }
+
+    get color() {
+        return this.getSelectedSwatch()?.color;
     }
 
     /* =========================
@@ -114,6 +118,7 @@ export default class UiColorSwatchesElement extends HTMLElement {
         for (const swatch of swatches) {
             swatch.color.equals(color)?swatch.classList.add('selected'):swatch.classList.remove('selected')
         }
+        
         this.dispatchEvent( new Event('select-color-swatch', { bubbles: true, cancelable: true }) );
     }
     getSelectedSwatch(){

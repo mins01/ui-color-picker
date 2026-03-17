@@ -105,6 +105,7 @@
             <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').getSelectedSwatch()?.remove()">getSelectedSwatch()?.remove() 선택된 색 삭제</button>
             <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').replaceChildren()">초기화</button>
             <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').clearSwatches()">clearSwatches() 초기화(locked 제외)</button>
+            <button type="button" class="btn btn-primary btn-sm" onclick="alert(document.getElementById('swatches').color?.toString()??'color없음')">.color?.toString()</button>
 
             <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').saveStorage()">saveStorage() 저장</button>
             <button type="button" class="btn btn-primary btn-sm" onclick="document.getElementById('swatches').loadStorage()">loadStorage() 로드</button>
