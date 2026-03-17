@@ -218,8 +218,11 @@ export default class UiColorHueBarElement extends HTMLElement {
                 :host([data-dir="horizontal"])::part(bg){
                     --bg-direction: to right;
                 }
-
                 :host::part(hue-indicator){
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    overflow: visible;
                     z-index: 2;
                     position: absolute;
                     top: var(--h-position, 0%);
@@ -240,29 +243,20 @@ export default class UiColorHueBarElement extends HTMLElement {
                     min-width: 8px;
                     min-height: 0;
                 }
-                :host::part(hue-handle){
-                    width: 100%;
-                    height: 100%;
-
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    overflow: visible;
-                }
-
                 :host .default-hue-handle{
                     width: 100%;
                     height: 100%;
                     border-radius:100px;
                     box-shadow: 0 0 0px 2px #fff, 0 0 0px 4px #000;
                     background-color:hsl(var(--h),100%,50%);
+                    flex:0 0 auto;
                 }
 
 
             </style>
             <div part="bar">
                 <div part="bg"></div>
-                <div part="hue-indicator">
+                <div part="hue-indicator" class="hue-indicator">
                     <slot name="hue-handle">
                         <div class="default-hue-handle"></div>
                     </slot>

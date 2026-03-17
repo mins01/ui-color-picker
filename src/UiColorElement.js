@@ -116,6 +116,13 @@ export default class UiColorElement extends HTMLElement {
 
     _syncStyle() {
         this.style.setProperty('--color', this.color.toRgbString());
+        this.style.setProperty('--r', this.color.r);
+        this.style.setProperty('--g', this.color.g);
+        this.style.setProperty('--b', this.color.b);
+        const hsl = this.color.toHsl()
+        this.style.setProperty('--h', hsl.h);
+        this.style.setProperty('--s', hsl.s);
+        this.style.setProperty('--l', hsl.l);
     }
 
     /* =========================

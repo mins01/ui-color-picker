@@ -59,12 +59,17 @@ export default class UiColorSwatchesElement extends HTMLElement {
             this.autoLoadStorage();
             this.renderSorted()
             this.trim()
-            this.addEventListener('dblclick',this.handleDblclick);
+            
         }
+        this.addEventListener('dblclick',this.handleDblclick);
+        this.addEventListener('click',this.handleclick);
             
     }
 
-    disconnectedCallback() {}
+    disconnectedCallback() {
+        this.removeEventListener('dblclick',this.handleDblclick);
+        this.removeEventListener('click',this.handleclick);
+    }
 
     attributeChangedCallback(name, oldValue, newValue) {
         if (oldValue === newValue) return;
@@ -108,6 +113,7 @@ export default class UiColorSwatchesElement extends HTMLElement {
         for (const swatch of swatches) {
             swatch.color.equals(color)?swatch.classList.add('selected'):swatch.classList.remove('selected')
         }
+        this.dispatchEvent( new Event('select-color-swatch', { bubbles: true, cancelable: true }) );
     }
     getSelectedSwatch(){
         return this.querySelector('.swatch.selected')
@@ -139,9 +145,10 @@ export default class UiColorSwatchesElement extends HTMLElement {
                 this.trim()
             }
         }
-        this.selectColor(color)
         this.renderSorted()
+        this.selectColor(color)
         if(addedSwatch){
+            addedSwatch.dispatchEvent( new Event('add-swatch', { bubbles: true, cancelable: true }) );
             this.autoSaveStorage();
         }
         return swatch;
@@ -212,7 +219,7 @@ export default class UiColorSwatchesElement extends HTMLElement {
     }
     saveStorage(){ // 색상 저장
         localStorage.setItem(this.storageKey,JSON.stringify(this));
-        console.log('saveStorage',this.storageKey);
+        // console.log('saveStorage',this.storageKey);
         
     }
     autoLoadStorage(){ // 자동 로드
@@ -238,7 +245,7 @@ export default class UiColorSwatchesElement extends HTMLElement {
         }
         this.renderSorted()
         this.trim()
-        console.log('loadStorage',this.storageKey);
+        // console.log('loadStorage',this.storageKey);
         return true;
     }
     toJSON(){
@@ -265,6 +272,12 @@ export default class UiColorSwatchesElement extends HTMLElement {
         if(!this.togglePinOnDblclick) return;
         this.toggleSwatchPin(target)
     }
+    handleclick(event){
+        const target = event.target.closest('.swatch');
+        if(!target) return;
+        this.selectColor(target.color)
+        target.dispatchEvent( new Event('click-swatch', { bubbles: true, cancelable: true }) );
+    }
 
     /* =========================
      * render
@@ -274,9 +287,18 @@ export default class UiColorSwatchesElement extends HTMLElement {
         this.shadowRoot.innerHTML = `
             <style>
                 :host {
-                    display: block;
                     min-width: 20px;
                     min-height: 20px;
+                    --swatch-size:32px;
+                    --border-radius: 4px;
+
+                    display: grid;
+                    /*grid-template-columns: repeat(auto-fill, minmax(var(--swatch-size,20px), 1fr)); */
+                    grid-template-columns: repeat(auto-fill, minmax(var(--swatch-size,20px), auto)); 
+                    gap: 4px;
+                    align-items: center;
+                    justify-items: center;
+                    justify-content: start;
                 }
             </style>
             <slot></slot>

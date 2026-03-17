@@ -46,19 +46,10 @@
         UiColorSwatchesElement.defineCustomElement();
     </script>
     <style>
-        .swatches{
-            --font-size:16px;
-            --border-radius: 4px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(calc( var(--font-size,20px) * 2 ), 1fr)); 
-            gap: 4px;
-            align-items: center;
-            justify-items: center;
-            justify-content: start;
-        }
         .swatch{
-            width: calc( var(--font-size,20px) * 2 );
-            height: calc( var(--font-size,20px) * 2 );
+            font-size: calc( var(--swatch-size,20px) / 2 );
+            width: calc( var(--swatch-size,20px));
+            height: calc( var(--swatch-size,20px));
             border-radius: var(--border-radius);
             user-select: none;
             position: relative;
@@ -69,41 +60,33 @@
             border: 1px solid #ccc;
 
         }
-        .swatch.locked{}
-        .swatch.locked::after{
-            content: '🔒';
-            font-size: calc( var(--font-size) * 0.8 );
+        .swatch::after{
+            font-size: 0.8em;
             position: absolute;
             inset: 0;
             display: flex;
             justify-content: flex-end;
             align-items: flex-end;
         }
-        .swatch.pinned{}
+        .swatch.locked::after{
+            content: '🔒';
+            
+        }
         .swatch.pinned::after{
-            content: '📌';
-            font-size:  calc( var(--font-size) * 0.8 );
-            position: absolute;
-            inset: 0;
-            display: flex;
-            justify-content: flex-end;
-            align-items: flex-end;
+            content: '📌';           
         }
 
         .swatch.selected{
-            border:1px solid #fff;
-            box-shadow:0 0 0 1px #000;
+            box-shadow:0 0 0 2px #000;
         }
         .swatch.selected::before{
-            content: '✔️';
-            inset: 0px;
-            border-radius: var(--border-radius);
             position: absolute;
-            box-sizing: border-box;
-            /* border:2px solid #000; */
+            inset: 0;
             display: flex;
             justify-content: center;
             align-items: center;
+            content: '✔️';
+            
         }
     </style>
     <script>
@@ -111,6 +94,10 @@
             console.log(event.type,event.target.toString());
             
         })
+        window.addEventListener('select-color-swatch',(event)=>{ console.log(event.type,event.target.getSelectedSwatch().toString()); })
+        window.addEventListener('click-swatch',(event)=>{ console.log(event.type,event.target.toString()); })
+        window.addEventListener('add-swatch',(event)=>{ console.log(event.type,event.target.toString()); })
+        
     </script>
 </head>
 
@@ -118,10 +105,8 @@
     <div class="container" id="container0">
         <h1>Test - UiColorSwatchesElement</h1>
         <hr>
-        <ui-color-swatches  style="max-width: 400px;--font-size:40px" class="swatches"
+        <ui-color-swatches  style="max-width: 400px;--swatch-size:80px" class="swatches"
             maxlength="5"
-            onclick="if(event.target.classList.contains('swatch')){console.log(event.target.value); this.selectColor(event.target.color)}"
-            ondblclick="if(event.target.classList.contains('swatch')){console.log(event.target.value); this.toggleSwatchPin(event.target)}"
             value="#aabbcc"
             >
             <ui-color class="swatch locked" value="#ff00ff"  >유지</ui-color>
@@ -146,8 +131,6 @@
             toggle-pin-on-dblclick
             style="max-width: 400px;"
             class="swatches"
-            onclick="if(event.target.classList.contains('swatch')){console.log(event.target.value); this.selectColor(event.target.color)}"
-            xondblclick="if(event.target.classList.contains('swatch')){console.log(event.target.value); this.toggleSwatchPin(event.target)}"
             >
             <ui-color class="swatch locked" value="#000"  ></ui-color>
             <ui-color class="swatch locked" value="#fff"  ></ui-color>
