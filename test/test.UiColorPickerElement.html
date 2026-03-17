@@ -81,28 +81,11 @@
         }
         ui-color-picker{
             font-size: 16px;
-            --clickable-size:32px;
         }
-        ui-color-picker .btn,
-        ui-color-picker ui-color{
-            font-size: 14px;
-            height: var(--clickable-size);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding:0px
-        }
-        ui-color-picker .histories{
-            background-color: #abc;
-            
-        }
-        ui-color-picker .swatches .swatch{
-            width: var(--clickable-size);
-            height: var(--clickable-size);
-        }
-
-        ui-color[data-target-color="selectColor"]{
-
+        ui-color-hue-bar::part(bg),
+        ui-color-sl-plane::part(bg){
+            border-radius: var(--bs-border-radius) !important;
+            box-shadow:0 0 0 1px var(--bs-border-color) !important;
         }
 
     </style>
@@ -175,15 +158,15 @@
         <hr>
 
         <ui-color-picker id="picker" class="border rounded" style="max-width: 400px;" onclick="console.log(this.pendingColor.toRgbString());" value="#33ff00">
-            <div class="d-flex flex-column gap-2 p-2">
-                <div class="d-flex gap-1" style="width: 100%;height: auto; aspect-ratio: 6/3;">
-                    <ui-color-sl-plane class="sync-hue-bar sync-part-color rounded border border-1 overflow-hidden" style="flex: 1 0 auto; aspect-ratio: 1/1;"></ui-color-sl-plane>
-                    <ui-color-hue-bar class="rounded border sync-part-color border-1 overflow-hidden" style="flex: 0 0 30px;"></ui-color-hue-bar>
+            <div class="d-flex flex-column gap-2 p-3">
+                <div class="d-flex gap-3" style="width: 100%;height: auto; aspect-ratio: 6/3;">
+                    <ui-color-sl-plane class="sync-hue-bar sync-part-color" style="flex: 1 0 auto; aspect-ratio: 1/1;"></ui-color-sl-plane>
+                    <ui-color-hue-bar class="rounded border sync-part-color border-1" style="flex: 0 0 30px;"></ui-color-hue-bar>
                 </div>
                 <div class="">
                     <div class="d-flex flex-wrap gap-2">
-                        <input name="toHslString" data-to-string-type="hsl" data-set-color="pendingColor" class="sync-pending-color col form-control form-control-sm" style="flex: 1 0 10em;">
-                        <input name="toRgbString" data-to-string-type="rgb" data-set-color="pendingColor" class="sync-pending-color col form-control form-control-sm" style="flex: 1 0 10em;">
+                        <input name="toHslString" data-to-string-type="hsl" data-set-color="pendingColor" class="sync-pending-color col form-control form-control-sm" style="flex: 1 0 8em;">
+                        <input name="toRgbString" data-to-string-type="rgb" data-set-color="pendingColor" class="sync-pending-color col form-control form-control-sm" style="flex: 1 0 8em;">
                         <input name="toHexString" data-to-string-type="hex" data-set-color="pendingColor" class="sync-pending-color col form-control form-control-sm" style="flex: 0 1 6em;">
                     </div>
                 </div>

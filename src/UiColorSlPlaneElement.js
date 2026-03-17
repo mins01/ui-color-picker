@@ -290,7 +290,6 @@ export default class UiColorSlPlaneElement extends HTMLElement {
                     display: block;
                     min-width: 10px;
                     min-height: 10px;
-                    cursor: crosshair;
                 }
                 ::slotted(*) {
                     pointer-events: none;
@@ -315,8 +314,8 @@ export default class UiColorSlPlaneElement extends HTMLElement {
                     position: absolute;
                     top: var(--l-position, 0%);
                     left: var(--s-position, 0%);
-                    width: 16px;
-                    height: 16px;
+                    width: 12px;
+                    height: 12px;
 
                     transform: translate(-50%, -50%);
                     display: flex;

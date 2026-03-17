@@ -182,7 +182,6 @@ export default class UiColorHueBarElement extends HTMLElement {
                     display: block;
                     min-width: 10px;
                     min-height: 10px;
-                    cursor: ns-resize
                 }
                 ::slotted(*) {
                     pointer-events: none;
