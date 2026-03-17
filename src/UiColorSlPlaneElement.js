@@ -299,7 +299,6 @@ export default class UiColorSlPlaneElement extends HTMLElement {
                     width: 100%;
                     height: 100%;
                     position: relative;
-                    overflow: hidden;
                     pointer-events: none;
                 }
                 :host::part(bg){
@@ -316,8 +315,8 @@ export default class UiColorSlPlaneElement extends HTMLElement {
                     position: absolute;
                     top: var(--l-position, 0%);
                     left: var(--s-position, 0%);
-                    width: 8px;
-                    height: 8px;
+                    width: 16px;
+                    height: 16px;
 
                     transform: translate(-50%, -50%);
                     display: flex;
@@ -327,13 +326,14 @@ export default class UiColorSlPlaneElement extends HTMLElement {
                     
                 }
                 :host .default-sl-handle{
-                    --handle-color:hsl(0,0%,calc( clamp(0, (0.5 - var(--l)) * 1000, 1) * 100%) );
-                    flex: 0 0 100%;
-                    border:2px solid var(--handle-color);
+                    box-shadow:0 0 0 2px hsl(0,0%,calc( clamp(0, (0.5 - var(--l)) * 1000, 1) * 100%) );
+                    background-color:hsl(var(--h),calc(var(--s) * 100%),calc(var(--l) * 100%));
                     border-radius: 50%;
+                    flex: 0 0 100%;
                     width: 100%;
                     height: 100%;
                     display: block;
+                    box-sizing:content-box;
                 }
             </style>
             <div part="plane">
