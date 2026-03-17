@@ -47,55 +47,8 @@
         import UiColorSwatchesElement from '../src/UiColorSwatchesElement.js';
         UiColorSwatchesElement.defineCustomElement();
     </script>
-    <style>
-        .swatch{
-            /* font-size: calc( var(--swatch-size,20px) / 2 );
-            width: calc( var(--swatch-size,20px));
-            height: calc( var(--swatch-size,20px));
-            border-radius: var(--border-radius);
-            user-select: none;
-            position: relative;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 1px solid #ccc; */
-
-        }
-        .swatch::after{
-            /* font-size: 0.8em;
-            position: absolute;
-            inset: 0;
-            display: flex;
-            justify-content: flex-end;
-            align-items: flex-end; */
-        }
-        /* .swatch.locked::after{
-            content: '🔒';
-            
-        }
-        .swatch.pinned::after{
-            content: '📌';           
-        } */
-
-        .swatch.selected{
-            box-shadow:0 0 0 2px #000;
-        }
-        .swatch.selected::before{
-            position: absolute;
-            inset: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            content: '✔️';
-            
-        }
-    </style>
     <script>
-        window.addEventListener('toggle-pin-swatch',(event)=>{
-            console.log(event.type,event.target.toString());
-            
-        })
+        window.addEventListener('toggle-pin-swatch',(event)=>{ console.log(event.type,event.target.toString()); })
         window.addEventListener('select-color-swatch',(event)=>{ console.log(event.type,event.target.getSelectedSwatch().toString()); })
         window.addEventListener('click-swatch',(event)=>{ console.log(event.type,event.target.toString()); })
         window.addEventListener('add-swatch',(event)=>{ console.log(event.type,event.target.toString()); })
