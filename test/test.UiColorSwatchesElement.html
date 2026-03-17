@@ -42,12 +42,14 @@
         window.Color = Color;
         import UiColorElement from '../src/UiColorElement.js';
         UiColorElement.defineCustomElement();
+        import UiColorSwatchElement from '../src/UiColorSwatchElement.js';
+        UiColorSwatchElement.defineCustomElement();
         import UiColorSwatchesElement from '../src/UiColorSwatchesElement.js';
         UiColorSwatchesElement.defineCustomElement();
     </script>
     <style>
         .swatch{
-            font-size: calc( var(--swatch-size,20px) / 2 );
+            /* font-size: calc( var(--swatch-size,20px) / 2 );
             width: calc( var(--swatch-size,20px));
             height: calc( var(--swatch-size,20px));
             border-radius: var(--border-radius);
@@ -57,24 +59,24 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            border: 1px solid #ccc;
+            border: 1px solid #ccc; */
 
         }
         .swatch::after{
-            font-size: 0.8em;
+            /* font-size: 0.8em;
             position: absolute;
             inset: 0;
             display: flex;
             justify-content: flex-end;
-            align-items: flex-end;
+            align-items: flex-end; */
         }
-        .swatch.locked::after{
+        /* .swatch.locked::after{
             content: '🔒';
             
         }
         .swatch.pinned::after{
             content: '📌';           
-        }
+        } */
 
         .swatch.selected{
             box-shadow:0 0 0 2px #000;
@@ -109,17 +111,17 @@
             maxlength="5"
             value="#aabbcc"
             >
-            <ui-color class="swatch locked" value="#ff00ff"  >유지</ui-color>
-            <ui-color class="swatch pinned" value="#aabbcc"  >선택유지</ui-color>
-            <ui-color class="swatch recent" value="#cba"  >유지</ui-color>
-            <ui-color class="swatch recent" value="#cba"  >유지</ui-color>
-            <ui-color class="swatch recent" value="#cbb"  >유지</ui-color>
-            <ui-color class="swatch recent" value="#cbd"  >유지</ui-color>
-            <ui-color class="swatch recent" value="#cb8"  >삭제</ui-color>
-            <ui-color class="swatch recent" value="#cb7"  >삭제</ui-color>
-            <ui-color class="swatch recent" value="#cb6"  >삭제</ui-color>
-            <ui-color class="swatch recent" value="#cb3"  >삭제</ui-color>
-            <ui-color class="swatch recent" value="#cb1"  >삭제</ui-color>
+            <ui-color-swatch class="swatch locked" value="#ff00ff"  >유지</ui-color-swatch>
+            <ui-color-swatch class="swatch pinned" value="#aabbcc"  >선택유지</ui-color-swatch>
+            <ui-color-swatch class="swatch recent" value="#cba"  >유지</ui-color-swatch>
+            <ui-color-swatch class="swatch recent" value="#cba"  >유지</ui-color-swatch>
+            <ui-color-swatch class="swatch recent" value="#cbb"  >유지</ui-color-swatch>
+            <ui-color-swatch class="swatch recent" value="#cbd"  >유지</ui-color-swatch>
+            <ui-color-swatch class="swatch recent" value="#cb8"  >삭제</ui-color-swatch>
+            <ui-color-swatch class="swatch recent" value="#cb7"  >삭제</ui-color-swatch>
+            <ui-color-swatch class="swatch recent" value="#cb6"  >삭제</ui-color-swatch>
+            <ui-color-swatch class="swatch recent" value="#cb3"  >삭제</ui-color-swatch>
+            <ui-color-swatch class="swatch recent" value="#cb1"  >삭제</ui-color-swatch>
         </ui-color-swatches>
         <hr>
         <ui-color-swatches
@@ -132,11 +134,11 @@
             style="max-width: 400px;"
             class="swatches"
             >
-            <ui-color class="swatch locked" value="#000"  ></ui-color>
-            <ui-color class="swatch locked" value="#fff"  ></ui-color>
-            <ui-color class="swatch locked" value="#ffcc00"  ></ui-color>
-            <ui-color class="swatch pinned" value="#aabbcc"  ></ui-color>
-            <ui-color class="swatch recent" value="#cba"  ></ui-color>
+            <ui-color-swatch class="swatch locked" value="#000"  ></ui-color-swatch>
+            <ui-color-swatch class="swatch locked" value="#fff"  ></ui-color-swatch>
+            <ui-color-swatch class="swatch locked" value="#ffcc00"  ></ui-color-swatch>
+            <ui-color-swatch class="swatch pinned" value="#aabbcc"  ></ui-color-swatch>
+            <ui-color-swatch class="swatch recent" value="#cba"  ></ui-color-swatch>
         </ui-color-swatches>
         <div class="form-text">toggle-pin-on-dblclick: 더블클릭으로 색을 핀고정 할 수 있다.</div>
         <hr>

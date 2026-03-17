@@ -1,4 +1,5 @@
 import Color from "../third_party/js-color/v2/src/Color.js";
+import UiColorSwatchElement from "./UiColorSwatchElement.js";
 
 export default class UiColorSwatchesElement extends HTMLElement {
 
@@ -154,7 +155,7 @@ export default class UiColorSwatchesElement extends HTMLElement {
         return swatch;
     }
     createSwatch(color,{locked=false,pinned=false,recent=true}={}){ // 색상 생성
-        const swatch = window.document.createElement('ui-color');
+        const swatch = window.document.createElement(UiColorSwatchElement.tagName);
         swatch.setColor(color);
         swatch.className = this.swatchClassName
         swatch.classList.add('swatch');
@@ -289,12 +290,10 @@ export default class UiColorSwatchesElement extends HTMLElement {
                 :host {
                     min-width: 20px;
                     min-height: 20px;
-                    --swatch-size:32px;
                     --border-radius: 4px;
-
                     display: grid;
-                    /*grid-template-columns: repeat(auto-fill, minmax(var(--swatch-size,20px), 1fr)); */
-                    grid-template-columns: repeat(auto-fill, minmax(var(--swatch-size,20px), auto)); 
+                    /*grid-template-columns: repeat(auto-fill, minmax(var(--swatch-size,${UiColorSwatchElement.swatchSize}), 1fr)); */
+                    grid-template-columns: repeat(auto-fill, minmax(var(--swatch-size,${UiColorSwatchElement.swatchSize}), auto)); 
                     gap: 4px;
                     align-items: center;
                     justify-items: center;
