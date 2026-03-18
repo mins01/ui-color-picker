@@ -1,3 +1,5 @@
+import Color from "../third_party/js-color/v2/src/Color.js";
+
 export default class UiColorHueBarElement extends HTMLElement {
 
     /* =========================
@@ -93,6 +95,11 @@ export default class UiColorHueBarElement extends HTMLElement {
         if(!color) return;
         const hsl = color.toHsl();
         this.h = hsl.h;
+    }
+    toColor(){
+        const color = new Color();
+        color.setHsla(this.h,1,0.5);
+        return color;
     }
 
     /* =========================

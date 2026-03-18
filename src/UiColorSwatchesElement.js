@@ -113,6 +113,9 @@ export default class UiColorSwatchesElement extends HTMLElement {
         // this.selectColor(color);
         this.addRecent(color);
     }
+    toColor(){
+        this.getSelectedSwatch().toColor();
+    }
     selectColor(color){ // 색상 선택
         const swatches = this.querySelectorAll('.swatch');
         for (const swatch of swatches) {
