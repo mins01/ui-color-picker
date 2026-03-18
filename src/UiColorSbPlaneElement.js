@@ -1,15 +1,15 @@
 import Color from "../third_party/js-color/v2/src/Color.js";
 
-export default class UiColorSlPlaneElement extends HTMLElement {
+export default class UiColorSbPlaneElement extends HTMLElement {
 
     /* =========================
      * static
      * ========================= */
 
-    static tagName = 'ui-color-sl-plane';
+    static tagName = 'ui-color-sb-plane';
 
     static get observedAttributes() {
-        return ['hue', 'saturation', 'lightness', 'value'];
+        return ['hue', 'saturation', 'brightness', 'value'];
     }
 
     static defineCustomElement(tagName = this.tagName) {
@@ -24,10 +24,10 @@ export default class UiColorSlPlaneElement extends HTMLElement {
 
     _h = 0;
     _s = 0;
-    _l = 0;
+    _b = 0;
 
     _sFromDown = null;
-    _lFromDown = null;
+    _bFromDown = null;
 
     /* =========================
      * getter / setter
@@ -35,7 +35,7 @@ export default class UiColorSlPlaneElement extends HTMLElement {
 
     get h() { return this._h; }
     set h(value) {
-        return this.setHsl(value,null,null);
+        return this.setHsb(value,null,null);
     }
 
     get hue() { return Math.round(this._h); }
@@ -43,7 +43,7 @@ export default class UiColorSlPlaneElement extends HTMLElement {
 
     get s() { return this._s; }
     set s(value) {
-        return this.setHsl(null,value,null);
+        return this.setHsb(null,value,null);
     }
 
     get saturation() {
@@ -52,16 +52,16 @@ export default class UiColorSlPlaneElement extends HTMLElement {
 
     set saturation(value) { this.s = value; }
 
-    get l() { return this._l; }
-    set l(value) {
-        return this.setHsl(null,null,value);
+    get b() { return this._b; }
+    set b(value) {
+        return this.setHsb(null,null,value);
     }
 
-    get lightness() {
-        return Math.round(this._l * 100)+'%';
+    get brightness() {
+        return Math.round(this._b * 100)+'%';
     }
 
-    set lightness(value) { this.l = value; }
+    set brightness(value) { this.b = value; }
 
 
     set value(value) {
@@ -70,7 +70,7 @@ export default class UiColorSlPlaneElement extends HTMLElement {
     }
 
     get value() {
-        return this.toHslString();
+        return this.toHsbString();
     }
 
     get color(){
@@ -91,11 +91,11 @@ export default class UiColorSlPlaneElement extends HTMLElement {
      * ========================= */
 
     connectedCallback() {
-        if (!this.shadowRoot.firstChild) this.render(); 
+        if (!this.shadowRoot.firstChild) this.render();
         this._syncStyle();
 
         this.addEventListener('pointerdown', this.handlePointerdown);
-        
+
         this.addEventListener('pointerup', this.handlePointerup);
         this.addEventListener('pointercancel', this.handlePointercancel);
     }
@@ -116,7 +116,7 @@ export default class UiColorSlPlaneElement extends HTMLElement {
 
         if (name === 'hue') this.h = newValue;
         if (name === 'saturation') this.s = newValue;
-        if (name === 'lightness') this.l = newValue;
+        if (name === 'brightness') this.b = newValue;
         if (name === 'value') this.value = newValue;
     }
 
@@ -126,10 +126,10 @@ export default class UiColorSlPlaneElement extends HTMLElement {
 
     setColor(color) {
         if(!color) return;
-        const { h, s, l } = color.toHsl();
-        this.setHsl(h,s,l);
+        const { h, s, b } = color.toHsb();
+        this.setHsb(h,s,b);
     }
-    setHsl(h=null,s=null,l=null){
+    setHsb(h=null,s=null,b=null){
         if(h !== null) this._h = Number(h);
         if(s !== null){
             if (typeof s === 'string' && s.endsWith('%')) {
@@ -139,13 +139,13 @@ export default class UiColorSlPlaneElement extends HTMLElement {
             }
             this._s = Math.max(0, Math.min(1, s));
         }
-        if(l !== null){
-            if (typeof l === 'string' && l.endsWith('%')) {
-                l = parseFloat(l) / 100;
+        if(b !== null){
+            if (typeof b === 'string' && b.endsWith('%')) {
+                b = parseFloat(b) / 100;
             } else {
-                l = Number(l);
+                b = Number(b);
             }
-            this._l = Math.max(0, Math.min(1, l));
+            this._b = Math.max(0, Math.min(1, b));
         }
         this._syncStyle();
 
@@ -153,15 +153,15 @@ export default class UiColorSlPlaneElement extends HTMLElement {
 
     toColor() {
         const color = new Color();
-        color.setHsla(this.h, this.s, this.l);
+        color.setHsba(this.h, this.s, this.b);
         return color;
     }
 
-    toHsl() {
+    toHsb() {
         return {
             h: this._h,
             s: this._s,
-            l: this._l
+            b: this._b
         };
     }
 
@@ -169,16 +169,16 @@ export default class UiColorSlPlaneElement extends HTMLElement {
      * internal util
      * ========================= */
 
-    #getSLFromEvent(event) {
+    #getSBFromEvent(event) {
         return {
             s: Math.max(0, Math.min(1, event.offsetX / this.offsetWidth)),
-            l: 1 - Math.max(0, Math.min(1, event.offsetY / this.offsetHeight))
+            b: 1 - Math.max(0, Math.min(1, event.offsetY / this.offsetHeight))
         };
     }
     _syncStyle(){
         this.style.setProperty('--h', this._h);
         this.style.setProperty('--s', this._s);
-        this.style.setProperty('--l', this._l);
+        this.style.setProperty('--b', this._b);
     }
 
     /* =========================
@@ -186,56 +186,56 @@ export default class UiColorSlPlaneElement extends HTMLElement {
      * ========================= */
 
     handlePointerdown(event) {
-        
+
         this.setPointerCapture(event.pointerId);
         this.addEventListener('pointermove', this.handlePointermove);
 
         this._sFromDown = this.s;
-        this._lFromDown = this.l;
+        this._bFromDown = this.b;
 
-        const { s, l } = this.#getSLFromEvent(event);
+        const { s, b } = this.#getSBFromEvent(event);
 
-        if (s === this.s && l === this.l) return;
+        if (s === this.s && b === this.b) return;
 
         this.s = s;
-        this.l = l;
+        this.b = b;
 
         this.dispatchEvent(
-            new Event('input-sl', { bubbles: true, cancelable: true })
+            new Event('input-sb', { bubbles: true, cancelable: true })
         );
-        
+
     }
 
     handlePointermove(event) {
         if (!this.hasPointerCapture(event.pointerId)) return;
-        const { s, l } = this.#getSLFromEvent(event);
-        if (s === this.s && l === this.l) return;
+        const { s, b } = this.#getSBFromEvent(event);
+        if (s === this.s && b === this.b) return;
         this.s = s;
-        this.l = l;
+        this.b = b;
         this.dispatchEvent(
-            new Event('input-sl', { bubbles: true, cancelable: true })
+            new Event('input-sb', { bubbles: true, cancelable: true })
         );
     }
 
     handlePointerup(event) {
-        
+
         this.releasePointerCapture(event.pointerId);
         this.removeEventListener('pointermove', this.handlePointermove);
 
-        if (this.s === this._sFromDown && this.l === this._lFromDown) {
+        if (this.s === this._sFromDown && this.b === this._bFromDown) {
 
             this._sFromDown = null;
-            this._lFromDown = null;
+            this._bFromDown = null;
             return;
         }
 
         this._sFromDown = null;
-        this._lFromDown = null;
+        this._bFromDown = null;
 
         this.dispatchEvent(
-            new Event('change-sl', { bubbles: true, cancelable: true })
+            new Event('change-sb', { bubbles: true, cancelable: true })
         );
-        
+
     }
 
     handlePointercancel(event) {
@@ -246,12 +246,12 @@ export default class UiColorSlPlaneElement extends HTMLElement {
      * conversion
      * ========================= */
 
-    toHslString() {
-        return `hsl(${this.hue}, ${this.saturation}, ${this.lightness})`;
+    toHsbString() {
+        return `hsb(${this.hue}, ${this.saturation}, ${this.brightness})`;
     }
 
     toString() {
-        return this.toHslString();
+        return this.toHsbString();
     }
 
     /* =========================
@@ -263,16 +263,16 @@ export default class UiColorSlPlaneElement extends HTMLElement {
             return this.toColor().toRgbNumber();
         }
         if (hint === 'string') {
-            return this.toHslString();
+            return this.toHsbString();
         }
-        return this.toHslString();
+        return this.toHsbString();
     }
 
     toJSON() {
         return {
             h: this._h,
             s: this._s,
-            l: this._l
+            b: this._b
         };
     }
 
@@ -285,10 +285,9 @@ export default class UiColorSlPlaneElement extends HTMLElement {
                 :host {
                     --h: 0;
                     --s: 0;
-                    --l: 0;
-                    --h-position: calc( var(--h,0) / 360 * 100% );
+                    --b: 0;
                     --s-position: calc( var(--s,0) * 100% );
-                    --l-position: calc( ( 1 - var(--l,0) ) * 100% );
+                    --b-position: calc( ( 1 - var(--b,0) ) * 100% );
                     user-select: none;
                     touch-action: none;
                     display: block;
@@ -309,14 +308,13 @@ export default class UiColorSlPlaneElement extends HTMLElement {
                     position: absolute;
                     inset:0px;
 
-                    background:linear-gradient(to bottom, hsl(0, 0%, 100%) 0%, hsla(0, 0%, 100%, 0) 50%, hsla(0, 0%, 0%, 0) 50%, hsl(0, 0%, 0%) 100%),
-	                linear-gradient(to right, hsla(0, 0%, 50%, 1) 0%, hsla(0, 0%, 50%, 0) 100%),
-                    hsl(var(--h,0) 100% 50%);
+                    background: linear-gradient(to bottom, transparent 0%, black 100%),
+                        linear-gradient(to right, white 0%, hsl(var(--h,0), 100%, 50%) 100%);
                 }
-                
-                :host::part(sl-indicator) {
+
+                :host::part(sb-indicator) {
                     position: absolute;
-                    top: var(--l-position, 0%);
+                    top: var(--b-position, 0%);
                     left: var(--s-position, 0%);
                     width: 12px;
                     height: 12px;
@@ -326,11 +324,14 @@ export default class UiColorSlPlaneElement extends HTMLElement {
                     justify-content: center;
                     align-items: center;
                     overflow: visible;
-                    
+
                 }
-                :host .default-sl-handle{
-                    box-shadow:0 0 0 2px hsl(0,0%,calc( clamp(0, (0.5 - var(--l)) * 1000, 1) * 100%) );
-                    background-color:hsl(var(--h),calc(var(--s) * 100%),calc(var(--l) * 100%));
+                :host .default-sb-handle{
+                    box-shadow:0 0 0 2px hsl(0,0%,calc( clamp(0, (var(--b) - 0.3) * 1000, 1) * 100%) );
+                    background-color: color-mix(in srgb,
+                        color-mix(in srgb, white calc((1 - var(--s)) * 100%), hsl(var(--h), 100%, 50%)),
+                        black calc((1 - var(--b)) * 100%)
+                    );
                     border-radius: 50%;
                     flex: 0 0 100%;
                     width: 100%;
@@ -342,9 +343,9 @@ export default class UiColorSlPlaneElement extends HTMLElement {
             <div part="plane">
                 <div part="bg">
                 </div>
-                <div part="sl-indicator">
-                    <slot name="sl-handle">
-                        <div class="default-sl-handle"></div>
+                <div part="sb-indicator">
+                    <slot name="sb-handle">
+                        <div class="default-sb-handle"></div>
                     </slot>
                 </div>
                 <slot></slot>
