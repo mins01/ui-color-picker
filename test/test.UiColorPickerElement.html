@@ -156,9 +156,18 @@
         <ui-color-picker id="picker2" class="border rounded" style="max-width: 400px;" onclick="console.log(this.pendingColor.toRgbString());" value="#33ff00">
             <div class="d-flex flex-column gap-2 p-3">
                 <div class="d-flex gap-3" style="width: 100%;height: auto;  ">
-                    <ui-color-sl-plane class="sync-hue-bar sync-part-color" style="flex: 1 0 auto; aspect-ratio: 1/1;">HSL</ui-color-sl-plane>
-                    <ui-color-sb-plane class="sync-hue-bar sync-part-color" style="flex: 1 0 auto; aspect-ratio: 1/1;">HSB</ui-color-sb-plane>
-                    <ui-color-hue-bar class="sync-part-color" style="flex: 0 0 30px;"></ui-color-hue-bar>
+                    <div style="flex: 1 0 auto; aspect-ratio: 1/1;">
+                        <div class="form-label">HSL</div>
+                        <ui-color-sl-plane class="sync-hue-bar sync-part-color" style="flex: 1 0 auto; aspect-ratio: 1/1;">HSL</ui-color-sl-plane>
+                    </div>
+                    <div style="flex: 1 0 auto; aspect-ratio: 1/1;">
+                        <div class="form-label">HSB</div>
+                        <ui-color-sb-plane class="sync-hue-bar sync-part-color" style="flex: 1 0 auto; aspect-ratio: 1/1;">HSB</ui-color-sb-plane>
+                    </div>
+                    <div  style="flex: 0 0 30px;" class="d-flex flex-column align-items-stretch w-100">
+                        <div class="form-label">HUE</div>
+                        <ui-color-hue-bar class="sync-part-color" style="flex: 1 0 30px; height: 100%;"></ui-color-hue-bar>
+                    </div>
                 </div>
                 <div class="">
                     <div class="d-flex flex-wrap gap-2">
