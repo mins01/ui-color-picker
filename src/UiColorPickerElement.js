@@ -134,28 +134,28 @@ export default class UiColorPickerElement extends HTMLElement {
     }
 
     syncSelectedColor() {
-        document.querySelectorAll('.sync-selected-color').forEach((el) => {
+        this.querySelectorAll('.sync-selected-color').forEach((el) => {
             this.syncToElement(this.selectedColor,el);
         })
     }
     syncPartColorForSelected() {
-        document.querySelectorAll('.sync-part-color').forEach((el) => {
+        this.querySelectorAll('.sync-part-color').forEach((el) => {
             this.syncToElement(this.selectedColor,el);
         })
     }
     syncPendingColor() {
-        document.querySelectorAll('.sync-pending-color').forEach((el) => {
+        this.querySelectorAll('.sync-pending-color').forEach((el) => {
             this.syncToElement(this.pendingColor,el);
         })
     }
     syncPartColorForPending(){
-        document.querySelectorAll('.sync-part-color').forEach((el) => {
+        this.querySelectorAll('.sync-part-color').forEach((el) => {
             this.syncToElement(this.pendingColor,el);
         })
     }
     syncHueBar(target) {
         console.log(target.h);    
-        document.querySelectorAll('.sync-hue-bar').forEach((el) => {
+        this.querySelectorAll('.sync-hue-bar').forEach((el) => {
             el.h = target.h;
         })
     }
