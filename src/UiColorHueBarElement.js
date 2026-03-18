@@ -78,6 +78,11 @@ export default class UiColorHueBarElement extends UiColorBarElement {
     /* =========================
      * internal utilities
      * ========================= */
+    _getHFromEvent(event) {
+        return this.dataset.dir === 'horizontal'
+            ? (Math.max(0, Math.min(1, event.offsetX / this.offsetWidth)))
+            : (Math.max(0, Math.min(1, event.offsetY / this.offsetHeight))); // hue는 y축은 inverse 하지 않는다.
+    }
 
     _syncStyle() {
         super._syncStyle();
@@ -103,9 +108,11 @@ export default class UiColorHueBarElement extends UiColorBarElement {
      * ========================= */
     static extendedStyle = `<style>
         :host {
+            --value-position: calc( ( var(--value,0)) * 100%);
             --h: calc(var(--value) * 360);
         }
         :host::part(bg){
+            --bg-direction: to bottom;
             background: linear-gradient(var(--bg-direction),
                 hsl(0,100%,50%),
                 hsl(30,100%,50%),

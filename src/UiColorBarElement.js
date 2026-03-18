@@ -106,7 +106,7 @@ export default class UiColorBarElement extends HTMLElement {
     _getHFromEvent(event) {
         return this.dataset.dir === 'horizontal'
             ? (Math.max(0, Math.min(1, event.offsetX / this.offsetWidth)))
-            : (Math.max(0, Math.min(1, event.offsetY / this.offsetHeight)));
+            : 1-(Math.max(0, Math.min(1, event.offsetY / this.offsetHeight))); //y축은 inverse
     }
 
     _syncStyle() {
@@ -173,12 +173,15 @@ export default class UiColorBarElement extends HTMLElement {
             <style>
                 :host {
                     --value: 0;
-                    --value-position: calc(var(--value,0) * 100%);
+                    --value-position: calc( ( 1 - var(--value,0)) * 100%);
                     user-select: none;
                     touch-action: none;
                     display: block;
                     min-width: 10px;
                     min-height: 10px;
+                }
+                :host([data-dir="horizontal"]){
+                    --value-position: calc( ( var(--value,0)) * 100%);
                 }
                 ::slotted(*) { pointer-events: none; }
 
@@ -189,8 +192,8 @@ export default class UiColorBarElement extends HTMLElement {
                     pointer-events: none;
                     position: absolute;
                     inset: 0px;
-                    --bg-direction: to bottom;
-                    background: linear-gradient(var(--bg-direction), rgb(0 0 0 / 1), rgb(255 255 255 / 1));
+                    --bg-direction: to top;
+                    background: linear-gradient(var(--bg-direction), rgb(0 0 0 / 1),  rgb(255 255 255 / 1));
                     box-shadow: inset 0 0 0 1px #ccc;
                 }
 
