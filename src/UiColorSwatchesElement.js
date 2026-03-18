@@ -116,9 +116,17 @@ export default class UiColorSwatchesElement extends HTMLElement {
     selectColor(color){ // 색상 선택
         const swatches = this.querySelectorAll('.swatch');
         for (const swatch of swatches) {
-            swatch.color.equals(color)?swatch.classList.add('selected'):swatch.classList.remove('selected')
-        }
-        if(this.color) this.dispatchEvent( new Event('select-color-swatch', { bubbles: true, cancelable: true }) );
+            if(swatch.color.equals(color)){
+                return this.selectSwatch(swatch);
+            }
+        }        
+    }
+    selectSwatch(swatch){
+        this.querySelectorAll('.swatch.selected').forEach((el)=>{
+            el.classList.remove('selected')
+        });
+        swatch.classList.add('selected')
+        swatch.dispatchEvent( new Event('select-swatch', { bubbles: true, cancelable: true }) );
     }
     getSelectedSwatch(){
         return this.querySelector('.swatch.selected')
@@ -151,8 +159,9 @@ export default class UiColorSwatchesElement extends HTMLElement {
             }
         }
         this.renderSorted()
-        this.selectColor(color)
+        // this.selectColor(color)
         if(addedSwatch){
+            this.selectSwatch(addedSwatch);
             addedSwatch.dispatchEvent( new Event('add-swatch', { bubbles: true, cancelable: true }) );
             this.autoSaveStorage();
         }
@@ -280,7 +289,7 @@ export default class UiColorSwatchesElement extends HTMLElement {
     handleclick(event){
         const target = event.target.closest('.swatch');
         if(!target) return;
-        this.selectColor(target.color)
+        this.selectSwatch(target)
         target.dispatchEvent( new Event('click-swatch', { bubbles: true, cancelable: true }) );
     }
 
