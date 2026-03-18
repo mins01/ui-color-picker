@@ -45,8 +45,8 @@
         UiColorHueBarElement.defineCustomElement();
     </script>
     <script>
-        document.addEventListener('input-raw', (event) => { console.log(event.type,event.target.raw) });
-        document.addEventListener('change-raw', (event) => { console.log(event.type,event.target.raw) });
+        document.addEventListener('input-value', (event) => { console.log(event.type,event.target.value) });
+        document.addEventListener('change-value', (event) => { console.log(event.type,event.target.value) });
         document.addEventListener('input-hue', (event) => { console.log(event.type,event.target.hue,event.target.h) });
         document.addEventListener('change-hue', (event) => { console.log(event.type,event.target.hue,event.target.h) });
     </script>    
@@ -58,13 +58,13 @@
         <hr>
         <div class="d-flex gap-3 my-3">
             <ui-color-bar style="width: 40px;height: 200px;" ></ui-color-bar>
-            <ui-color-bar style="width: 40px;height: 200px;" raw="0.3"></ui-color-bar>
+            <ui-color-bar style="width: 40px;height: 200px;" value="0.3"></ui-color-bar>
             <ui-color-hue-bar style="width: 40px;height: 200px;" hue="120"></ui-color-hue-bar>
         </div>
 
         <div class="d-flex flex-column gap-3 my-3">
             <ui-color-bar style="width: 200px;height: 40px;" data-dir="horizontal" ></ui-color-bar>
-            <ui-color-bar style="width: 200px;height: 40px;" data-dir="horizontal" raw="0.3"></ui-color-bar>
+            <ui-color-bar style="width: 200px;height: 40px;" data-dir="horizontal" value="0.3"></ui-color-bar>
             <ui-color-hue-bar style="width: 200px;height: 40px;" data-dir="horizontal" hue="120"></ui-color-hue-bar>
         </div>
     </div>

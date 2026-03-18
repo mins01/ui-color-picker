@@ -1,33 +1,35 @@
 import Color from "../third_party/js-color/v2/src/Color.js";
 import UiColorBarElement from "./UiColorBarElement.js";
+
 export default class UiColorHueBarElement extends UiColorBarElement {
 
     /* =========================
      * static
      * ========================= */
 
-    /** 커스텀 엘리먼트 태그명 */
     static tagName = 'ui-color-hue-bar';
 
+    /** Hue 전용 이벤트 이름 */
     static inputEventName = 'input-hue';
     static changeEventName = 'change-hue';
 
-    /** 감시할 속성 목록 */
     static get observedAttributes() {
         return ['hue'];
     }
-
 
     /* =========================
      * getter / setter
      * ========================= */
 
     get h() {
-        return this.raw * 360;
+        return this.value * 360;
     }
 
     set h(value) {
-        this.raw = Number(value) / 360;
+        let n = Number(value);
+        if (isNaN(n)) n = 0;
+        n = Math.max(0, Math.min(360, n)); // 0~360 제한
+        this.value = n / 360;
     }
 
     get hue() {
@@ -59,14 +61,17 @@ export default class UiColorHueBarElement extends UiColorBarElement {
      * public API
      * ========================= */
 
+    // 유지: 색상 적용
     setColor(color) {
-        if(!color) return;
+        if (!color) return;
         const hsl = color.toHsl();
         this.h = hsl.h;
     }
-    toColor(){
+
+    // 유지: Color 객체 반환
+    toColor() {
         const color = new Color();
-        color.setHsla(this.h,1,0.5);
+        color.setHsla(this.h, 1, 0.5);
         return color;
     }
 
@@ -74,11 +79,10 @@ export default class UiColorHueBarElement extends UiColorBarElement {
      * internal utilities
      * ========================= */
 
-    _syncStyle(){
+    _syncStyle() {
         super._syncStyle();
         this.style.setProperty('--h', this.h);
     }
-    
 
     /* =========================
      * primitive / serialization
@@ -95,29 +99,11 @@ export default class UiColorHueBarElement extends UiColorBarElement {
     }
 
     /* =========================
-     * public API
-     * ========================= */
-
-    // 여기선 아무작업 안한다. 상속 받는 쪽에서 다시 재선언해라
-    setColor(color) {
-        if(!color) return;
-        color = color.toHsl();
-        this.h = color.h;
-        
-    }
-    // 여기선 아무작업 안한다. 상속 받는 쪽에서 다시 재선언해라
-    toColor(){
-        const color = new Color();
-        color.setHsla(this.h,1,0.5);
-        return color;
-    }
-
-    /* =========================
      * 스타일 확장
      * ========================= */
     static extendedStyle = `<style>
         :host {
-            --h: calc(var(--raw) * 360);
+            --h: calc(var(--value) * 360);
         }
         :host::part(bg){
             background: linear-gradient(var(--bg-direction),
@@ -138,8 +124,6 @@ export default class UiColorHueBarElement extends UiColorBarElement {
         }
         :host .default-handle{
             background-color:hsl(var(--h),100%,50%);
-
         }
     </style>`;
-    
 }

@@ -8,17 +8,17 @@ export default class UiColorBarElement extends HTMLElement {
 
     /** 커스텀 엘리먼트 태그명 */
     static tagName = 'ui-color-bar';
-    
 
-    static inputEventName = 'input-raw';
-    static changeEventName = 'change-raw';
+    /** 이벤트 이름 */
+    static inputEventName = 'input-value';
+    static changeEventName = 'change-value';
 
     // 스타일 확장
     static extendedStyle = `<style></style>`;
 
     /** 감시할 속성 목록 */
     static get observedAttributes() {
-        return ['raw'];
+        return ['value'];
     }
 
     /** 커스텀 엘리먼트 등록 */
@@ -32,23 +32,23 @@ export default class UiColorBarElement extends HTMLElement {
      * fields
      * ========================= */
 
-    _raw = 0;
-    _rawFromDown = null;
+    _value = 0;
+    _valueFromDown = null;
 
     /* =========================
      * getter / setter
      * ========================= */
 
-    get raw() {
-        return this._raw;
+    get value() {
+        return this._value;
     }
 
-    set raw(value) {
-        this._raw = Number(value);
-        this._syncStyle()
+    set value(v) {
+        let n = Number(v);
+        if (isNaN(n)) n = 0;
+        this._value = Math.max(0, Math.min(1, n));
+        this._syncStyle();
     }
-
-
 
     /* =========================
      * constructor
@@ -57,7 +57,6 @@ export default class UiColorBarElement extends HTMLElement {
     constructor() {
         super();
         this.attachShadow({ mode: 'open' });
-
     }
 
     /* =========================
@@ -84,21 +83,20 @@ export default class UiColorBarElement extends HTMLElement {
 
     attributeChangedCallback(name, oldValue, newValue) {
         if (oldValue === newValue) return;
-        if (name === 'raw') { this.raw = newValue; }
+        if (name === 'value') { this.value = newValue; }
     }
 
     /* =========================
      * public API
      * ========================= */
 
-    // 여기선 아무작업 안한다. 상속 받는 쪽에서 다시 재선언해라
+    // 상속받아 재선언 가능
     setColor(color) {
         if(!color) return;
-        
     }
-    // 여기선 아무작업 안한다. 상속 받는 쪽에서 다시 재선언해라
-    toColor(){
-        
+
+    toColor() {
+        // 상속받아 재선언
     }
 
     /* =========================
@@ -111,10 +109,10 @@ export default class UiColorBarElement extends HTMLElement {
             : (Math.max(0, Math.min(1, event.offsetY / this.offsetHeight)));
     }
 
-    // 재선언해서 쓰자
-    _syncStyle(){
-        this.style.setProperty('--raw', this.raw);
+    _syncStyle() {
+        this.style.setProperty('--value', this.value);
     }
+
     /* =========================
      * pointer events
      * ========================= */
@@ -122,36 +120,30 @@ export default class UiColorBarElement extends HTMLElement {
     handlePointerdown(event) {
         this.addEventListener('pointermove', this.handlePointermove);
         this.setPointerCapture(event.pointerId);
-        this._rawFromDown = this.raw;
-        const raw = this._getHFromEvent(event);
-        if (raw === this.raw) return;
-        this.raw = raw;
-        this.dispatchEvent(
-            new Event(this.constructor.inputEventName, { bubbles: true, cancelable: true })
-        );
+        this._valueFromDown = this.value;
+        const val = this._getHFromEvent(event);
+        if (val === this.value) return;
+        this.value = val;
+        this.dispatchEvent(new Event(this.constructor.inputEventName, { bubbles: true, cancelable: true }));
     }
 
     handlePointermove(event) {
         if (!this.hasPointerCapture(event.pointerId)) return;
-        const raw = this._getHFromEvent(event);
-        if (raw === this.raw) return;
-        this.raw = raw;
-        this.dispatchEvent(
-            new Event(this.constructor.inputEventName, { bubbles: true, cancelable: true })
-        );
+        const val = this._getHFromEvent(event);
+        if (val === this.value) return;
+        this.value = val;
+        this.dispatchEvent(new Event(this.constructor.inputEventName, { bubbles: true, cancelable: true }));
     }
 
     handlePointerup(event) {
         this.removeEventListener('pointermove', this.handlePointermove);
         this.releasePointerCapture(event.pointerId);
-        if (this.raw === this._rawFromDown) {
-            this._rawFromDown = null;
+        if (this.value === this._valueFromDown) {
+            this._valueFromDown = null;
             return;
         }
-        this._rawFromDown = null;
-        this.dispatchEvent(
-            new Event(this.constructor.changeEventName, { bubbles: true, cancelable: true })
-        );
+        this._valueFromDown = null;
+        this.dispatchEvent(new Event(this.constructor.changeEventName, { bubbles: true, cancelable: true }));
     }
 
     handlePointercancel(event) {
@@ -163,63 +155,55 @@ export default class UiColorBarElement extends HTMLElement {
      * ========================= */
 
     [Symbol.toPrimitive](hint) {
-        if (hint === 'number') return this.raw;
-        if (hint === 'string') return this.raw.toString(10);
-        return this.raw;
+        if (hint === 'number') return this.value;
+        if (hint === 'string') return this.value.toString(10);
+        return this.value;
     }
 
     toJSON() {
-        return { v: this._raw };
+        return { value: this._value };
     }
 
     /* =========================
      * render
      * ========================= */
 
-    /** Shadow DOM 렌더링 */
     render() {
         this.shadowRoot.innerHTML = `
             <style>
                 :host {
-                    --raw: 0;
-                    --raw-position: calc( var(--raw,0) * 100% );
+                    --value: 0;
+                    --value-position: calc(var(--value,0) * 100%);
                     user-select: none;
                     touch-action: none;
                     display: block;
                     min-width: 10px;
                     min-height: 10px;
                 }
-                ::slotted(*) {
-                    pointer-events: none;
-                }
-                :host::part(bar){
-                    width: 100%;
-                    height: 100%;
-                    position: relative;
-                }
-                :host::part(bg){
+                ::slotted(*) { pointer-events: none; }
+
+                :host::part(bar) { width: 100%; height: 100%; position: relative; }
+
+                :host::part(bg) {
                     z-index: 1;
                     pointer-events: none;
                     position: absolute;
-                    inset:0px;
+                    inset: 0px;
                     --bg-direction: to bottom;
-                    background: linear-gradient(var(--bg-direction),
-                        rgb(0 0 0 / 1),
-                        rgb(255 255 255 / 1)
-                    );
+                    background: linear-gradient(var(--bg-direction), rgb(0 0 0 / 1), rgb(255 255 255 / 1));
                     box-shadow: inset 0 0 0 1px #ccc;
                 }
-                :host([data-dir="horizontal"])::part(bg){
-                    --bg-direction: to right;
-                }
-                :host::part(indicator){
+
+                :host([data-dir="horizontal"])::part(bg) { --bg-direction: to right; }
+
+                :host::part(indicator) {
                     z-index: 2;
                     display: flex;
                     justify-content: center;
                     align-items: center;
                     overflow: visible;
                     position: absolute;
-                    top: var(--raw-position, 0%);
+                    top: var(--value-position, 0%);
                     transform: translateY(-50%);
                     left: 0;
                     width: 100%;
@@ -227,25 +211,26 @@ export default class UiColorBarElement extends HTMLElement {
                     min-width: 0;
                     min-height: 8px;
                 }
-                :host([data-dir="horizontal"])::part(indicator){
+
+                :host([data-dir="horizontal"])::part(indicator) {
                     flex-direction: column;
                     top: 0;
-                    left: var(--raw-position, 0%);
+                    left: var(--value-position, 0%);
                     transform: translateX(-50%);
                     width: 1%;
                     height: 100%;
                     min-width: 8px;
                     min-height: 0;
                 }
-                :host .default-handle{
+
+                :host .default-handle {
                     width: 100%;
                     height: 100%;
-                    border-radius:100px;
+                    border-radius: 100px;
                     box-shadow: 0 0 0px 2px #fff, 0 0 0px 4px #000;
-                    background-color:rgb( calc(var(--raw)*255) calc(var(--raw)*255) calc(var(--raw)*255));
-                    flex:0 0 auto;
+                    background-color: rgb(calc(var(--value)*255) calc(var(--value)*255) calc(var(--value)*255));
+                    flex: 0 0 auto;
                 }
-
 
             </style>
             ${this.constructor.extendedStyle}
