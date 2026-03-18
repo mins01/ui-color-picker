@@ -62,6 +62,7 @@ export default class UiColorPickerElement extends HTMLElement {
         this.addEventListener('change-hue', this.handleChangeHue);
         this.addEventListener('input', this.handleInput);
         this.addEventListener('change', this.handleChange);
+        this.addEventListener('select-swatch', this.handleSelectSwatch);
     }
 
     disconnectedCallback() {
@@ -71,6 +72,7 @@ export default class UiColorPickerElement extends HTMLElement {
         this.removeEventListener('change-hue', this.handleChangeHue);
         this.removeEventListener('input', this.handleInput);
         this.removeEventListener('change', this.handleChange);
+        this.removeEventListener('select-swatch', this.handleSelectSwatch);
 
     }
 
@@ -253,7 +255,12 @@ export default class UiColorPickerElement extends HTMLElement {
             }
         }
 
-    }    
+    }
+
+    handleSelectSwatch(event) {
+        const swatch = event.target;
+        this.setPendingColor(swatch.color);        
+    }
 
     /* =========================
      * conversion / util

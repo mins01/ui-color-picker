@@ -91,67 +91,7 @@
         }
 
     </style>
-    <style>
-        .swatches{
-            --font-size:16px;
-            --border-radius: 4px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(calc( var(--font-size,20px) * 2 ), 1fr)); 
-            gap: 4px;
-            align-items: center;
-            justify-items: center;
-            justify-content: start;
-        }
-        .swatch{
-            width: calc( var(--font-size,20px) * 2 );
-            height: calc( var(--font-size,20px) * 2 );
-            border-radius: var(--border-radius);
-            user-select: none;
-            position: relative;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border: 1px solid #ccc;
-
-        }
-        .swatch.locked{}
-        .swatch.locked::after{
-            content: '🔒';
-            font-size: calc( var(--font-size) * 0.8 );
-            position: absolute;
-            inset: 0;
-            display: flex;
-            justify-content: flex-end;
-            align-items: flex-end;
-        }
-        .swatch.pinned{}
-        .swatch.pinned::after{
-            content: '📌';
-            font-size:  calc( var(--font-size) * 0.8 );
-            position: absolute;
-            inset: 0;
-            display: flex;
-            justify-content: flex-end;
-            align-items: flex-end;
-        }
-
-        .swatch.selected{
-            border:1px solid #fff;
-            box-shadow:0 0 0 1px #000;
-        }
-        .swatch.selected::before{
-            content: '✔️';
-            inset: 0px;
-            border-radius: var(--border-radius);
-            position: absolute;
-            box-sizing: border-box;
-            /* border:2px solid #000; */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-    </style>
+    
 </head>
 
 <body>
@@ -191,20 +131,19 @@
                             storage-key="color-picker-test"
                             auto-save="1"
                             auto-load="1"
-                            class="sync-selected-color swatches " 
-                            onclick="if(event.target.classList.contains('swatch')){this.selectColor(event.target.color); this.closest('ui-color-picker').setPendingColor(event.target.color);}"
-                            ondblclick="if(event.target.classList.contains('swatch')){console.log(event.target.value); this.toggleSwatchPin(event.target)}"
+                            toggle-pin-on-dblclick
+                            class="sync-selected-color swatches" 
                             >
-                            <ui-color class="swatch locked" value="#000000"></ui-color> <!-- black -->
-                            <ui-color class="swatch locked" value="#FFFFFF"></ui-color> <!-- white -->
+                            <ui-color-swatch class="swatch locked" value="#000000"></ui-color-swatch> <!-- black -->
+                            <ui-color-swatch class="swatch locked" value="#FFFFFF"></ui-color-swatch> <!-- white -->
         
-                            <ui-color class="swatch locked" value="#FF0000"></ui-color> <!-- red -->
-                            <ui-color class="swatch locked" value="#00FF00"></ui-color> <!-- green -->
-                            <ui-color class="swatch locked" value="#0000FF"></ui-color> <!-- blue -->
+                            <ui-color-swatch class="swatch locked" value="#FF0000"></ui-color-swatch> <!-- red -->
+                            <ui-color-swatch class="swatch locked" value="#00FF00"></ui-color-swatch> <!-- green -->
+                            <ui-color-swatch class="swatch locked" value="#0000FF"></ui-color-swatch> <!-- blue -->
         
-                            <ui-color class="swatch locked" value="#FFFF00"></ui-color> <!-- yellow -->
-                            <ui-color class="swatch locked" value="#00FFFF"></ui-color> <!-- cyan -->
-                            <ui-color class="swatch locked" value="#FF00FF"></ui-color> <!-- magenta -->
+                            <ui-color-swatch class="swatch locked" value="#FFFF00"></ui-color-swatch> <!-- yellow -->
+                            <ui-color-swatch class="swatch locked" value="#00FFFF"></ui-color-swatch> <!-- cyan -->
+                            <ui-color-swatch class="swatch locked" value="#FF00FF"></ui-color-swatch> <!-- magenta -->
         
                         </ui-color-swatches>
                     </div>
