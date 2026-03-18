@@ -175,7 +175,10 @@ export default class UiColorSbPlaneElement extends HTMLElement {
             b: 1 - Math.max(0, Math.min(1, event.offsetY / this.offsetHeight))
         };
     }
+    #cachedColor = new Color();
     _syncStyle(){
+        this.#cachedColor.setHsba(this._h,this._s,this._b);
+        this.style.setProperty('--color-string', this.#cachedColor.toRgbString());
         this.style.setProperty('--h', this._h);
         this.style.setProperty('--s', this._s);
         this.style.setProperty('--b', this._b);
@@ -283,6 +286,7 @@ export default class UiColorSbPlaneElement extends HTMLElement {
         this.shadowRoot.innerHTML = `
             <style>
                 :host {
+                    --color-string:#000;
                     --h: 0;
                     --s: 0;
                     --b: 0;
@@ -327,11 +331,8 @@ export default class UiColorSbPlaneElement extends HTMLElement {
 
                 }
                 :host .default-sb-handle{
-                    box-shadow:0 0 0 2px hsl(0,0%,calc( clamp(0, (var(--b) - 0.3) * 1000, 1) * 100%) );
-                    background-color: color-mix(in srgb,
-                        color-mix(in srgb, white calc((1 - var(--s)) * 100%), hsl(var(--h), 100%, 50%)),
-                        black calc((1 - var(--b)) * 100%)
-                    );
+                    box-shadow:0 0 0 2px hsl(0,0%,calc( clamp(0, (0.5 - var(--b)) * 1000, 1) * 100%) );
+                    background-color: var(--color-string);
                     border-radius: 50%;
                     flex: 0 0 100%;
                     width: 100%;

@@ -175,7 +175,8 @@ export default class UiColorSlPlaneElement extends HTMLElement {
             l: 1 - Math.max(0, Math.min(1, event.offsetY / this.offsetHeight))
         };
     }
-    _syncStyle(){
+    _syncStyle(){        
+        this.style.setProperty('--color-string', this.toHslString());
         this.style.setProperty('--h', this._h);
         this.style.setProperty('--s', this._s);
         this.style.setProperty('--l', this._l);
@@ -283,6 +284,7 @@ export default class UiColorSlPlaneElement extends HTMLElement {
         this.shadowRoot.innerHTML = `
             <style>
                 :host {
+                    --color-string:#000;
                     --h: 0;
                     --s: 0;
                     --l: 0;
@@ -330,7 +332,7 @@ export default class UiColorSlPlaneElement extends HTMLElement {
                 }
                 :host .default-sl-handle{
                     box-shadow:0 0 0 2px hsl(0,0%,calc( clamp(0, (0.5 - var(--l)) * 1000, 1) * 100%) );
-                    background-color:hsl(var(--h),calc(var(--s) * 100%),calc(var(--l) * 100%));
+                    background-color:var(--color-string,#000);
                     border-radius: 50%;
                     flex: 0 0 100%;
                     width: 100%;

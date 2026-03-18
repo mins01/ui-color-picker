@@ -163,9 +163,7 @@ export default class UiColorPickerElement extends HTMLElement {
     syncToElement(color,toElement){
         if(toElement.setColor) toElement.setColor(color);
         if ('value' in toElement) { 
-            const str = color.toString(toElement.dataset.toStringType);
-            console.log(str);
-            
+            const str = color.toString(toElement.dataset.toStringType);            
             if(toElement.value !== str) toElement.value = str;
         }
     }
