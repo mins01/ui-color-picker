@@ -1,20 +1,20 @@
 import Color from "../third_party/js-color/v2/src/Color.js";
 import UiColorBarElement from "./UiColorBarElement.js";
 
-export default class UiColorGreenBarElement extends UiColorBarElement {
+export default class UiColorBarRgbRedElement extends UiColorBarElement {
 
     /* =========================
      * static
      * ========================= */
 
-    static tagName = 'ui-color-green-bar';
+    static tagName = 'ui-color-bar-rgb-red';
 
-    /** Green 전용 이벤트 이름 */
-    static inputEventName = 'input-green';
-    static changeEventName = 'change-green';
+    /** Red 전용 이벤트 이름 */
+    static inputEventName = 'input-rgb-red';
+    static changeEventName = 'change-rgb-red';
 
     static get observedAttributes() {
-        return ['green'];
+        return ['red'];
     }
 
     /* =========================
@@ -22,23 +22,23 @@ export default class UiColorGreenBarElement extends UiColorBarElement {
      * ========================= */
 
     /** 0~255 범위 값 */
-    get g() {
+    get r() {
         return this.value * 255
     }
 
-    set g(value) {
+    set r(value) {
         let n = Number(value);
         if (isNaN(n)) n = 0;
         n = Math.max(0, Math.min(255, n)); // 0~255 제한
         this.value = n / 255;
     }
 
-    get green() {
-        return Math.round(this.g)
+    get red() {
+        return Math.round(this.r);
     }
 
-    set green(value) {
-        this.g = value;
+    set red(value) {
+        this.r = value;
     }
 
     /* =========================
@@ -55,22 +55,24 @@ export default class UiColorGreenBarElement extends UiColorBarElement {
 
     attributeChangedCallback(name, oldValue, newValue) {
         if (oldValue === newValue) return;
-        if (name === 'green') this.g = newValue;
+        if (name === 'red') this.r = newValue;
     }
 
     /* =========================
      * public API
      * ========================= */
 
+    // 유지: 색상 적용
     setColor(color) {
         if (!color) return;
         const rgb = color.toRgb();
-        this.g = rgb.g;
+        this.r = rgb.r;
     }
 
+    // 유지: Color 객체 반환
     toColor() {
         const color = new Color();
-        color.setRgba(0, this.g, 0, 1); // Green 값만 적용, R,B=0
+        color.setRgba(this.r, 0, 0, 1); // Red 값만 적용, G,B=0
         return color;
     }
 
@@ -80,7 +82,7 @@ export default class UiColorGreenBarElement extends UiColorBarElement {
 
     _syncStyle() {
         super._syncStyle();
-        this.style.setProperty('--g', this.g);
+        this.style.setProperty('--r', this.r);
     }
 
     /* =========================
@@ -88,13 +90,13 @@ export default class UiColorGreenBarElement extends UiColorBarElement {
      * ========================= */
 
     [Symbol.toPrimitive](hint) {
-        if (hint === 'number') return this.g;
-        if (hint === 'string') return this.g.toString(10);
-        return this.g;
+        if (hint === 'number') return this.r;
+        if (hint === 'string') return this.r.toString(10);
+        return this.r;
     }
 
     toJSON() {
-        return { g: this.g };
+        return { r: this.r };
     }
 
     /* =========================
@@ -102,16 +104,16 @@ export default class UiColorGreenBarElement extends UiColorBarElement {
      * ========================= */
     static extendedStyle = `<style>
         :host {
-            --g: calc(var(--value) * 255);
+            --r: calc(var(--value) * 255);
         }
         :host::part(bg) {
             background: linear-gradient(var(--bg-direction),
                 rgb(0,0,0),
-                rgb(0,255,0)
+                rgb(255,0,0)
             );
         }
         :host .default-handle {
-            background-color: rgb(0,var(--g),0);
+            background-color: rgb(var(--r),0,0);
         }
     </style>`;
 }

@@ -1,13 +1,13 @@
 import Color from "../third_party/js-color/v2/src/Color.js";
 import UiColorBarElement from "./UiColorBarElement.js";
 
-export default class UiColorHueBarElement extends UiColorBarElement {
+export default class UiColorBarHueElement extends UiColorBarElement {
 
     /* =========================
      * static
      * ========================= */
 
-    static tagName = 'ui-color-hue-bar';
+    static tagName = 'ui-color-bar-hue';
 
     /** Hue 전용 이벤트 이름 */
     static inputEventName = 'input-hue';

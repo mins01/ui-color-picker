@@ -153,8 +153,8 @@ export default class UiColorPickerElement extends HTMLElement {
             this.syncToElement(this.pendingColor,el);
         })
     }
-    syncHueBar(target) {
-        this.querySelectorAll('.sync-hue-bar').forEach((el) => {
+    syncHue(target) {
+        this.querySelectorAll('.sync-hue').forEach((el) => {
             el.h = target.h;
         })
     }
@@ -194,7 +194,7 @@ export default class UiColorPickerElement extends HTMLElement {
 
         this.pendingColor.setHsla(hsl.h, hsl.s, hsl.l);
         this.syncPendingColor();
-        this.syncHueBar(target);
+        this.syncHue(target);
     }
 
     handleChangeHue(event) {
