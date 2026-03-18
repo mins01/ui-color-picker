@@ -154,7 +154,6 @@ export default class UiColorPickerElement extends HTMLElement {
         })
     }
     syncHueBar(target) {
-        console.log(target.h);    
         this.querySelectorAll('.sync-hue-bar').forEach((el) => {
             el.h = target.h;
         })
