@@ -169,7 +169,9 @@ export default class UiColorPickerElement extends HTMLElement {
 
     confirm() {
         this.selectedColor.setColor(this.pendingColor);
+        this.syncPendingColor()
         this.syncSelectedColor()
+        this.syncPartColorForSelected();
         this.dispatchEvent(new Event('confirm-color-picker', { bubbles: true, cancelable: true }));
     }
     cancel() {

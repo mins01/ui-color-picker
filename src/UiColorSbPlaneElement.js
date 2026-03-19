@@ -316,7 +316,7 @@ export default class UiColorSbPlaneElement extends HTMLElement {
                         linear-gradient(to right, white 0%, hsl(var(--h,0), 100%, 50%) 100%);
                 }
 
-                :host::part(sb-indicator) {
+                :host::part(indicator) {
                     position: absolute;
                     top: var(--b-position, 0%);
                     left: var(--s-position, 0%);
@@ -330,7 +330,7 @@ export default class UiColorSbPlaneElement extends HTMLElement {
                     overflow: visible;
 
                 }
-                :host .default-sb-handle{
+                :host .default-handle{
                     box-shadow:0 0 0 2px hsl(0,0%,calc( clamp(0, (0.5 - var(--b)) * 1000, 1) * 100%) );
                     background-color: var(--color-string);
                     border-radius: 50%;
@@ -344,9 +344,9 @@ export default class UiColorSbPlaneElement extends HTMLElement {
             <div part="plane">
                 <div part="bg">
                 </div>
-                <div part="sb-indicator">
-                    <slot name="sb-handle">
-                        <div class="default-sb-handle"></div>
+                <div part="indicator">
+                    <slot name="handle">
+                        <div class="default-handle"></div>
                     </slot>
                 </div>
                 <slot></slot>

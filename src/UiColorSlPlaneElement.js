@@ -316,7 +316,7 @@ export default class UiColorSlPlaneElement extends HTMLElement {
                     hsl(var(--h,0) 100% 50%);
                 }
                 
-                :host::part(sl-indicator) {
+                :host::part(indicator) {
                     position: absolute;
                     top: var(--l-position, 0%);
                     left: var(--s-position, 0%);
@@ -330,7 +330,7 @@ export default class UiColorSlPlaneElement extends HTMLElement {
                     overflow: visible;
                     
                 }
-                :host .default-sl-handle{
+                :host .default-handle{
                     box-shadow:0 0 0 2px hsl(0,0%,calc( clamp(0, (0.5 - var(--l)) * 1000, 1) * 100%) );
                     background-color:var(--color-string,#000);
                     border-radius: 50%;
@@ -344,9 +344,9 @@ export default class UiColorSlPlaneElement extends HTMLElement {
             <div part="plane">
                 <div part="bg">
                 </div>
-                <div part="sl-indicator">
-                    <slot name="sl-handle">
-                        <div class="default-sl-handle"></div>
+                <div part="indicator">
+                    <slot name="handle">
+                        <div class="default-handle"></div>
                     </slot>
                 </div>
                 <slot></slot>
