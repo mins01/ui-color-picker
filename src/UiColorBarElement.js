@@ -14,7 +14,16 @@ export default class UiColorBarElement extends HTMLElement {
     static changeEventName = 'change-value';
 
     // 스타일 확장
-    static extendedStyle = `<style></style>`;
+    static prependStyle = `<style>
+                :host {
+                    --value: 0;
+                    --value-position: calc( ( 1 - var(--value,0)) * 100%);
+                }
+                :host([data-dir="horizontal"]){
+                    --value-position: calc( ( var(--value,0)) * 100%);
+                }
+            </style>`; // 값 초기화 등
+    static appendStyle = `<style></style>`; // 커스텀 스타일 등
 
     /** 감시할 속성 목록 */
     static get observedAttributes() {
@@ -45,7 +54,7 @@ export default class UiColorBarElement extends HTMLElement {
 
     set value(v) {
         let n = Number(v);
-        if (isNaN(n)) n = 0;
+        if (!Number.isFinite(n)) { throw new TypeError( `Failed to set the 'value' property on '${this.tagName}': The provided value is non-finite.` ); }
         this._value = Math.max(0, Math.min(1, n));
         this._syncStyle();
     }
@@ -170,23 +179,17 @@ export default class UiColorBarElement extends HTMLElement {
 
     render() {
         this.shadowRoot.innerHTML = `
+            ${this.constructor.prependStyle}
             <style>
                 :host {
-                    --value: 0;
-                    --value-position: calc( ( 1 - var(--value,0)) * 100%);
                     user-select: none;
                     touch-action: none;
                     display: block;
                     min-width: 10px;
                     min-height: 10px;
                 }
-                :host([data-dir="horizontal"]){
-                    --value-position: calc( ( var(--value,0)) * 100%);
-                }
                 ::slotted(*) { pointer-events: none; }
-
                 :host::part(bar) { width: 100%; height: 100%; position: relative; }
-
                 :host::part(bg) {
                     z-index: 1;
                     pointer-events: none;
@@ -196,9 +199,7 @@ export default class UiColorBarElement extends HTMLElement {
                     background: linear-gradient(var(--bg-direction), rgb(0 0 0 / 1),  rgb(255 255 255 / 1));
                     box-shadow: inset 0 0 0 1px #ccc;
                 }
-
                 :host([data-dir="horizontal"])::part(bg) { --bg-direction: to right; }
-
                 :host::part(indicator) {
                     z-index: 2;
                     display: flex;
@@ -236,10 +237,10 @@ export default class UiColorBarElement extends HTMLElement {
                 }
 
             </style>
-            ${this.constructor.extendedStyle}
+            ${this.constructor.appendStyle}
             <div part="bar">
                 <div part="bg"></div>
-                <div part="indicator" class="indicator">
+                <div part="indicator">
                     <slot name="handle">
                         <div class="default-handle"></div>
                     </slot>

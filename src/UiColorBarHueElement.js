@@ -13,31 +13,21 @@ export default class UiColorBarHueElement extends UiColorBarElement {
     static inputEventName = 'input-hue';
     static changeEventName = 'change-hue';
 
-    static get observedAttributes() {
-        return ['hue'];
-    }
-
     /* =========================
      * getter / setter
      * ========================= */
 
-    get h() {
-        return this.value * 360;
+    /** 0~255 범위 값 */
+    get value() {
+        return this._value
     }
 
-    set h(value) {
+    set value(value) {
         let n = Number(value);
-        if (isNaN(n)) n = 0;
+        if (!Number.isFinite(n)) { throw new TypeError( `Failed to set the 'value' property on '${this.tagName}': The provided value is non-finite.` ); }
         n = Math.max(0, Math.min(360, n)); // 0~360 제한
-        this.value = n / 360;
-    }
-
-    get hue() {
-        return Math.round(this.h);
-    }
-
-    set hue(value) {
-        this.h = value;
+        this._value = n ;
+        this._syncStyle();
     }
 
     /* =========================
@@ -48,14 +38,7 @@ export default class UiColorBarHueElement extends UiColorBarElement {
         super();
     }
 
-    /* =========================
-     * attribute
-     * ========================= */
 
-    attributeChangedCallback(name, oldValue, newValue) {
-        if (oldValue === newValue) return;
-        if (name === 'hue') { this.h = newValue; }
-    }
 
     /* =========================
      * public API
@@ -65,13 +48,13 @@ export default class UiColorBarHueElement extends UiColorBarElement {
     setColor(color) {
         if (!color) return;
         const hsl = color.toHsl();
-        this.h = hsl.h;
+        this.value = hsl.h;
     }
 
     // 유지: Color 객체 반환
     toColor() {
         const color = new Color();
-        color.setHsla(this.h, 1, 0.5);
+        color.setHsla(this.value, 1, 0.5);
         return color;
     }
 
@@ -80,37 +63,26 @@ export default class UiColorBarHueElement extends UiColorBarElement {
      * ========================= */
     _getHFromEvent(event) {
         return this.dataset.dir === 'horizontal'
-            ? (Math.max(0, Math.min(1, event.offsetX / this.offsetWidth)))
-            : (Math.max(0, Math.min(1, event.offsetY / this.offsetHeight))); // hue는 y축은 inverse 하지 않는다.
+            ? (Math.max(0, Math.min(1, event.offsetX / this.offsetWidth))) * 360
+            : (Math.max(0, Math.min(1, event.offsetY / this.offsetHeight))) * 360; // hue는 y축은 inverse 하지 않는다.
     }
 
-    _syncStyle() {
-        super._syncStyle();
-        this.style.setProperty('--h', this.h);
-    }
 
-    /* =========================
-     * primitive / serialization
-     * ========================= */
-
-    [Symbol.toPrimitive](hint) {
-        if (hint === 'number') return this.h;
-        if (hint === 'string') return this.h.toString(10);
-        return this.h;
-    }
-
-    toJSON() {
-        return { h: this.h };
-    }
 
     /* =========================
      * 스타일 확장
      * ========================= */
-    static extendedStyle = `<style>
-        :host {
-            --value-position: calc( ( var(--value,0)) * 100%);
-            --h: calc(var(--value) * 360);
-        }
+    static prependStyle = `
+        <style>
+            :host {
+                --value: 0;
+                --value-position: calc( ( var(--value,0) / 360 )  * 100%);
+            }
+            :host([data-dir="horizontal"]){
+                --value-position: calc( ( var(--value,0) / 360 ) * 100%);
+            }
+        </style>`; // 값 초기화 등
+    static appendStyle = `<style>
         :host::part(bg){
             --bg-direction: to bottom;
             background: linear-gradient(var(--bg-direction),
@@ -130,7 +102,7 @@ export default class UiColorBarHueElement extends UiColorBarElement {
             );
         }
         :host .default-handle{
-            background-color:hsl(var(--h),100%,50%);
+            background-color:hsl(var(--value),100%,50%);
         }
     </style>`;
 }

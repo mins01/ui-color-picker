@@ -13,8 +13,9 @@ export default class UiColorBarRgbRedElement extends UiColorBarElement {
     static inputEventName = 'input-rgb-red';
     static changeEventName = 'change-rgb-red';
 
+
     static get observedAttributes() {
-        return ['red'];
+        return ['value'];
     }
 
     /* =========================
@@ -22,23 +23,16 @@ export default class UiColorBarRgbRedElement extends UiColorBarElement {
      * ========================= */
 
     /** 0~255 범위 값 */
-    get r() {
-        return this.value * 255
+    get value() {
+        return this._value
     }
 
-    set r(value) {
+    set value(value) {
         let n = Number(value);
-        if (isNaN(n)) n = 0;
+        if (!Number.isFinite(n)) { throw new TypeError( `Failed to set the 'value' property on '${this.tagName}': The provided value is non-finite.` ); }
         n = Math.max(0, Math.min(255, n)); // 0~255 제한
-        this.value = n / 255;
-    }
-
-    get red() {
-        return Math.round(this.r);
-    }
-
-    set red(value) {
-        this.r = value;
+        this._value = n ;
+        this._syncStyle();
     }
 
     /* =========================
@@ -50,15 +44,6 @@ export default class UiColorBarRgbRedElement extends UiColorBarElement {
     }
 
     /* =========================
-     * attribute
-     * ========================= */
-
-    attributeChangedCallback(name, oldValue, newValue) {
-        if (oldValue === newValue) return;
-        if (name === 'red') this.r = newValue;
-    }
-
-    /* =========================
      * public API
      * ========================= */
 
@@ -66,13 +51,13 @@ export default class UiColorBarRgbRedElement extends UiColorBarElement {
     setColor(color) {
         if (!color) return;
         const rgb = color.toRgb();
-        this.r = rgb.r;
+        this.value = rgb.r;
     }
 
     // 유지: Color 객체 반환
     toColor() {
         const color = new Color();
-        color.setRgba(this.r, 0, 0, 1); // Red 값만 적용, G,B=0
+        color.setRgba(this.value, 0, 0, 1); // Red 값만 적용, G,B=0
         return color;
     }
 
@@ -80,40 +65,36 @@ export default class UiColorBarRgbRedElement extends UiColorBarElement {
      * internal utilities
      * ========================= */
 
-    _syncStyle() {
-        super._syncStyle();
-        this.style.setProperty('--r', this.r);
+    _getHFromEvent(event) {
+        return this.dataset.dir === 'horizontal'
+            ? (Math.max(0, Math.min(1, event.offsetX / this.offsetWidth))) * 255
+            : (1-(Math.max(0, Math.min(1, event.offsetY / this.offsetHeight)))) * 255; //y축은 inverse
     }
 
-    /* =========================
-     * primitive / serialization
-     * ========================= */
 
-    [Symbol.toPrimitive](hint) {
-        if (hint === 'number') return this.r;
-        if (hint === 'string') return this.r.toString(10);
-        return this.r;
-    }
 
-    toJSON() {
-        return { r: this.r };
-    }
 
     /* =========================
      * 스타일 확장
      * ========================= */
-    static extendedStyle = `<style>
-        :host {
-            --r: calc(var(--value) * 255);
-        }
+    // 스타일 확장
+    static prependStyle = `
+        <style>
+            :host {
+                --value: 0;
+                --value-position: calc( ( 1 - var(--value,0) / 255 )  * 100%);
+            }
+            :host([data-dir="horizontal"]){
+                --value-position: calc( ( var(--value,0) / 255 ) * 100%);
+            }
+        </style>`; // 값 초기화 등
+    static appendStyle = `
+        <style>
         :host::part(bg) {
-            background: linear-gradient(var(--bg-direction),
-                rgb(0,0,0),
-                rgb(255,0,0)
-            );
+            background: linear-gradient(var(--bg-direction), rgb(0,0,0), rgb(255,0,0) );
         }
         :host .default-handle {
-            background-color: rgb(var(--r),0,0);
+            background-color: rgb(var(--value),0,0);
         }
     </style>`;
 }
