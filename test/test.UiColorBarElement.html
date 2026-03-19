@@ -44,24 +44,24 @@
         import UiColorBarHueElement from '../src/UiColorBarHueElement.js';
         UiColorBarHueElement.defineCustomElement();
 
-        import UiColorBarRgbRedElement from '../src/UiColorBarRgbRedElement.js';
-        UiColorBarRgbRedElement.defineCustomElement();
-        import UiColorBarRgbGreenElement from '../src/UiColorBarRgbGreenElement.js';
-        UiColorBarRgbGreenElement.defineCustomElement();
-        import UiColorBarRgbBlueElement from '../src/UiColorBarRgbBlueElement.js';
-        UiColorBarRgbBlueElement.defineCustomElement();
+        import UiColorBarRedElement from '../src/UiColorBarRedElement.js';
+        UiColorBarRedElement.defineCustomElement();
+        import UiColorBarGreenElement from '../src/UiColorBarGreenElement.js';
+        UiColorBarGreenElement.defineCustomElement();
+        import UiColorBarBlueElement from '../src/UiColorBarBlueElement.js';
+        UiColorBarBlueElement.defineCustomElement();
     </script>
     <script>
         document.addEventListener('input-value', (event) => { console.log(event.type,event.target.value) });
         document.addEventListener('change-value', (event) => { console.log(event.type,event.target.value) });
         document.addEventListener('input-hue', (event) => { console.log(event.type,event.target.value) });
         document.addEventListener('change-hue', (event) => { console.log(event.type,event.target.value) });
-        document.addEventListener('input-rgb-red', (event) => { console.log(event.type,event.target.value,event.target.value) });
-        document.addEventListener('change-rgb-red', (event) => { console.log(event.type,event.target.value,event.target.value) });
-        document.addEventListener('input-rgb-green', (event) => { console.log(event.type,event.target.value,event.target.value) });
-        document.addEventListener('change-rgb-green', (event) => { console.log(event.type,event.target.value,event.target.value) });
-        document.addEventListener('input-rgb-blue', (event) => { console.log(event.type,event.target.value,event.target.value) });
-        document.addEventListener('change-rgb-blue', (event) => { console.log(event.type,event.target.value,event.target.value) });
+        document.addEventListener('input-red', (event) => { console.log(event.type,event.target.value,event.target.value) });
+        document.addEventListener('change-red', (event) => { console.log(event.type,event.target.value,event.target.value) });
+        document.addEventListener('input-green', (event) => { console.log(event.type,event.target.value,event.target.value) });
+        document.addEventListener('change-green', (event) => { console.log(event.type,event.target.value,event.target.value) });
+        document.addEventListener('input-blue', (event) => { console.log(event.type,event.target.value,event.target.value) });
+        document.addEventListener('change-blue', (event) => { console.log(event.type,event.target.value,event.target.value) });
     </script>    
 </head>
 
@@ -73,18 +73,18 @@
             <ui-color-bar style="width: 40px;height: 200px;" ></ui-color-bar>
             <ui-color-bar style="width: 40px;height: 200px;" value="0.3"></ui-color-bar>
             <ui-color-bar-hue style="width: 40px;height: 200px;" value="120"></ui-color-bar-hue>
-            <ui-color-bar-rgb-red style="width: 40px;height: 200px;" value="90"></ui-color-bar-rgb-red>
-            <ui-color-bar-rgb-green style="width: 40px;height: 200px;" value="120"></ui-color-bar-rgb-green>
-            <ui-color-bar-rgb-blue style="width: 40px;height: 200px;" value="200"></ui-color-bar-rgb-blue>
+            <ui-color-bar-red style="width: 40px;height: 200px;" value="90"></ui-color-bar-red>
+            <ui-color-bar-green style="width: 40px;height: 200px;" value="120"></ui-color-bar-green>
+            <ui-color-bar-blue style="width: 40px;height: 200px;" value="200"></ui-color-bar-blue>
         </div>
 
         <div class="d-flex flex-column gap-3 my-3">
             <ui-color-bar style="width: 200px;height: 40px;" data-dir="horizontal" ></ui-color-bar>
             <ui-color-bar style="width: 200px;height: 40px;" data-dir="horizontal" value="0.3"></ui-color-bar>
             <ui-color-bar-hue style="width: 200px;height: 40px;" data-dir="horizontal" value="120"></ui-color-bar-hue>
-            <ui-color-bar-rgb-red style="width: 200px;height: 40px;" data-dir="horizontal" value="90"></ui-color-bar-rgb-red>
-            <ui-color-bar-rgb-green style="width: 200px;height: 40px;" data-dir="horizontal" value="120"></ui-color-bar-rgb-green>
-            <ui-color-bar-rgb-blue style="width: 200px;height: 40px;" data-dir="horizontal" value="200"></ui-color-bar-rgb-blue>
+            <ui-color-bar-red style="width: 200px;height: 40px;" data-dir="horizontal" value="90"></ui-color-bar-red>
+            <ui-color-bar-green style="width: 200px;height: 40px;" data-dir="horizontal" value="120"></ui-color-bar-green>
+            <ui-color-bar-blue style="width: 200px;height: 40px;" data-dir="horizontal" value="200"></ui-color-bar-blue>
         </div>
     </div>
     
