@@ -28,9 +28,12 @@ export default class UiColorBarRedElement extends UiColorBarElement {
     }
 
     setColor(color) {
-        if (!color) return;
-        const rgb = color.toRgb();
-        this.value = rgb.r;
+        if(!color) return;
+        const rgba = color?.toRealRgba?.()??color?.toRgba?.()?? (color && typeof color === 'object' ? color : null);
+        if (!rgba || rgba.r == null || rgba.g == null || rgba.b == null) {
+            throw new TypeError("Invalid Color");
+        }
+        this.value = rgba.r;
     }
 
     toColor() {
