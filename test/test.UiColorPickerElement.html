@@ -46,8 +46,8 @@
         UiColorBarHueElement.defineCustomElement();
         import UiColorSlPlaneElement from '../src/UiColorSlPlaneElement.js';
         UiColorSlPlaneElement.defineCustomElement();
-        import UiColorSbPlaneElement from '../src/UiColorSbPlaneElement.js';
-        UiColorSbPlaneElement.defineCustomElement();
+        import UiColorPlaneSbElement from '../src/UiColorPlaneSbElement.js';
+        UiColorPlaneSbElement.defineCustomElement();
         import UiColorSwatchElement from '../src/UiColorSwatchElement.js';
         UiColorSwatchElement.defineCustomElement();
         import UiColorSwatchesElement from '../src/UiColorSwatchesElement.js';
@@ -88,7 +88,7 @@
         }
         ui-color-bar-hue::part(bg),
         ui-color-sl-plane::part(bg),
-        ui-color-sb-plane::part(bg){
+        ui-color-plane-sb::part(bg){
             border-radius: var(--bs-border-radius) !important;
             box-shadow:0 0 0 1px var(--bs-border-color) !important;
         }
@@ -163,7 +163,7 @@
                     </div>
                     <div style="flex: 1 0 auto; aspect-ratio: 1/1;">
                         <div class="form-label">HSB</div>
-                        <ui-color-sb-plane class="sync-hue sync-part-color" style="flex: 1 0 auto; aspect-ratio: 1/1;">HSB</ui-color-sb-plane>
+                        <ui-color-plane-sb class="sync-hue sync-part-color" style="flex: 1 0 auto; aspect-ratio: 1/1;">HSB</ui-color-plane-sb>
                     </div>
                     <div  style="flex: 0 0 30px;" class="d-flex flex-column align-items-stretch w-100">
                         <div class="form-label">HUE</div>

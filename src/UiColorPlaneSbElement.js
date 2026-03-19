@@ -1,12 +1,12 @@
 import Color from "../third_party/js-color/v2/src/Color.js";
 
-export default class UiColorSbPlaneElement extends HTMLElement {
+export default class UiColorPlaneSbElement extends HTMLElement {
 
     /* =========================
      * static
      * ========================= */
 
-    static tagName = 'ui-color-sb-plane';
+    static tagName = 'ui-color-plane-sb';
 
     static get observedAttributes() {
         return ['hue', 'saturation', 'brightness', 'value'];
