@@ -155,7 +155,7 @@ export default class UiColorPickerElement extends HTMLElement {
     }
     syncHue(target) {
         this.querySelectorAll('.sync-hue').forEach((el) => {
-            el.h = target.h;
+            el.h = target.value;
         })
     }
 
@@ -190,7 +190,7 @@ export default class UiColorPickerElement extends HTMLElement {
         const target = event.target;
 
         const hsl = this.pendingColor.toHsl();
-        hsl.h = target.h;
+        hsl.h = target.value;
 
         this.pendingColor.setHsla(hsl.h, hsl.s, hsl.l);
         this.syncPendingColor();
@@ -258,9 +258,9 @@ export default class UiColorPickerElement extends HTMLElement {
      * conversion / util
      * ========================= */
 
-    toHslString() {
-        return `hsl(${this.hue}, ${this.saturation} ${this.lightness})`;
-    }
+    // toHslString() {
+    //     return `hsl(${this.hue}, ${this.saturation} ${this.lightness})`;
+    // }
 
     toString(type = Color.toStringType) {
         return this.selectedColor.toString(type);

@@ -34,6 +34,7 @@ export default class UiColorBarElement extends HTMLElement {
     static defineCustomElement(tagName = this.tagName) {
         if (!customElements.get(tagName)) {
             customElements.define(tagName, this);
+            console.log('defineCustomElement', tagName);
         }
     }
 
