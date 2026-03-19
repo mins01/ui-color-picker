@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ko" >
 <head>
-    <title>Test - UiColorSlPlaneElement</title>
+    <title>Test - UiColorPlaneSlElement</title>
     <meta charset="utf-8">
     <meta http-equiv="Content-Script-Type" content="text/javascript">
     <meta http-equiv="Content-Style-Type" content="text/css">
@@ -27,19 +27,19 @@
     
     <!-- meta og -->
     
-    <meta property="og:title" content="Test - UiColorSlPlaneElement">
-    <meta property="og:description" content="Test - UiColorSlPlaneElement">
+    <meta property="og:title" content="Test - UiColorPlaneSlElement">
+    <meta property="og:description" content="Test - UiColorPlaneSlElement">
     <meta property="og:image" content="http://www.mins01.com/img/logo.gif">
     <meta property="og:image:width" content="190">
     <meta property="og:image:height" content="70" />
-    <meta property="og:site_name" content="Test - UiColorSlPlaneElement" />
+    <meta property="og:site_name" content="Test - UiColorPlaneSlElement" />
     <meta property="og:type" content="website">
     
     <!-- //meta og -->
     
     <script type="module">
-        import UiColorSlPlaneElement from '../src/UiColorSlPlaneElement.js';
-        UiColorSlPlaneElement.defineCustomElement();
+        import UiColorPlaneSlElement from '../src/UiColorPlaneSlElement.js';
+        UiColorPlaneSlElement.defineCustomElement();
     </script>
     <script>
         document.addEventListener('input-sl', (event) => { console.log(event.type,event.target.h,event.target.s,event.target.l,event.target.color.toRgbString()) });
@@ -76,12 +76,12 @@
 
 <body>
     <div class="container py-3" id="container0">
-        <h1>Test - UiColorSlPlaneElement</h1>
+        <h1>Test - UiColorPlaneSlElement</h1>
         <hr>
 
-        <ui-color-sl-plane id="target" class="mx-auto" style="max-width: 800px;height: 300px;" hue="90" saturation="0.7" lightness="0.3">
+        <ui-color-plane-sl id="target" class="mx-auto" style="max-width: 800px;height: 300px;" hue="90" saturation="0.7" lightness="0.3">
             
-        </ui-color-sl-plane>
+        </ui-color-plane-sl>
         <div class="my-3">
             <input type="range" min="0" max="360" step="1" value="90" oninput="document.querySelector('#target').h = this.value">
             <button type="button" class="btn btn-primary" onclick="alert(JSON.stringify(document.querySelector('#target').toHsl()))">toHsl()</button>
@@ -91,9 +91,9 @@
             <button type="button" class="btn btn-primary" onclick="var c=document.querySelector('#target').toColor(); console.log(JSON.stringify([c.toHexString(),c.toRgb(),c.toHsl(),c.toHsb()],null,2))">toXxx</button>
         </div>
         <hr>
-        <ui-color-sl-plane id="custom-handle"  class="mx-auto border" style="max-width: 800px;height: 300px;" value="#aabbcc" >
+        <ui-color-plane-sl id="custom-handle"  class="mx-auto border" style="max-width: 800px;height: 300px;" value="#aabbcc" >
             <div slot="sl-handle" class="custom-sl-handle"></div>
-        </ui-color-sl-plane>
+        </ui-color-plane-sl>
         <div class="my-3">
             <input type="range" min="0" max="360" step="1" value="90" oninput="document.querySelector('#custom-handle').h = this.value">
         </div>
