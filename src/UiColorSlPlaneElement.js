@@ -127,7 +127,11 @@ export default class UiColorSlPlaneElement extends HTMLElement {
     setColor(color) {
         if(!color) return;
         const { h, s, l } = color.toHsl();
-        this.setHsl(h,s,l);
+        if(s===0 || l===0 || s===0){
+            this.setHsl(this.h,s,l);
+        }else{
+            this.setHsl(h,s,l);
+        }
     }
     setHsl(h=null,s=null,l=null){
         if(h !== null) this._h = Number(h);

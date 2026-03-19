@@ -46,9 +46,13 @@ export default class UiColorBarHueElement extends UiColorBarElement {
 
     // 유지: 색상 적용
     setColor(color) {
-        if (!color) return;
-        const hsl = color.toHsl();
-        this.value = hsl.h;
+        if(!color) return;
+        const { h, s, l } = color.toHsl();
+        if(s===0 || l===0 || s===0){
+            // hue가 사리지는 경우
+        }else{
+            this.value = h;
+        }
     }
 
     // 유지: Color 객체 반환

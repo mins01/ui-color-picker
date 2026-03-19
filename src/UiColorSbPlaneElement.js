@@ -129,6 +129,17 @@ export default class UiColorSbPlaneElement extends HTMLElement {
         const { h, s, b } = color.toHsb();
         this.setHsb(h,s,b);
     }
+
+    setColor(color) {
+        if(!color) return;
+        const { h, s, b } = color.toHsb();
+        if(s===0 || b===0){
+            this.setHsb(this.h,s,b);
+        }else{
+            this.setHsb(h,s,b);
+        }
+    }
+
     setHsb(h=null,s=null,b=null){
         if(h !== null) this._h = Number(h);
         if(s !== null){
