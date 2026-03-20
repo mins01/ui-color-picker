@@ -215,7 +215,7 @@ export default class UiColorPlaneSbElement extends HTMLElement {
         this.b = b;
 
         this.dispatchEvent(
-            new Event('input-sb', { bubbles: true, cancelable: true })
+            new Event('input-color', { bubbles: true, cancelable: true })
         );
 
     }
@@ -227,7 +227,7 @@ export default class UiColorPlaneSbElement extends HTMLElement {
         this.s = s;
         this.b = b;
         this.dispatchEvent(
-            new Event('input-sb', { bubbles: true, cancelable: true })
+            new Event('input-color', { bubbles: true, cancelable: true })
         );
     }
 
@@ -247,7 +247,7 @@ export default class UiColorPlaneSbElement extends HTMLElement {
         this._bFromDown = null;
 
         this.dispatchEvent(
-            new Event('change-sb', { bubbles: true, cancelable: true })
+            new Event('change-color', { bubbles: true, cancelable: true })
         );
 
     }

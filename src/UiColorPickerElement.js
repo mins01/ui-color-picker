@@ -57,10 +57,8 @@ export default class UiColorPickerElement extends HTMLElement {
         this.syncPendingColor();
         this.syncHue(this.selectedColor.toHsl().h);
 
-        this.addEventListener('input-sl', this.handleInputColorPlane);
-        this.addEventListener('change-sl', this.handleInputColorPlane);
-        this.addEventListener('input-sb', this.handleInputColorPlane);
-        this.addEventListener('change-sb', this.handleInputColorPlane);
+        this.addEventListener('input-color', this.handleInputColorPlane);
+        this.addEventListener('change-color', this.handleInputColorPlane);
         this.addEventListener('input-hue', this.handleInputHue);
         this.addEventListener('change-hue', this.handleChangeHue);
         this.addEventListener('input', this.handleInput);
@@ -69,16 +67,13 @@ export default class UiColorPickerElement extends HTMLElement {
     }
 
     disconnectedCallback() {
-        this.removeEventListener('input-sl', this.handleInputColorPlane);
-        this.removeEventListener('change-sl', this.handleInputColorPlane);
-        this.removeEventListener('input-sb', this.handleInputColorPlane);
-        this.removeEventListener('change-sb', this.handleInputColorPlane);
+        this.removeEventListener('input-color', this.handleInputColorPlane);
+        this.removeEventListener('change-color', this.handleInputColorPlane);
         this.removeEventListener('input-hue', this.handleInputHue);
         this.removeEventListener('change-hue', this.handleChangeHue);
         this.removeEventListener('input', this.handleInput);
         this.removeEventListener('change', this.handleChange);
         this.removeEventListener('select-swatch', this.handleSelectSwatch);
-
     }
 
     /* =========================
