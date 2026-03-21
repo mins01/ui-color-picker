@@ -310,8 +310,9 @@ export default class UiColorSwatchesElement extends HTMLElement {
                     display: grid;
                     /*grid-template-columns: repeat(auto-fill, minmax(var(--swatch-size,${UiColorSwatchElement.swatchSize}), 1fr)); */
                     grid-template-columns: repeat(auto-fill, minmax(var(--swatch-size,${UiColorSwatchElement.swatchSize}), auto)); 
+                    grid-auto-rows: max-content;
                     gap: 4px;
-                    align-items: center;
+                    align-items: start;
                     justify-items: center;
                     justify-content: start;
                 }
