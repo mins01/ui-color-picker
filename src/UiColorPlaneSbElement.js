@@ -360,7 +360,6 @@ export default class UiColorPlaneSbElement extends HTMLElement {
                         <div class="default-handle"></div>
                     </slot>
                 </div>
-                <slot></slot>
             </div>
         `;
     }

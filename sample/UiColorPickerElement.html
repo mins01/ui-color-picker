@@ -219,13 +219,20 @@
 
                     <div style="position: relative;flex: 1 0 auto; aspect-ratio: 1/1;">
                         <ui-color-wheel-hue class="sync-part-color" style="aspect-ratio: 1/1;"></ui-color-wheel-hue>
-                        
                         <div style="
                             position: absolute;
-                            inset: 23%;
-                            z-index: 1;" 
+                            inset: 10%;
+                            z-index: 2;
+                            border-radius: 1000em;
+                            pointer-events: all;
+                            ">
+                            </div>
+                        <div style="
+                            position: absolute;
+                            inset: 25%;
+                            z-index: 3;" 
                             >
-                            <ui-color-plane-sb slot="inner-circle" class="sync-hue sync-part-color" style="flex: 1 0 auto; aspect-ratio: 1/1;">HSB</ui-color-plane-sb>
+                            <ui-color-plane-sb slot="inner-circle" class="sync-hue sync-part-color" style="flex: 1 0 auto; aspect-ratio: 1/1;"></ui-color-plane-sb>
                         </div>
                     </div>
 

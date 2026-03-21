@@ -308,6 +308,7 @@ export default class UiColorPlaneSlElement extends HTMLElement {
                 }
                 ::slotted(*) {
                     pointer-events: none;
+                    user-select: none;
                 }
                 :host::part(plane){
                     width: 100%;
@@ -358,7 +359,6 @@ export default class UiColorPlaneSlElement extends HTMLElement {
                         <div class="default-handle"></div>
                     </slot>
                 </div>
-                <slot></slot>
             </div>
         `;
     }
