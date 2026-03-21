@@ -88,6 +88,11 @@
             min-width: 200px;
             font-size: 16px;
         }
+        .dialog-color-picker ui-color-picker{
+            max-width: min(768px, 98vw);
+            max-height: 98dvh;
+            height: auto;
+        }
         ui-color-picker ui-color-swatches {
             max-height: max-content; 
             min-height: 80px;
@@ -152,7 +157,7 @@
             </ui-color-swatches>              
         </ui-color-picker>
         <dialog id="dialogPicker1" class="dialog-color-picker">
-            <ui-color-picker class="border rounded d-flex flex-column user-select-none gap-2 p-3" style="max-width: 100vmin;" onclick="console.log(this.pendingColor.toRgbString());" value="#33ff00">
+            <ui-color-picker class="border rounded d-flex flex-column user-select-none gap-2 p-3" style="width: 100vw;" onclick="console.log(this.pendingColor.toRgbString());" value="#33ff00">
                 <div class="d-flex gap-3 " >
                     <ui-color-plane-sl class="sync-hue sync-part-color" style="flex: 1 0 auto; aspect-ratio: 1/1;"></ui-color-plane-sl>
                     <ui-color-bar-hue class="sync-part-color" style="flex: 0 0 30px;"></ui-color-bar-hue>
@@ -204,7 +209,7 @@
             })
             dialogPicker1.addEventListener('cancel-color-picker', (event) => {
                 console.log('confirm-color-picker',event.target.value);
-                alert(event.type+' : '+event.target.value);
+                // alert(event.type+' : '+event.target.value);
                 dialogPicker1.close();
             })
         </script>
@@ -290,7 +295,7 @@
         </ui-color-picker>
         <hr>
         <dialog id="dialogPicker3" class="dialog-color-picker">
-            <ui-color-picker class="border rounded d-flex flex-column user-select-none gap-2 p-3" style="max-width: 400px;" onclick="console.log(this.pendingColor.toRgbString());" value="#33ff00">
+            <ui-color-picker class="border rounded d-flex flex-column user-select-none gap-2 p-3 justify-content-between" style="min-width: 200px; width: 100vw;" onclick="console.log(this.pendingColor.toRgbString());" value="#33ff00">
                 <div class="d-flex gap-3" style="width: 100%;height: auto;  ">
                     <div style="position: relative;flex: 1 0 auto; aspect-ratio: 1/1;">
                         <ui-color-wheel-hue class="sync-part-color" style="aspect-ratio: 1/1;"></ui-color-wheel-hue>
@@ -314,13 +319,6 @@
 
                 </div>
                 <div class="d-flex flex-wrap gap-2">
-                    <input name="toHslString" data-to-string-type="hsl" data-set-color="pendingColor" class="sync-pending-color col form-control form-control-sm" style="flex: 1 0 8em;">
-                    <input name="toHsbString" data-to-string-type="hsb" data-set-color="pendingColor" class="sync-pending-color col form-control form-control-sm" style="flex: 1 0 8em;">
-                    <input name="toRgbString" data-to-string-type="rgb" data-set-color="pendingColor" class="sync-pending-color col form-control form-control-sm" style="flex: 1 0 8em;">
-                    <input name="toHexString" data-to-string-type="hex" data-set-color="pendingColor" class="sync-pending-color col form-control form-control-sm" style="flex: 0 1 6em;">
-                    <input name="toHexString" data-to-string-type="cmyk" data-set-color="pendingColor" class="sync-pending-color col form-control form-control-sm" style="flex: 0 1 14em;">
-                </div>
-                <div class="d-flex flex-wrap gap-2">
                     <div class="input-group col">
                         <ui-color data-target-color="selectColor" class="sync-selected-color sync-hue rounded-start-pill border d-flex justify-content-center align-items-center user-select-none col"><div style="text-shadow: 0px 0px 2px #000; color: #fff;">Selected</div></ui-color>
                         <ui-color data-target-color="pendingColor" class="sync-pending-color rounded-end-pill border d-flex justify-content-center align-items-center user-select-none col" value="#fff"><div style="text-shadow: 0px 0px 2px #000; color: #fff;">Pending</div></ui-color>
@@ -342,7 +340,7 @@
             })
             dialogPicker3.addEventListener('cancel-color-picker', (event) => {
                 console.log('confirm-color-picker',event.target.value);
-                alert(event.type+' : '+event.target.value);
+                // alert(event.type+' : '+event.target.value);
                 dialogPicker3.close();
             })
         </script>
