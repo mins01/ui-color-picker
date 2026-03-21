@@ -227,18 +227,19 @@ export default class UiColorWheelElement extends HTMLElement {
                     );
                     -webkit-mask: radial-gradient(farthest-side, transparent calc( var(--inner-ratio)  * 100% ), black calc( var(--inner-ratio)  * 100% ));
                     mask: radial-gradient(farthest-side, transparent calc( var(--inner-ratio)  * 100% ), black calc( var(--inner-ratio) * 100% ));
-                    box-shadow: inset 0 0 0 1px #ccc;
+                    box-shadow: inset 0 0 0 2px #ccc;
                 }
                 :host::part(inner-circle) {
                     position: absolute;
                     z-index: 1;
                     pointer-events: none;
-                    inset: calc((1 - var(--inner-ratio)) / 2 * 100%);
+                    inset: calc((1 - var(--inner-ratio)) / 2 * 100% - 1px);
                     border-radius: 100vmax;
-                    box-shadow: inset 0 0 0 1px #ccc;
+                    box-shadow: inset 0 0 0 2px #ccc;
                 }
                 
                 :host::part(indicator) {
+                    pointer-events: none;
                     z-index: 2;
                     display: flex;
                     justify-content: center;
@@ -278,7 +279,6 @@ export default class UiColorWheelElement extends HTMLElement {
                         <div class="default-handle"></div>
                     </slot>
                 </div>
-                <slot></slot>
             </div>
         `;
     }

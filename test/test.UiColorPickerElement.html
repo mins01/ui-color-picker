@@ -44,6 +44,8 @@
         UiColorElement.defineCustomElement();
         import UiColorBarHueElement from '../src/UiColorBarHueElement.js';
         UiColorBarHueElement.defineCustomElement();
+        import UiColorWheelHueElement from '../src/UiColorWheelHueElement.js';
+        UiColorWheelHueElement.defineCustomElement();
         import UiColorPlaneSlElement from '../src/UiColorPlaneSlElement.js';
         UiColorPlaneSlElement.defineCustomElement();
         import UiColorPlaneSbElement from '../src/UiColorPlaneSbElement.js';
@@ -206,6 +208,53 @@
                         </ui-color-swatches>
                     </div>
                 </div>                
+            </div>
+        </ui-color-picker>
+        <hr>
+        <ui-color-picker id="picker23" class="border rounded" style="max-width: 400px;" onclick="console.log(this.pendingColor.toRgbString());" value="#33ff00">
+            <div class="d-flex flex-column gap-2 p-3">
+                <div class="d-flex gap-3" style="width: 100%;height: auto;  ">
+                    
+
+
+                    <div style="position: relative;flex: 1 0 auto; aspect-ratio: 1/1;">
+                        <ui-color-wheel-hue style="aspect-ratio: 1/1;"></ui-color-wheel-hue>
+                        
+                        <div style="
+                            position: absolute;
+                            inset: 23%;
+                            z-index: 1;" 
+                            >
+                            <ui-color-plane-sb slot="inner-circle" class="sync-hue sync-part-color" style="flex: 1 0 auto; aspect-ratio: 1/1;">HSB</ui-color-plane-sb>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="d-flex gap-3" style="width: 100%;height: auto;  ">
+                    
+                </div>
+                <div class="">
+                    <div class="d-flex flex-wrap gap-2">
+                        <input name="toHslString" data-to-string-type="hsl" data-set-color="pendingColor" class="sync-pending-color col form-control form-control-sm" style="flex: 1 0 8em;">
+                        <input name="toHsbString" data-to-string-type="hsb" data-set-color="pendingColor" class="sync-pending-color col form-control form-control-sm" style="flex: 1 0 8em;">
+                        <input name="toRgbString" data-to-string-type="rgb" data-set-color="pendingColor" class="sync-pending-color col form-control form-control-sm" style="flex: 1 0 8em;">
+                        <input name="toHexString" data-to-string-type="hex" data-set-color="pendingColor" class="sync-pending-color col form-control form-control-sm" style="flex: 0 1 6em;">
+                        <input name="toHexString" data-to-string-type="cmyk" data-set-color="pendingColor" class="sync-pending-color col form-control form-control-sm" style="flex: 0 1 14em;">
+                    </div>
+                </div>
+                <div class="">
+                    <div class="d-flex flex-wrap gap-2">
+                        <div class="input-group col">
+                            <ui-color data-target-color="selectColor" class="sync-selected-color sync-hue rounded-start-pill border d-flex justify-content-center align-items-center user-select-none col"><div style="text-shadow: 0px 0px 2px #000; color: #fff;">Selected</div></ui-color>
+                            <ui-color data-target-color="pendingColor" class="sync-pending-color rounded-end-pill border d-flex justify-content-center align-items-center user-select-none col" value="#fff"><div style="text-shadow: 0px 0px 2px #000; color: #fff;">Pending</div></ui-color>
+                        </div>
+                        <div class="d-flex gap-1 col">
+                            <button type="button" class="btn btn-primary btn-sm col" onclick="this.closest('ui-color-picker').confirm()">Confirm</button>
+                            <button type="button" class="btn btn-secondary btn-sm col" onclick="this.closest('ui-color-picker').cancel()" >Cancel</button>
+                        </div>
+                    </div>
+                </div>
+             
             </div>
         </ui-color-picker>
     </div>
