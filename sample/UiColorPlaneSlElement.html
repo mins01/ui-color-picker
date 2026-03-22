@@ -47,15 +47,15 @@
     </script>
     
     <style>
-        #custom-handle .custom-sl-handle{
-            --handle-color:hsl(var(--h),50%,calc( clamp(0.2, (0.5 - var(--l)) * 1000, 0.8) * 100%) );
+        #custom-handle .custom-handle{
+            --handle-color:hsl(var(--h),50%,calc( clamp(0.1, (0.5 - var(--l)) * 1000, 0.9) * 100%) );
             position: relative;
             overflow: visible;
             width: 20px;
             height: 20px;
             flex:0 0 auto;
         }
-        #custom-handle .custom-sl-handle::before , #custom-handle .custom-sl-handle::after{
+        #custom-handle .custom-handle::before , #custom-handle .custom-handle::after{
             position: absolute;
             content: '';
             height: 100%;
@@ -66,7 +66,7 @@
             left: 50%;
             transform: translate(-50%,-50%);
         }
-        #custom-handle .custom-sl-handle::after{
+        #custom-handle .custom-handle::after{
             height: 0px;
             width: 100%;
             border-color: transparent var(--handle-color);
@@ -91,8 +91,8 @@
             <button type="button" class="btn btn-primary" onclick="var c=document.querySelector('#target').toColor(); console.log(JSON.stringify([c.toHexString(),c.toRgb(),c.toHsl(),c.toHsb()],null,2))">toXxx</button>
         </div>
         <hr>
-        <ui-color-plane-sl id="custom-handle"  class="mx-auto border" style="max-width: 800px;height: 300px;" value="#aabbcc" >
-            <div slot="sl-handle" class="custom-sl-handle"></div>
+        <ui-color-plane-sl id="custom-handle"  class="mx-auto border" style="max-width: 800px;height: 300px; --bg-border-color:#ff0000; --bg-border-width:4px; --bg-border-radius:8px" value="#aabbcc" >
+            <div slot="handle" class="custom-handle"></div>
         </ui-color-plane-sl>
         <div class="my-3">
             <input type="range" min="0" max="360" step="1" value="90" oninput="document.querySelector('#custom-handle').h = this.value">

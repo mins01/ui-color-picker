@@ -300,6 +300,9 @@ export default class UiColorPlaneSlElement extends HTMLElement {
                     --h-position: calc( var(--h,0) / 360 * 100% );
                     --s-position: calc( var(--s,0) * 100% );
                     --l-position: calc( ( 1 - var(--l,0) ) * 100% );
+                    --bg-border-width: 0px;
+                    --bg-border-color: #ccc;
+                    --bg-border-radius: 0px;
                     user-select: none;
                     touch-action: none;
                     display: block;
@@ -322,11 +325,14 @@ export default class UiColorPlaneSlElement extends HTMLElement {
                     inset:0px;
 
                     background:linear-gradient(to bottom, hsl(0, 0%, 100%) 0%, hsla(0, 0%, 100%, 0) 50%, hsla(0, 0%, 0%, 0) 50%, hsl(0, 0%, 0%) 100%),
-	                linear-gradient(to right, hsla(0, 0%, 50%, 1) 0%, hsla(0, 0%, 50%, 0) 100%),
-                    hsl(var(--h,0) 100% 50%);
+	                            linear-gradient(to right, hsla(0, 0%, 50%, 1) 0%, hsla(0, 0%, 50%, 0) 100%), hsl(var(--h,0) 100% 50%);
+
+                    box-shadow: 0 0 0 var(--bg-border-width) var(--bg-border-color);
+                    border-radius: var(--bg-border-radius);
                 }
                 
                 :host::part(indicator) {
+                    pointer-events: all;
                     position: absolute;
                     top: var(--l-position, 0%);
                     left: var(--s-position, 0%);
@@ -338,7 +344,6 @@ export default class UiColorPlaneSlElement extends HTMLElement {
                     justify-content: center;
                     align-items: center;
                     overflow: visible;
-                    
                 }
                 :host .default-handle{
                     box-shadow:0 0 0 2px hsl(0,0%,calc( clamp(0, (0.5 - var(--l)) * 1000, 1) * 100%) );

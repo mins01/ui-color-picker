@@ -188,6 +188,10 @@ export default class UiColorBarElement extends HTMLElement {
                     display: block;
                     min-width: 10px;
                     min-height: 10px;
+
+                    --bg-border-width: 0px;
+                    --bg-border-color: #ccc;
+                    --bg-border-radius: 0px;
                 }
                 ::slotted(*) { pointer-events: none; }
                 :host::part(bar) { width: 100%; height: 100%; position: relative; }
@@ -198,10 +202,13 @@ export default class UiColorBarElement extends HTMLElement {
                     inset: 0px;
                     --bg-direction: to top;
                     background: linear-gradient(var(--bg-direction), rgb(0 0 0 / 1),  rgb(255 255 255 / 1));
-                    box-shadow: inset 0 0 0 1px #ccc;
+                    
+                    box-shadow: 0 0 0 var(--bg-border-width) var(--bg-border-color);
+                    border-radius: var(--bg-border-radius);
                 }
                 :host([data-dir="horizontal"])::part(bg) { --bg-direction: to right; }
                 :host::part(indicator) {
+                    pointer-events: all;
                     z-index: 2;
                     display: flex;
                     justify-content: center;
