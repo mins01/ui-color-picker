@@ -107,6 +107,23 @@
             --bg-border-color: var(--bs-border-color,#ccc);
             --bg-border-width: 2px;
         }
+        ui-color-picker .wheel-group{
+            position: relative;flex: 1 0 auto; aspect-ratio: 1/1;
+        }
+        ui-color-picker .wheel-group .inner-plane-wrap{
+            position: absolute;
+            inset: 10%;
+            z-index: 2;
+            border-radius: 1000em;
+            user-select: none;
+            pointer-events: all;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        ui-color-picker .wheel-group .inner-plane-wrap > *{
+            flex: 0 0 auto; width:calc(70% - 8px); aspect-ratio: 1/1;
+        }
 
     </style>
     
@@ -258,19 +275,9 @@
         <hr>
         <ui-color-picker class="border rounded d-flex flex-column user-select-none gap-2 p-3" style="max-width: 400px;" onclick="console.log(this.pendingColor.toRgbString());" value="#33ff00">
             <div class="d-flex gap-3" style="width: 100%;height: auto;  ">
-                <div style="position: relative;flex: 1 0 auto; aspect-ratio: 1/1;">
+                <div class="wheel-group">
                     <ui-color-wheel-hue class="sync-part-color" style="aspect-ratio: 1/1;"></ui-color-wheel-hue>
-                    <div style="
-                            position: absolute;
-                            inset: 10%;
-                            z-index: 2;
-                            border-radius: 1000em;
-                            user-select: none;
-                            pointer-events: all;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                        ">
+                    <div class="inner-plane-wrap" style=" inset: 10%;">
                         <ui-color-plane-sb slot="inner-circle" class="sync-hue sync-part-color" style="flex: 0 0 auto; width:calc(70% - 8px); aspect-ratio: 1/1;"></ui-color-plane-sb>
                     </div>
                 </div>
@@ -298,23 +305,12 @@
         <dialog id="dialogPicker3" class="dialog-color-picker">
             <ui-color-picker class="border rounded d-flex flex-column user-select-none gap-2 p-3 justify-content-between" style="min-width: 200px; width: 100vw;" onclick="console.log(this.pendingColor.toRgbString());" value="#33ff00">
                 <div class="d-flex gap-3" style="width: 100%;height: auto;  ">
-                    <div style="position: relative;flex: 1 0 auto; aspect-ratio: 1/1;">
+                    <div class="wheel-group">
                         <ui-color-wheel-hue class="sync-part-color" style="aspect-ratio: 1/1;"></ui-color-wheel-hue>
-                        <div style="
-                            position: absolute;
-                            inset: 10%;
-                            z-index: 2;
-                            border-radius: 1000em;
-                            user-select: none;
-                            pointer-events: all;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                        ">
+                        <div class="inner-plane-wrap" style=" inset: 10%;">
                             <ui-color-plane-sb slot="inner-circle" class="sync-hue sync-part-color" style="flex: 0 0 auto; width:calc(70% - 8px); aspect-ratio: 1/1;"></ui-color-plane-sb>
                         </div>
                     </div>
-
                 </div>
                 <div class="d-flex flex-wrap gap-2">
                     <div class="input-group col">
