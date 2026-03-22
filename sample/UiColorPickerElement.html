@@ -261,20 +261,17 @@
                 <div style="position: relative;flex: 1 0 auto; aspect-ratio: 1/1;">
                     <ui-color-wheel-hue class="sync-part-color" style="aspect-ratio: 1/1;"></ui-color-wheel-hue>
                     <div style="
-                        position: absolute;
-                        inset: 10%;
-                        z-index: 2;
-                        border-radius: 1000em;
-                        user-select: none;
-                        pointer-events: all;
+                            position: absolute;
+                            inset: 10%;
+                            z-index: 2;
+                            border-radius: 1000em;
+                            user-select: none;
+                            pointer-events: all;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
                         ">
-                        </div>
-                    <div style="
-                        position: absolute;
-                        inset: 25%;
-                        z-index: 3;" 
-                        >
-                        <ui-color-plane-sb slot="inner-circle" class="sync-hue sync-part-color" style="flex: 1 0 auto; aspect-ratio: 1/1;"></ui-color-plane-sb>
+                        <ui-color-plane-sb slot="inner-circle" class="sync-hue sync-part-color" style="flex: 0 0 auto; width:calc(70% - 8px); aspect-ratio: 1/1;"></ui-color-plane-sb>
                     </div>
                 </div>
 
@@ -310,14 +307,11 @@
                             border-radius: 1000em;
                             user-select: none;
                             pointer-events: all;
-                            ">
-                            </div>
-                        <div style="
-                            position: absolute;
-                            inset: 25%;
-                            z-index: 3;" 
-                            >
-                            <ui-color-plane-sb slot="inner-circle" class="sync-hue sync-part-color" style="flex: 1 0 auto; aspect-ratio: 1/1;"></ui-color-plane-sb>
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        ">
+                            <ui-color-plane-sb slot="inner-circle" class="sync-hue sync-part-color" style="flex: 0 0 auto; width:calc(70% - 8px); aspect-ratio: 1/1;"></ui-color-plane-sb>
                         </div>
                     </div>
 
