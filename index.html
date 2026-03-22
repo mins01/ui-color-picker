@@ -101,9 +101,9 @@
                     </ui-color-swatches>
                 </ui-color-picker>
             </dialog>
-            <button type="button" class="btn btn-primary" onclick="dialogPicker1.showModal()">ShowModal</button>
-            <button type="button" class="btn btn-primary" onclick="dialogPicker1.querySelector('ui-color-picker').value = '#f00'; dialogPicker1.showModal()">#f00 ShowModal</button>
-            <button type="button" class="btn btn-primary" onclick="dialogPicker1.querySelector('ui-color-picker').value = `rgb(${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)})`; dialogPicker1.showModal()">random color ShowModal</button>
+            <button type="button" class="btn btn-primary" onclick="dialogPicker1.showModal(); requestAnimationFrame(() => { document.activeElement?.blur(); });">ShowModal</button>
+            <button type="button" class="btn btn-primary" onclick="dialogPicker1.querySelector('ui-color-picker').value = '#f00'; dialogPicker1.showModal(); requestAnimationFrame(() => { document.activeElement?.blur(); });">#f00 ShowModal</button>
+            <button type="button" class="btn btn-primary" onclick="dialogPicker1.querySelector('ui-color-picker').value = `rgb(${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)})`; dialogPicker1.showModal(); requestAnimationFrame(() => { document.activeElement?.blur(); });">random color ShowModal</button>
 
             <script>
                 const dialogPicker1 = document.getElementById('dialogPicker1');
