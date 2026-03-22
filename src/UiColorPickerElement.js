@@ -94,7 +94,9 @@ export default class UiColorPickerElement extends HTMLElement {
 
     set value(value) {
         this.selectedColor.setString(value);
+        this.currentHue = this.toHsl().h
         this.syncSelectedColor()
+        this.syncPartColorForSelected()
     }
 
     get value() {
@@ -152,9 +154,10 @@ export default class UiColorPickerElement extends HTMLElement {
         this.syncHue();
     }
 
-    #cachedSyncHue = null; // hue를 유지한다.
-    syncHue(hue=this.#cachedSyncHue) {
-        if(hue!=this.#cachedSyncHue) this.#cachedSyncHue = hue;
+    currentHue = null; // hue를 유지한다.
+    syncHue(hue=null) {
+        if(hue == null) hue = this.currentHue
+        if(hue!=this.currentHue) this.currentHue = hue;
         this.querySelectorAll('.sync-hue').forEach((el) => {
             el.h = hue;
         })

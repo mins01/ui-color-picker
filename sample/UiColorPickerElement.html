@@ -200,6 +200,8 @@
             </ui-color-picker>
         </dialog>
         <button type="button" class="btn btn-primary" onclick="dialogPicker1.showModal()">ShowModal</button>
+        <button type="button" class="btn btn-primary" onclick="dialogPicker1.querySelector('ui-color-picker').value = '#f00'; dialogPicker1.showModal()">#f00 ShowModal</button>
+
         <script>
             const dialogPicker1 = document.getElementById('dialogPicker1');
             dialogPicker1.addEventListener('confirm-color-picker', (event) => {
@@ -331,6 +333,8 @@
             </ui-color-picker>
         </dialog>
         <button type="button" class="btn btn-primary" onclick="dialogPicker3.showModal()">ShowModal</button>
+        <button type="button" class="btn btn-primary" onclick="dialogPicker3.querySelector('ui-color-picker').value = '#aabbcc'; dialogPicker3.showModal()">#aabbcc ShowModal</button>
+        <button type="button" class="btn btn-primary" onclick="dialogPicker3.querySelector('ui-color-picker').value = '#f00'; dialogPicker3.showModal()">#f00 ShowModal</button>
         <script>
             const dialogPicker3 = document.getElementById('dialogPicker3');
             dialogPicker3.addEventListener('confirm-color-picker', (event) => {
