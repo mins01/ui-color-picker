@@ -1,0 +1,39 @@
+@charset "utf-8";
+
+
+.dialog-color-picker {
+    padding:0px;
+    border-width: 0px;
+    border-radius: 10px;
+    max-width: calc(100% - 20px);
+    touch-action: none;
+}
+.dialog-color-picker[open] {
+    display: flex;
+}
+.dialog-color-picker::backdrop {
+    background-color: rgba(0, 0, 0, 0.75);
+}
+
+ui-color-picker{
+    max-width: 100vw;
+    min-width: 200px;
+    font-size: 16px;
+}
+.dialog-color-picker ui-color-picker{
+    max-width: min(768px, 98vw);
+    max-height: 98dvh;
+    height: auto;
+}
+ui-color-picker ui-color-swatches {
+    max-height: max-content; 
+    min-height: 80px;
+    flex:1 1 300px
+
+}
+ui-color-picker ui-color-bar-hue::part(bg),
+ui-color-picker ui-color-plane-sl::part(bg),
+ui-color-picker ui-color-plane-sb::part(bg){
+    border-radius: var(--bs-border-radius,8px) !important;
+    box-shadow:0 0 0 1px var(--bs-border-color,#ccc) !important;
+}
