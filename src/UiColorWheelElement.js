@@ -199,12 +199,18 @@ export default class UiColorWheelElement extends HTMLElement {
             ${this.constructor.prependStyle}
             <style>
                 :host {
+                    --bg-border-width: 0px;
+                    --bg-border-color: #ccc;
+                    --bg-border-radius: 0px;
+
                     user-select: none;
                     touch-action: none;
                     display: block;
                     min-width: 10px;
                     min-height: 10px;
                     aspect-ratio: 1 / 1;
+
+                    
                 }
                 ::slotted(*) { pointer-events: none; }
                 :host::part(wrapper) { width: 100%; height: 100%; position: relative; }
@@ -216,6 +222,9 @@ export default class UiColorWheelElement extends HTMLElement {
                     display: flex;
                     justify-content: center;
                     align-items: center;
+
+                    border-radius:100vmax;
+                    box-shadow: 0 0 0 var(--bg-border-width) var(--bg-border-color);
                 }
                 :host::part(outer-circle) {
                     width: 100%;
@@ -225,21 +234,21 @@ export default class UiColorWheelElement extends HTMLElement {
                         black 0deg,
                         white 360deg
                     );
-                    -webkit-mask: radial-gradient(farthest-side, transparent calc( var(--inner-ratio)  * 100% ), black calc( var(--inner-ratio)  * 100% ));
-                    mask: radial-gradient(farthest-side, transparent calc( var(--inner-ratio)  * 100% ), black calc( var(--inner-ratio) * 100% ));
-                    box-shadow: inset 0 0 0 2px #ccc;
+                    -webkit-mask: radial-gradient(farthest-side, transparent calc( var(--inner-ratio)  * 100% - 1px), black calc( var(--inner-ratio)  * 100% ));
+                    mask: radial-gradient(farthest-side, transparent calc( var(--inner-ratio)  * 100%  - 1px), black calc( var(--inner-ratio) * 100% ));
+                    
                 }
                 :host::part(inner-circle) {
                     position: absolute;
                     z-index: 1;
                     pointer-events: none;
-                    inset: calc((1 - var(--inner-ratio)) / 2 * 100% - 1px);
+                    inset: calc((1 - var(--inner-ratio)) / 2 * 100% - 0.5px);
                     border-radius: 100vmax;
-                    box-shadow: inset 0 0 0 2px #ccc;
+                    box-shadow:inset 0 0 0 var(--bg-border-width) var(--bg-border-color);
                 }
                 
                 :host::part(indicator) {
-                    pointer-events: none;
+                    pointer-events: all;
                     z-index: 2;
                     display: flex;
                     justify-content: center;
