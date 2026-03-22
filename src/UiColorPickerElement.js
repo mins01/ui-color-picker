@@ -63,6 +63,7 @@ export default class UiColorPickerElement extends HTMLElement {
         this.addEventListener('change-hue', this.handleChangeHue);
         this.addEventListener('input', this.handleInput);
         this.addEventListener('change', this.handleChange);
+        this.addEventListener('click', this.handleClick);
         this.addEventListener('select-swatch', this.handleSelectSwatch);
     }
 
@@ -73,6 +74,7 @@ export default class UiColorPickerElement extends HTMLElement {
         this.removeEventListener('change-hue', this.handleChangeHue);
         this.removeEventListener('input', this.handleInput);
         this.removeEventListener('change', this.handleChange);
+        this.removeEventListener('click', this.handleClick);
         this.removeEventListener('select-swatch', this.handleSelectSwatch);
     }
 
@@ -255,6 +257,16 @@ export default class UiColorPickerElement extends HTMLElement {
         }
 
     }
+    handleClick(event) {
+        const target = event.target;
+        if(!target.dataset.pickerAction) return;
+        switch(target.dataset.pickerAction) {
+            case 'confirm': this.confirm(); break;
+            case 'cancel': this.cancel(); break;
+        }
+    }
+
+    
 
     handleSelectSwatch(event) {
         const swatch = event.target;
