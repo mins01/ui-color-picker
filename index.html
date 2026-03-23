@@ -58,7 +58,7 @@
         </ul>
         <hr>
         <div>
-            <dialog id="dialogPicker1" class="dialog-color-picker">
+            <dialog id="dialogPicker1" tabindex="-1" class="dialog-color-picker">
                 <ui-color-picker class="border rounded d-flex flex-column user-select-none gap-2 p-3" style="width: 100vw;" onclick="console.log(this.pendingColor.toRgbString());" value="#33ff00">
                     <div class="d-flex gap-3 " >
                         <ui-color-plane-sl class="sync-hue sync-part-color" style="flex: 1 0 auto; aspect-ratio: 1/1;"></ui-color-plane-sl>
@@ -101,9 +101,9 @@
                     </ui-color-swatches>
                 </ui-color-picker>
             </dialog>
-            <button type="button" class="btn btn-primary" onclick="dialogPicker1.showModal(); requestAnimationFrame(() => { document.activeElement?.blur(); });">ShowModal</button>
-            <button type="button" class="btn btn-primary" onclick="dialogPicker1.querySelector('ui-color-picker').value = '#f00'; dialogPicker1.showModal(); requestAnimationFrame(() => { document.activeElement?.blur(); });">#f00 ShowModal</button>
-            <button type="button" class="btn btn-primary" onclick="dialogPicker1.querySelector('ui-color-picker').value = `rgb(${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)})`; dialogPicker1.showModal(); requestAnimationFrame(() => { document.activeElement?.blur(); });">random color ShowModal</button>
+            <button type="button" class="btn btn-primary" onclick="dialogPicker1.showModal(); dialogPicker1.focus()">ShowModal</button>
+            <button type="button" class="btn btn-primary" onclick="dialogPicker1.querySelector('ui-color-picker').value = '#f00'; dialogPicker1.showModal(); dialogPicker1.focus()">#f00 ShowModal</button>
+            <button type="button" class="btn btn-primary" onclick="dialogPicker1.querySelector('ui-color-picker').value = `rgb(${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)},${Math.floor(Math.random() * 256)})`; dialogPicker1.showModal(); dialogPicker1.focus()">random color ShowModal</button>
 
             <script>
                 const dialogPicker1 = document.getElementById('dialogPicker1');

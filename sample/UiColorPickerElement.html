@@ -124,7 +124,25 @@
         ui-color-picker .wheel-group .inner-plane-wrap > *{
             flex: 0 0 auto; width:calc(70% - 8px); aspect-ratio: 1/1;
         }
+    </style>
+    <style>
+        /* dialog 애니메이션 */
+        /* safari 17.5
+        #dialogPicker3[open]{
+            transition: transform 0.3s;
+            transform: translateY(0);
 
+            @starting-style { transform: translateY(100px); }
+        } */
+        #dialogPicker3[open] {
+            animation: slideUp 0.3s ease forwards;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(40px);  }
+            to { transform: translateY(0); }
+        }
+                
     </style>
     
 </head>
@@ -175,7 +193,7 @@
 
             </ui-color-swatches>              
         </ui-color-picker>
-        <dialog id="dialogPicker1" class="dialog-color-picker">
+        <dialog id="dialogPicker1" tabindex="-1" class="dialog-color-picker">
             <ui-color-picker class="border rounded d-flex flex-column user-select-none gap-2 p-3" style="width: 100vw;" onclick="console.log(this.pendingColor.toRgbString());" value="#33ff00">
                 <div class="d-flex gap-3 " >
                     <ui-color-plane-sl class="sync-hue sync-part-color" style="flex: 1 0 auto; aspect-ratio: 1/1;"></ui-color-plane-sl>
@@ -218,8 +236,8 @@
                 </ui-color-swatches>
             </ui-color-picker>
         </dialog>
-        <button type="button" class="btn btn-primary" onclick="dialogPicker1.showModal(); requestAnimationFrame(() => { document.activeElement?.blur(); });">ShowModal</button>
-        <button type="button" class="btn btn-primary" onclick="dialogPicker1.querySelector('ui-color-picker').value = '#f00'; dialogPicker1.showModal(); requestAnimationFrame(() => { document.activeElement?.blur(); });">#f00 ShowModal</button>
+        <button type="button" class="btn btn-primary" onclick="dialogPicker1.showModal(); dialogPicker1.focus() ">ShowModal</button>
+        <button type="button" class="btn btn-primary" onclick="dialogPicker1.querySelector('ui-color-picker').value = '#f00'; dialogPicker1.showModal(); dialogPicker1.focus()">#f00 ShowModal</button>
 
         <script>
             const dialogPicker1 = document.getElementById('dialogPicker1');
@@ -302,7 +320,7 @@
             </div>
         </ui-color-picker>
         <hr>
-        <dialog id="dialogPicker3" class="dialog-color-picker">
+        <dialog id="dialogPicker3" tabindex="-1" class="dialog-color-picker">
             <ui-color-picker class="border rounded d-flex flex-column user-select-none gap-2 p-3 justify-content-between" style="min-width: 200px; width: 100vw;" onclick="console.log(this.pendingColor.toRgbString());" value="#33ff00">
                 <div class="d-flex gap-3" style="width: 100%;height: auto;  ">
                     <div class="wheel-group">
@@ -324,11 +342,16 @@
                 </div>
             </ui-color-picker>
         </dialog>
-        <button type="button" class="btn btn-primary" onclick="dialogPicker3.showModal(); requestAnimationFrame(() => { document.activeElement?.blur(); });">ShowModal</button>
-        <button type="button" class="btn btn-primary" onclick="dialogPicker3.querySelector('ui-color-picker').value = '#aabbcc'; dialogPicker3.showModal(); requestAnimationFrame(() => { document.activeElement?.blur(); });">#aabbcc ShowModal</button>
-        <button type="button" class="btn btn-primary" onclick="dialogPicker3.querySelector('ui-color-picker').value = '#f00'; dialogPicker3.showModal(); requestAnimationFrame(() => { document.activeElement?.blur(); });">#f00 ShowModal</button>
+        <button type="button" class="btn btn-primary" onclick="dialogPicker3.showModal(); dialogPicker3.focus()">ShowModal</button>
+        <button type="button" class="btn btn-primary" onclick="dialogPicker3.querySelector('ui-color-picker').value = '#aabbcc'; dialogPicker3.showModal(); dialogPicker3.focus()">#aabbcc ShowModal</button>
+        <button type="button" class="btn btn-primary" onclick="dialogPicker3.querySelector('ui-color-picker').value = '#f00'; dialogPicker3.showModal(); dialogPicker3.focus()">#f00 ShowModal</button>
         <script>
             const dialogPicker3 = document.getElementById('dialogPicker3');
+            dialogPicker3.addEventListener('click', (event) => { // 배경 클릭시 닫기
+                if(event.target === event.currentTarget){
+                    event.target.close();
+                }
+            })
             dialogPicker3.addEventListener('confirm-color-picker', (event) => {
                 console.log('confirm-color-picker',event.target.value);
                 alert(event.type+' : '+event.target.value);
