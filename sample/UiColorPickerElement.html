@@ -63,9 +63,9 @@
     </script>
     <script>
         document.addEventListener('confirm-color-picker', (event) => { 
-            console.log(event.type,event.target.color.toRgbString())
+            console.log(event.type,event.target.color.toRgbString(),event.target.value)
         });
-        document.addEventListener('cancel-color-picker', (event) => { console.log(event.type,event.target.color.toRgbString()) });
+        document.addEventListener('cancel-color-picker', (event) => { console.log(event.type,event.target.color.toRgbString(),event.target.value) });
         
     </script>
     <style>
@@ -253,7 +253,7 @@
             })
         </script>
         <hr>
-        <ui-color-picker id="picker2" class="border rounded d-flex flex-column user-select-none gap-2 p-3" style="max-width: 600px;"  onclick="console.log(this.pendingColor.toRgbString());" value="#33ff00">
+        <ui-color-picker id="picker2" class="border rounded d-flex flex-column user-select-none gap-2 p-3" style="max-width: 600px;"  onclick="console.log(this.pendingColor.toRgbString());" value="#33ff00" data-to-string-type="hsl">
             <div class="d-flex gap-3" style="width: 100%;height: auto;  ">
                 <div style="flex: 1 0 auto; aspect-ratio: 1/1;">
                     <div class="form-label">HSL</div>
@@ -291,7 +291,7 @@
             </div>
         </ui-color-picker>
         <hr>
-        <ui-color-picker class="border rounded d-flex flex-column user-select-none gap-2 p-3" style="max-width: 400px;" onclick="console.log(this.pendingColor.toRgbString());" value="#33ff00">
+        <ui-color-picker class="border rounded d-flex flex-column user-select-none gap-2 p-3" style="max-width: 400px;" onclick="console.log(this.pendingColor.toRgbString());" value="#33ff00"  data-to-string-type="hsb">
             <div class="d-flex gap-3" style="width: 100%;height: auto;  ">
                 <div class="wheel-group">
                     <ui-color-wheel-hue class="sync-part-color" style="aspect-ratio: 1/1;"></ui-color-wheel-hue>

@@ -5,6 +5,7 @@ export default class UiColorPickerElement extends HTMLElement {
     /* =========================
      * static
      * ========================= */
+    static toStringType = 'rgb';
 
     /** 커스텀 엘리먼트 태그명 */
     static tagName = 'ui-color-picker';
@@ -102,7 +103,8 @@ export default class UiColorPickerElement extends HTMLElement {
     }
 
     get value() {
-        return this.selectedColor.toRgbString();
+        // return this.selectedColor.toRgbString();
+        return this.toString();
     }
 
     /* =========================
@@ -281,7 +283,8 @@ export default class UiColorPickerElement extends HTMLElement {
     //     return `hsl(${this.hue}, ${this.saturation} ${this.lightness})`;
     // }
 
-    toString(type = Color.toStringType) {
+    toString(type = null) {
+        if(!type){ type = this.dataset.toStringType??this.constructor.toStringType; }
         return this.selectedColor.toString(type);
     }
 
