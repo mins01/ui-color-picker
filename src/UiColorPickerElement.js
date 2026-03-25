@@ -49,7 +49,7 @@ export default class UiColorPickerElement extends HTMLElement {
      * ========================= */
 
     connectedCallback() {
-        this.pendingColor.setColor(this.selectedColor);
+        this.setPendingColor(this.selectedColor);
         if (!this.shadowRoot.firstChild){
             this.render();
         }
@@ -96,8 +96,8 @@ export default class UiColorPickerElement extends HTMLElement {
      * ========================= */
 
     set value(value) {
-        this.selectedColor.setString(value);
-        this.currentHue = this.toHsl().h
+        const color = Color.fromString(value);        
+        this.setSelectedColor(color);
         this.syncSelectedColor()
         this.syncPartColorForSelected()
     }
@@ -118,11 +118,13 @@ export default class UiColorPickerElement extends HTMLElement {
     }
     setPendingColor(color) {
         this.pendingColor.setColor(color);
+        this.currentHue = this.pendingColor.toHsl().h
         this.syncPendingColor();
         this.syncPartColorForPending();
     }
     setSelectedColor(color) {
         this.selectedColor.setColor(color);
+        this.currentHue = this.selectedColor.toHsl().h
         this.syncSelectedColor();
         this.syncPartColorForSelected();
     }
@@ -136,6 +138,7 @@ export default class UiColorPickerElement extends HTMLElement {
     }
 
     syncSelectedColor() {
+        this.currentHue = this.toHsl().h
         this.querySelectorAll('.sync-selected-color').forEach((el) => {
             this.syncToElement(this.selectedColor,el);
         })
@@ -162,6 +165,7 @@ export default class UiColorPickerElement extends HTMLElement {
     syncHue(hue=null) {
         if(hue == null) hue = this.currentHue
         if(hue!=this.currentHue) this.currentHue = hue;
+        
         this.querySelectorAll('.sync-hue').forEach((el) => {
             el.h = hue;
         })
@@ -176,17 +180,15 @@ export default class UiColorPickerElement extends HTMLElement {
     }
 
     confirm() {
-        this.selectedColor.setColor(this.pendingColor);
-        this.syncPendingColor()
+        this.setSelectedColor(this.pendingColor)
         this.syncSelectedColor()
         this.syncPartColorForSelected();
         this.dispatchEvent(new Event('confirm-color-picker', { bubbles: true, cancelable: true }));
     }
     cancel() {
         if(!this.pendingColor.equals(this.selectedColor)) this.syncPartColorForSelected();
-        this.pendingColor.setColor(this.selectedColor);
+        this.setPendingColor(this.selectedColor)
         this.syncPendingColor()
-        this.syncSelectedColor()
         
         this.dispatchEvent(new Event('cancel-color-picker', { bubbles: true, cancelable: true }));
     }
@@ -205,7 +207,8 @@ export default class UiColorPickerElement extends HTMLElement {
 
         this.pendingColor.setHsla(hsl.h, hsl.s, hsl.l);
         this.syncPendingColor();
-        this.syncHue(target.value);
+        this.currentHue = target.value
+        this.syncHue();
     }
 
     handleChangeHue(event) {
@@ -214,7 +217,7 @@ export default class UiColorPickerElement extends HTMLElement {
 
     handleInputColorPlane(event){
         const target = event.target;
-        this.pendingColor.setColor(target.color)
+        this.setPendingColor(target.color)
         this.syncPendingColor();
     }
 
@@ -224,17 +227,12 @@ export default class UiColorPickerElement extends HTMLElement {
 
         const color = Color.fromString(target.value);
         if(!color) return
-        console.log(target.value,color);
 
         if(target.dataset.setColor ==='pendingColor') {
-            // this.setPendingColor(color);
-            this.pendingColor.setColor(color);
-            // this.syncPendingColor();
+            this.setPendingColor(color);
             this.syncPartColorForPending();
         }else if(target.dataset.setColor ==='selectedColor') {
-            // this.setSelectedColor(color);
-            this.selectedColor.setColor(color);
-            // this.syncPendingColor();
+            this.setSelectedColor(color);
             this.syncPartColorForSelected();
         }
     }
