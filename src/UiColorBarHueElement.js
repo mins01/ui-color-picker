@@ -48,8 +48,8 @@ export default class UiColorBarHueElement extends UiColorBarElement {
     setColor(color) {
         if(!color) return;
         const { h, s, l } = color.toHsl();
-        if(s===0 || l===0 || s===0){
-            // hue가 사리지는 경우
+        if(s < 0.005){
+            // 무채색이면 무시
         }else{
             this.value = h;
         }

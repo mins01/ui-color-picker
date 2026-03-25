@@ -56,7 +56,7 @@ export default class UiColorPickerElement extends HTMLElement {
         this.syncSelectedColor();
         this.syncPartColorForSelected();
         this.syncPendingColor();
-        this.syncHue(this.selectedColor.toHsl().h);
+        this.syncInputHue(this.selectedColor.toHsl().h);
 
         this.addEventListener('input-color', this.handleInputColorPlane);
         this.addEventListener('change-color', this.handleInputColorPlane);
@@ -116,15 +116,17 @@ export default class UiColorPickerElement extends HTMLElement {
         this.setPendingColor(color)
         this.setSelectedColor(color)
     }
-    setPendingColor(color) {
+    setPendingColor(color,noSync = false) {
         this.pendingColor.setColor(color);
         this.currentHue = this.pendingColor.toHsl().h
+        if(noSync) return;
         this.syncPendingColor();
         this.syncPartColorForPending();
     }
-    setSelectedColor(color) {
+    setSelectedColor(color,noSync = false) {
         this.selectedColor.setColor(color);
         this.currentHue = this.selectedColor.toHsl().h
+        if(noSync) return;
         this.syncSelectedColor();
         this.syncPartColorForSelected();
     }
@@ -163,9 +165,17 @@ export default class UiColorPickerElement extends HTMLElement {
 
     currentHue = null; // hue를 유지한다.
     syncHue(hue=null) {
+        return;
+        // 우선 사용안한다 문제가 크다.
         if(hue == null) hue = this.currentHue
         if(hue!=this.currentHue) this.currentHue = hue;
         
+        this.querySelectorAll('.sync-hue').forEach((el) => {
+            // el.h = hue;
+            el.setColor(this.pendingColor)
+        })
+    }
+    syncInputHue(hue=null) {
         this.querySelectorAll('.sync-hue').forEach((el) => {
             el.h = hue;
         })
@@ -208,7 +218,8 @@ export default class UiColorPickerElement extends HTMLElement {
         this.pendingColor.setHsla(hsl.h, hsl.s, hsl.l);
         this.syncPendingColor();
         this.currentHue = target.value
-        this.syncHue();
+        // this.syncHue();
+        this.syncInputHue(target.value);
     }
 
     handleChangeHue(event) {
@@ -217,7 +228,7 @@ export default class UiColorPickerElement extends HTMLElement {
 
     handleInputColorPlane(event){
         const target = event.target;
-        this.setPendingColor(target.color)
+        this.setPendingColor(target.color,true)
         this.syncPendingColor();
     }
 
@@ -229,10 +240,10 @@ export default class UiColorPickerElement extends HTMLElement {
         if(!color) return
 
         if(target.dataset.setColor ==='pendingColor') {
-            this.setPendingColor(color);
+            this.setPendingColor(color,true); //싱크 수동으로
             this.syncPartColorForPending();
         }else if(target.dataset.setColor ==='selectedColor') {
-            this.setSelectedColor(color);
+            this.setSelectedColor(color,true); //싱크 수동으로
             this.syncPartColorForSelected();
         }
     }

@@ -128,12 +128,9 @@ export default class UiColorPlaneSbElement extends HTMLElement {
         if(!color) return;
         const { h, s, b } = color.toHsb();
         
-        if( 
-            (b===0 && this._b===0)
-            ||(b===1 && this._b===1)
-        ){
-            // 극단의 색이면 현재를 유지
-            
+        if( s < 0.005 ){
+            // 무채색이면 무시
+            this.setHsb(this._h,s,null);
         }else{
             this.setHsb(h,s,b);
         }        
