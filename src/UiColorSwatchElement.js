@@ -62,7 +62,8 @@ export default class UiColorSwatchElement extends UiColorElement {
                     content: '📌';           
                 }
                 :host(.selected){
-                    box-shadow:0 0 0 2px #000;
+                        border-color:#000;
+                    box-shadow:inset 0 0 0 1px #fff;
                 }
                 :host(.selected)::before{
                     position: absolute;

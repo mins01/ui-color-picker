@@ -132,7 +132,6 @@ export default class UiColorPickerElement extends HTMLElement {
         const { h, s } = color.toHsl(true);
         if(s > 0){ //무채색이 아니면
             this.selectedHue = this.pendingHue = h;
-            console.log('setSelectedColor',this.selectedHue);
         }else{ // 무채색이면
             this.selectedHue = this.pendingHue;
         }
@@ -159,8 +158,6 @@ export default class UiColorPickerElement extends HTMLElement {
         this.querySelectorAll('.sync-part-color').forEach((el) => {
             this.syncToElement(this.selectedColor,el);
             this.syncHueToElement(this.selectedHue,el);
-            console.log(this.selectedHue);
-            
         })
     }
     syncPendingColor() {
@@ -178,7 +175,6 @@ export default class UiColorPickerElement extends HTMLElement {
     // 입력받은 색상 변경에 대한 싱크 동작처리
     syncInputHue(hue=null) {
         this.pendingHue = hue
-        console.log('syncInputHue',this.pendingHue);
         this.querySelectorAll('.sync-hue').forEach((el) => {
             el.h = hue;
         })
