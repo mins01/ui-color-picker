@@ -155,16 +155,17 @@ export default class UiColorSwatchesElement extends HTMLElement {
         if(!this.hasColor(color)){
             addedSwatch = this.createSwatch(color,{locked,pinned,recent});
             if(addedSwatch){
+                this.selectSwatch(addedSwatch);
                 const firstNotPinned = this.querySelector('.swatch:not(.pinned)');
                 if(firstNotPinned) firstNotPinned.before(addedSwatch);
                 else this.append(addedSwatch);   
                 this.trim()
             }
+            this.renderSorted()
+        }else{
+            this.selectColor(color);
         }
-        this.renderSorted()
-        // this.selectColor(color)
         if(addedSwatch){
-            this.selectSwatch(addedSwatch);
             addedSwatch.dispatchEvent( new Event('add-swatch', { bubbles: true, cancelable: true }) );
             this.autoSaveStorage();
         }
