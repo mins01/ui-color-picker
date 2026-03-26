@@ -29,13 +29,16 @@ export default class UiColorPickerElement extends HTMLElement {
     /** 현재 색 */
     selectedColor = new Color(0,0,0,1)
     color = this.selectedColor; // alias of selectedColor
-
     /** 선택중인 색 */
     pendingColor = new Color(0,0,0,1);
+    // 현재 HUE
+    selectedHue = 0;
+    // 선택중인 HUE
+    pendingHue = 0;
 
     maxSwatches = 30;
 
-    currentHue = 0; // hue를 유지한다.
+    
 
     /* =========================
      * constructor
@@ -119,10 +122,6 @@ export default class UiColorPickerElement extends HTMLElement {
     }
     setPendingColor(color,autoSync = true) {
         if(!color) return;
-        // const { h, s } = color.toHsl(false);
-        // if(s > 0){ //무채색이 아니면
-        //     this.currentHue = h;
-        // }
         this.pendingColor.setColor(color);
         if(!autoSync) return;
         this.syncPendingColor();
@@ -132,7 +131,10 @@ export default class UiColorPickerElement extends HTMLElement {
         if(!color) return;
         const { h, s } = color.toHsl(true);
         if(s > 0){ //무채색이 아니면
-            this.currentHue = h;
+            this.selectedHue = this.pendingHue = h;
+            console.log('setSelectedColor',this.selectedHue);
+        }else{ // 무채색이면
+            this.selectedHue = this.pendingHue;
         }
         this.selectedColor.setColor(color);
         if(!autoSync) return;
@@ -156,7 +158,9 @@ export default class UiColorPickerElement extends HTMLElement {
     syncPartColorForSelected() {
         this.querySelectorAll('.sync-part-color').forEach((el) => {
             this.syncToElement(this.selectedColor,el);
-            this.syncHueToElement(this.currentHue,el);
+            this.syncHueToElement(this.selectedHue,el);
+            console.log(this.selectedHue);
+            
         })
     }
     syncPendingColor() {
@@ -173,7 +177,8 @@ export default class UiColorPickerElement extends HTMLElement {
 
     // 입력받은 색상 변경에 대한 싱크 동작처리
     syncInputHue(hue=null) {
-        this.currentHue = hue
+        this.pendingHue = hue
+        console.log('syncInputHue',this.pendingHue);
         this.querySelectorAll('.sync-hue').forEach((el) => {
             el.h = hue;
         })
@@ -185,8 +190,6 @@ export default class UiColorPickerElement extends HTMLElement {
             const str = color.toString(toElement.dataset.toStringType);            
             if(toElement.value !== str) toElement.value = str;
         }
-
-        // if('setHue' in toElement) toElement.setHue(this.currentHue);
     }
     syncHueToElement(hue,toElement){
         if('setHue' in toElement) toElement.setHue(hue);
