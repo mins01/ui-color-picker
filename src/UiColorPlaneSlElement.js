@@ -123,17 +123,22 @@ export default class UiColorPlaneSlElement extends HTMLElement {
     /* =========================
      * public API
      * ========================= */
-
+    
     setColor(color) {
         if(!color) return;
-        let { h, s, l } = color.toHsl();
-        if (s < 0.005) { // gray
-            // 무채색이면 색상 유지
-            this.setHsl(this._h,s,null);
+        let { h, s, l } = color.toHsl(false);
+        if(l < 0.005 || l > 0.995){
+            this.setHsl(null,null,l);    
         }else{
-            this.setHsl(h,s,l);
+            this.setHsl(null,s,l);
         }
     }
+
+    // 색상만 다시 맞춘다.
+    setHue(h){
+        this.setHsl(h,null,null);
+    }
+
     setHsl(h=null,s=null,l=null){
         if(h !== null) this._h = Number(h);
         if(s !== null){

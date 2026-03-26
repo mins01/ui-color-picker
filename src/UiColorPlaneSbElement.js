@@ -127,15 +127,26 @@ export default class UiColorPlaneSbElement extends HTMLElement {
     setColor(color) {
         if(!color) return;
         const { h, s, b } = color.toHsb();
-        
-        if( s < 0.005 ){
-            // 무채색이면 무시
-            this.setHsb(this._h,s,null);
+
+        if( b < 0.005 && s < 0.005 ){
+            // this.setHsb(h,s,null);
         }else{
-            this.setHsb(h,s,b);
-        }        
+            this.setHsb(null,s,b);
+        }
+
+
+        // this.setHsb(null,s,b); //hue는 무시
+        // if( s < 0.005 ){
+        //     // 무채색이면 무시
+        //     this.setHsb(this._h,s,null);
+        // }else{
+        //     this.setHsb(h,s,b);
+        // }        
     }
 
+    setHue(h){
+        this.setHsb(h,null,null);
+    }
 
     setHsb(h=null,s=null,b=null){
         if(h !== null) this._h = Number(h);
