@@ -76,7 +76,6 @@ export default class UiColorElement extends HTMLElement {
         if(this.color.equals(color)) return;
         this.color.setColor(color);
         this._syncStyle();
-        this.dispatchEvent(new Event('change-color', { bubbles: true }));
     }
 
     setRgba(r, g, b, a = null) {

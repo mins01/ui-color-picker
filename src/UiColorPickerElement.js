@@ -125,6 +125,7 @@ export default class UiColorPickerElement extends HTMLElement {
         this.pendingColor.setColor(color);
 
         const { h, s, l } = this.pendingColor.toHsl();
+        
         if(s > 0 && l > 0 && l < 1 ){ //무채색이 아니면
             this.pendingHue = h;           
         }
@@ -137,6 +138,7 @@ export default class UiColorPickerElement extends HTMLElement {
         if(!color) return;
         this.selectedColor.setColor(color);
 
+        
         const { h, s, l } = this.selectedColor.toHsl();
         if(s > 0 && l > 0 && l < 1 ){ //무채색이 아니면
             this.selectedHue = h;           
@@ -195,20 +197,14 @@ export default class UiColorPickerElement extends HTMLElement {
     }
 
     confirm() {
-        this.setSelectedColor(this.pendingColor)
         this.selectedHue = this.pendingHue;
-        this.syncInputHue(this.selectedHue)
-        
+        this.setSelectedColor(this.pendingColor) // 내부에서 요소에 맞춰 hue가 싱크됨        
         this.dispatchEvent(new Event('confirm-color-picker', { bubbles: true, cancelable: true }));
     }
     cancel() {
-        const { h, s } = this.selectedColor.toHsl(true);
         this.setPendingColor(this.selectedColor,false);
-        this.syncSelectedColor()
-        this.syncPartColorForSelected();
         this.pendingHue = this.selectedHue;
-        this.syncInputHue(this.selectedHue)
-        
+        this.setSelectedColor(this.pendingColor); // 내부에서 요소에 맞춰 hue가 싱크됨
         this.dispatchEvent(new Event('cancel-color-picker', { bubbles: true, cancelable: true }));
     }
 
