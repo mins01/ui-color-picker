@@ -94,7 +94,7 @@ export default class UiColorSwatchesElement extends HTMLElement {
 
     set value(value) {
         const color = Color.fromString(value);
-        this.selectColor(color);
+        this.selectColor(color,{silence:true});
     }
 
     get value() {
@@ -116,11 +116,11 @@ export default class UiColorSwatchesElement extends HTMLElement {
     toColor(){
         this.getSelectedSwatch().toColor();
     }
-    selectColor(color){ // 색상 선택
+    selectColor(color,{silence=false}={}){ // 색상 선택
         const swatches = this.querySelectorAll('.swatch');
         for (const swatch of swatches) {
             if(swatch.color.equals(color)){
-                return this.selectSwatch(swatch,{silence:true});
+                return this.selectSwatch(swatch,{silence});
             }
         }        
     }
@@ -158,6 +158,8 @@ export default class UiColorSwatchesElement extends HTMLElement {
         if(!this.hasColor(color)){
             addedSwatch = this.createSwatch(color,{locked,pinned,recent});
             if(addedSwatch){
+                addedSwatch.dispatchEvent( new Event('add-swatch', { bubbles: true, cancelable: true }) );
+                this.autoSaveStorage();
                 this.selectSwatch(addedSwatch);
                 const firstNotPinned = this.querySelector('.swatch:not(.pinned)');
                 if(firstNotPinned) firstNotPinned.before(addedSwatch);
@@ -167,10 +169,6 @@ export default class UiColorSwatchesElement extends HTMLElement {
             this.renderSorted()
         }else{
             this.selectColor(color);
-        }
-        if(addedSwatch){
-            addedSwatch.dispatchEvent( new Event('add-swatch', { bubbles: true, cancelable: true }) );
-            this.autoSaveStorage();
         }
         return swatch;
     }
