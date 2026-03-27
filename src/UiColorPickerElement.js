@@ -63,25 +63,25 @@ export default class UiColorPickerElement extends HTMLElement {
         
         this.syncInputHue(this.selectedColor.toHsl().h);
 
-        this.addEventListener('input-color', this.handleInputColorPlane);
-        this.addEventListener('change-color', this.handleInputColorPlane);
+        this.addEventListener('input-color', this.handleInputColor);
+        this.addEventListener('change-color', this.handleChangeColor);
         this.addEventListener('input-hue', this.handleInputHue);
         this.addEventListener('change-hue', this.handleChangeHue);
         this.addEventListener('input', this.handleInput);
         this.addEventListener('change', this.handleChange);
         this.addEventListener('click', this.handleClick);
-        this.addEventListener('select-swatch', this.handleSelectSwatch);
+        this.addEventListener('select-swatch', this.handleChangeColor);
     }
 
     disconnectedCallback() {
-        this.removeEventListener('input-color', this.handleInputColorPlane);
-        this.removeEventListener('change-color', this.handleInputColorPlane);
+        this.removeEventListener('input-color', this.handleInputColor);
+        this.removeEventListener('change-color', this.handleChangeColor);
         this.removeEventListener('input-hue', this.handleInputHue);
         this.removeEventListener('change-hue', this.handleChangeHue);
         this.removeEventListener('input', this.handleInput);
         this.removeEventListener('change', this.handleChange);
         this.removeEventListener('click', this.handleClick);
-        this.removeEventListener('select-swatch', this.handleSelectSwatch);
+        this.removeEventListener('select-swatch', this.handleChangeColor);
     }
 
     /* =========================
@@ -117,16 +117,18 @@ export default class UiColorPickerElement extends HTMLElement {
 
     setColor(color) {
         if(!color) return;
-        const { h, s, l } = color.toHsl();
-        if(s > 0 && l > 0 && l < 1 ){ //무채색이 아니면
-            this.selectedHue = this.pendingHue = h;           
-        }
         this.setPendingColor(color)
         this.setSelectedColor(color)
     }
     setPendingColor(color,autoSync = true) {
         if(!color) return;
         this.pendingColor.setColor(color);
+
+        const { h, s, l } = this.pendingColor.toHsl();
+        if(s > 0 && l > 0 && l < 1 ){ //무채색이 아니면
+            this.pendingHue = h;           
+        }
+
         if(!autoSync) return;
         this.syncPendingColor();
         this.syncPartColorForPending();
@@ -134,6 +136,12 @@ export default class UiColorPickerElement extends HTMLElement {
     setSelectedColor(color,autoSync = true) {
         if(!color) return;
         this.selectedColor.setColor(color);
+
+        const { h, s, l } = this.selectedColor.toHsl();
+        if(s > 0 && l > 0 && l < 1 ){ //무채색이 아니면
+            this.selectedHue = h;           
+        }
+        
         if(!autoSync) return;
         this.syncSelectedColor();
         this.syncPartColorForSelected();
@@ -169,10 +177,7 @@ export default class UiColorPickerElement extends HTMLElement {
         })
     }
 
-
-    // 입력받은 색상 변경에 대한 싱크 동작처리
     syncInputHue(hue=null) {
-        this.pendingHue = hue
         this.querySelectorAll('.sync-hue').forEach((el) => {
             el.h = hue;
         })
@@ -190,28 +195,19 @@ export default class UiColorPickerElement extends HTMLElement {
     }
 
     confirm() {
-        const { h, s } = this.pendingColor.toHsl(true);
-        if(s > 0){ //무채색이 아니면
-            this.selectedHue = this.pendingHue = h;
-        }else{ // 무채색이면
-            this.selectedHue = this.pendingHue;
-        }
         this.setSelectedColor(this.pendingColor)
-        // this.syncSelectedColor()
-        // this.syncPartColorForSelected();
+        this.selectedHue = this.pendingHue;
+        this.syncInputHue(this.selectedHue)
+        
         this.dispatchEvent(new Event('confirm-color-picker', { bubbles: true, cancelable: true }));
     }
     cancel() {
         const { h, s } = this.selectedColor.toHsl(true);
-        if(s > 0){ //무채색이 아니면
-            this.pendingHue = this.selectedHue = h;
-        }else{ // 무채색이면
-            this.pendingHue = this.selectedHue;
-        }
-        this.setPendingColor(this.selectedColor);
-        // this.syncPendingColor();
-        // this.syncSelectedColor();
+        this.setPendingColor(this.selectedColor,false);
+        this.syncSelectedColor()
         this.syncPartColorForSelected();
+        this.pendingHue = this.selectedHue;
+        this.syncInputHue(this.selectedHue)
         
         this.dispatchEvent(new Event('cancel-color-picker', { bubbles: true, cancelable: true }));
     }
@@ -224,14 +220,11 @@ export default class UiColorPickerElement extends HTMLElement {
     
     handleInputHue(event) {
         const target = event.target;
-
         const hsl = this.pendingColor.toHsl();
         hsl.h = target.value;
         this.pendingHue = hsl.h;
-
         this.pendingColor.setHsla(hsl.h, hsl.s, hsl.l);
         this.syncPendingColor();
-        
         this.syncInputHue(target.value);
     }
 
@@ -239,14 +232,16 @@ export default class UiColorPickerElement extends HTMLElement {
         return this.handleInputHue(event);
     }
 
-    handleInputColorPlane(event){
+    handleInputColor(event){
         const target = event.target;
-        const { h, s, l } = target.color.toHsl();
-        if(s > 0 && l > 0 && l < 1 ){ //무채색이 아니면
-            this.pendingHue = h;           
-        }
         this.setPendingColor(target.color,false) // 싱크 안함. 단방향
         this.syncPendingColor();
+    }
+    handleChangeColor(event){
+        // handleInputColor 과의 차이는 모든 pending 싱크 맞추고 hue도 맞춤.
+        const target = event.target;
+        this.setPendingColor(target.color)
+        this.syncInputHue(this.pendingHue);
     }
 
     handleInput(event) {
@@ -257,11 +252,13 @@ export default class UiColorPickerElement extends HTMLElement {
         if(!color) return
 
         if(target.dataset.setColor ==='pendingColor') {
-            this.setPendingColor(color);
-            // this.syncPartColorForPending();
+            this.setPendingColor(color,false);
+            this.syncPartColorForPending();
+            this.syncInputHue(this.pendingHue)
         }else if(target.dataset.setColor ==='selectedColor') {
             this.setSelectedColor(color,false);
-            // this.syncPartColorForSelected();
+            this.syncPartColorForSelected();
+            this.syncInputHue(this.selectedHue)
         }
     }
 
@@ -271,16 +268,14 @@ export default class UiColorPickerElement extends HTMLElement {
 
         const color = Color.fromString(target.value);
         if(!color){
-                if(target.dataset.setColor ==='pendingColor') {
-                    this.syncPendingColor();
-                }else if(target.dataset.setColor ==='selectedColor') {
-                    this.syncPendingColor();
-                }
+                
         }else{
             if(target.dataset.setColor ==='pendingColor') {
-                this.setPendingColor(color);            
+                this.setPendingColor(color);
+                this.syncInputHue(this.pendingHue)          
             }else if(target.dataset.setColor ==='selectedColor') {
                 this.setSelectedColor(color);
+                this.syncInputHue(this.selectedHue)
             }
         }
 
@@ -297,8 +292,7 @@ export default class UiColorPickerElement extends HTMLElement {
     
 
     handleSelectSwatch(event) {
-        const swatch = event.target;
-        this.setPendingColor(swatch.color);        
+        return this.handleChangeColor(event)
     }
 
     /* =========================
