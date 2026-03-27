@@ -130,6 +130,7 @@ export default class UiColorSwatchesElement extends HTMLElement {
         });
         swatch.classList.add('selected')
         swatch.dispatchEvent( new Event('select-swatch', { bubbles: true, cancelable: true }) );
+        swatch.dispatchEvent( new Event('change-color', { bubbles: true, cancelable: true }) );
     }
     getSelectedSwatch(){
         return this.querySelector('.swatch.selected')

@@ -70,7 +70,7 @@ export default class UiColorPickerElement extends HTMLElement {
         this.addEventListener('input', this.handleInput);
         this.addEventListener('change', this.handleChange);
         this.addEventListener('click', this.handleClick);
-        this.addEventListener('select-swatch', this.handleChangeColor);
+        // this.addEventListener('select-swatch', this.handleChangeColor); // change-color 와 동시에 발생된다.
     }
 
     disconnectedCallback() {
@@ -81,7 +81,7 @@ export default class UiColorPickerElement extends HTMLElement {
         this.removeEventListener('input', this.handleInput);
         this.removeEventListener('change', this.handleChange);
         this.removeEventListener('click', this.handleClick);
-        this.removeEventListener('select-swatch', this.handleChangeColor);
+        // this.removeEventListener('select-swatch', this.handleChangeColor);
     }
 
     /* =========================
