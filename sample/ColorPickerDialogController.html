@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="ko" >
+<head>
+    <title>Sample - ColorPickerDialogController</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Script-Type" content="text/javascript">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="http://www.mins01.com/favicon.ico"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <script src="/js/ForGoogle.js"></script>
+    <!-- google analytics -->
+    <script>if(window.ForGoogle){ ForGoogle.analytics() }else{ console.log("failure : ForGoogle.analytics()");}</script>
+    
+
+    <!-- jquery 관련 -->
+    <!-- <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script> -->
+
+    <!-- 부트스트랩 5.3.x -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+    <!-- vue.js -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
+    
+    <!-- meta og -->
+    
+    <meta property="og:title" content="Sample - ColorPickerDialogController">
+    <meta property="og:description" content="Sample - ColorPickerDialogController">
+    <meta property="og:image" content="http://www.mins01.com/img/logo.gif">
+    <meta property="og:image:width" content="190">
+    <meta property="og:image:height" content="70" />
+    <meta property="og:site_name" content="Sample - ColorPickerDialogController" />
+    <meta property="og:type" content="website">
+    
+    <!-- //meta og -->
+
+
+
+    <script type="module">
+        import Color from "../third_party/js-color/v2/src/Color.js";
+        window.Color = Color;        
+    </script>
+    <link rel="stylesheet" href="../src/ui-color-picker.css">
+    <script type="module" src="../src/ui-color-picker.js"></script>
+    <script type="module">
+        import ColorPickerDialogController from "../src/ColorPickerDialogController.js";
+        window.ColorPickerDialogController = ColorPickerDialogController;
+        window.addEventListener('load', (event) => { 
+            const cpdc = new ColorPickerDialogController(document.getElementById('colorPickerDialog1')) 
+            window.cpdc = cpdc;
+            cpdc.addColorPickerInterceptor(window,'.open-color-picker-dialog');
+
+            const cpdc2 = new ColorPickerDialogController(document.getElementById('colorPickerDialog2')) 
+            window.cpdc2 = cpdc2;
+            cpdc2.addColorPickerInterceptor(window,'.open-color-picker-dialog-2');
+        })
+    </script>
+    
+</head>
+
+<body>
+    <div class="container py-3" id="container0">
+        <h1>Sample - ColorPickerDialogController</h1>
+        <hr>
+        <h2>Handling &lt;input type="color"&gt; </h2>
+
+        <div class="my-3">
+            <div class="d-flex flex-wrap gap-3">
+                <input type="color" name="" class="form-control form-control-color open-color-picker-dialog" value="#000000" onchange="console.log('input:color changed',this.value)">
+                <input type="color" name="" class="form-control form-control-color open-color-picker-dialog" value="#aabbcc" onchange="console.log('input:color changed',this.value)">
+                <input type="color" name="" class="form-control form-control-color open-color-picker-dialog" value="#ff0000" onchange="console.log('input:color changed',this.value)">
+                <input type="color" name="" class="form-control form-control-color open-color-picker-dialog" value="#336699" onchange="console.log('input:color changed',this.value)">
+            
+                <input type="text" name="" class="form-control open-color-picker-dialog" style="width: 10em;" readonly value="">
+                <input type="text" name="" class="form-control open-color-picker-dialog" style="width: 10em;" readonly value="" data-to-string-type="rgb" placeholder="rgb">
+                <input type="text" name="" class="form-control open-color-picker-dialog" style="width: 10em;" readonly value="" data-to-string-type="hsl" placeholder="hsl">
+                <input type="text" name="" class="form-control open-color-picker-dialog" style="width: 10em;" readonly value="" data-to-string-type="hsb" placeholder="hsb">
+                <input type="text" name="" class="form-control open-color-picker-dialog" style="width: 10em;" readonly value="" data-to-string-type="cmyk" placeholder="cmyk">
+                <input type="text" name="" class="form-control " onclick="cpdc.openColorPickerDialog(this).then((value)=>{ this.value=value; this.style.backgroundColor=this.value})" style="width: 10em;" readonly value=""  placeholder="onclick">
+
+                <input type="button" name="" class="btn btn-primary open-color-picker-dialog" readonly value="#aabbcc" id="input-button" onchange="this.style.backgroundColor=this.value" >
+            </div>
+            <hr>
+            <div class="d-flex flex-wrap gap-3">
+                <input type="color" name="" class="form-control form-control-color open-color-picker-dialog-2" value="#000000" onchange="console.log('input:color changed',this.value)">
+                <input type="color" name="" class="form-control form-control-color open-color-picker-dialog-2" value="#aabbcc" onchange="console.log('input:color changed',this.value)">
+                <input type="color" name="" class="form-control form-control-color open-color-picker-dialog-2" value="#ff0000" onchange="console.log('input:color changed',this.value)">
+                <input type="color" name="" class="form-control form-control-color open-color-picker-dialog-2" value="#336699" onchange="console.log('input:color changed',this.value)">
+            
+                <input type="text" name="" class="form-control open-color-picker-dialog-2" style="width: 10em;" readonly value="">
+                <input type="text" name="" class="form-control open-color-picker-dialog-2" style="width: 10em;" readonly value="" data-to-string-type="rgb" placeholder="rgb">
+                <input type="text" name="" class="form-control open-color-picker-dialog-2" style="width: 10em;" readonly value="" data-to-string-type="hsl" placeholder="hsl">
+                <input type="text" name="" class="form-control open-color-picker-dialog-2" style="width: 10em;" readonly value="" data-to-string-type="hsb" placeholder="hsb">
+                <input type="text" name="" class="form-control open-color-picker-dialog-2" style="width: 10em;" readonly value="" data-to-string-type="cmyk" placeholder="cmyk">
+                <input type="text" name="" class="form-control " onclick="cpdc2.openColorPickerDialog(this).then((value)=>{ this.value=value; this.style.backgroundColor=this.value})" style="width: 10em;" readonly value=""  placeholder="onclick">
+
+                <input type="button" name="" class="btn btn-primary open-color-picker-dialog-2" readonly value="#aabbcc" id="input-button" onchange="this.style.backgroundColor=this.value" >
+            </div>
+        </div>
+
+
+
+        <dialog id="colorPickerDialog1" tabindex="-1" class="dialog-color-picker" style="max-width: 600px; ">
+            <ui-color-picker class="border rounded d-flex flex-column user-select-none gap-2 p-3" style="width: 100vw;" onclick="console.log(this.pendingColor.toRgbString());" value="#000000">
+                <div class="d-flex gap-3 " >
+                    <ui-color-plane-sb class="sync-hue sync-part-color" style="flex: 1 0 auto; aspect-ratio: 1/1;"></ui-color-plane-sb>
+                    <ui-color-bar-hue class="sync-part-color" style="flex: 0 0 30px;"></ui-color-bar-hue>
+                </div>
+                <div class="d-flex flex-wrap gap-2 user-select-all">
+                    <input name="toHslString" data-to-string-type="hsl" data-set-color="pendingColor" class="sync-pending-color col form-control form-control-sm" style="flex: 1 0 8em;">
+                    <input name="toRgbString" data-to-string-type="rgb" data-set-color="pendingColor" class="sync-pending-color col form-control form-control-sm" style="flex: 1 0 8em;">
+                    <input name="toHexString" data-to-string-type="hex" data-set-color="pendingColor" class="sync-pending-color col form-control form-control-sm" style="flex: 0 1 6em;">
+                </div>
+                <div class="d-flex flex-wrap gap-2">
+                    <div class="input-group col">
+                        <ui-color data-target-color="selectColor" class="sync-selected-color sync-hue rounded-start-pill border d-flex justify-content-center align-items-center user-select-none col"><div style="text-shadow: 0px 0px 2px #000; color: #fff;">Selected</div></ui-color>
+                        <ui-color data-target-color="pendingColor" class="sync-pending-color rounded-end-pill border d-flex justify-content-center align-items-center user-select-none col" value="#fff"><div style="text-shadow: 0px 0px 2px #000; color: #fff;">Pending</div></ui-color>
+                    </div>
+                    <div class="d-flex gap-1 col">
+                        <button type="button" class="btn btn-primary btn-sm col" data-picker-action="confirm">Confirm</button>
+                        <button type="button" class="btn btn-secondary btn-sm col"  data-picker-action="cancel">Cancel</button>
+                    </div>
+                </div>
+            </ui-color-picker>
+        </dialog>
+
+        <dialog id="colorPickerDialog2" tabindex="-1" class="dialog-color-picker">
+            <ui-color-picker class="border rounded d-flex flex-column user-select-none gap-2 p-3 justify-content-between" style="min-width: 200px; width: 100vw;" onclick="console.log(this.pendingColor.toRgbString());" value="#33ff00">
+                <div class="d-flex gap-3" style="width: 100%;height: auto;  ">
+                    <div class="wheel-group" >
+                        <ui-color-wheel-hue class="sync-part-color" style="aspect-ratio: 1/1;"></ui-color-wheel-hue>
+                        <ui-color-plane-sb  class="sync-hue sync-part-color inner-circle-position"></ui-color-plane-sb>
+                    </div>
+                </div>
+                <div class="d-flex flex-wrap gap-2">
+                    <div class="input-group col">
+                        <ui-color data-target-color="selectColor" class="sync-selected-color sync-hue rounded-start-pill border d-flex justify-content-center align-items-center user-select-none col"><div style="text-shadow: 0px 0px 2px #000; color: #fff;">Selected</div></ui-color>
+                        <ui-color data-target-color="pendingColor" class="sync-pending-color rounded-end-pill border d-flex justify-content-center align-items-center user-select-none col" value="#fff"><div style="text-shadow: 0px 0px 2px #000; color: #fff;">Pending</div></ui-color>
+                    </div>
+                    <div class="d-flex gap-1 col">
+                        <button type="button" class="btn btn-primary btn-sm col" data-picker-action="confirm">Confirm</button>
+                        <button type="button" class="btn btn-secondary btn-sm col"  data-picker-action="cancel">Cancel</button>
+                    </div>
+                </div>
+            </ui-color-picker>
+        </dialog>
+
+    </div>
+    
+</body>
+</html>

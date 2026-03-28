@@ -52,7 +52,7 @@ export default class UiColorWheelHueElement extends UiColorWheelElement {
     setColor(color) {
         if(!color) return;
         const { h, s, l } = color.toHsl();
-        if(s===0 || l===0 || s===0){
+        if(s===0 || l===0 || l===1){
             // hue가 사리지는 경우
         }else{
             this.value = h;
