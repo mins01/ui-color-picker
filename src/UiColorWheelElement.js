@@ -145,6 +145,12 @@ export default class UiColorWheelElement extends HTMLElement {
 
     handlePointerdown(event) {
         this.addEventListener('pointermove', this.handlePointermove);
+        if(event.composedPath()[0].closest('.inner-circle')){ // 내부 원은 이벤트 정지
+            event.preventDefault();
+            event.stopPropagation();
+            return false;
+        }
+        
         this.setPointerCapture(event.pointerId);
         this._valueFromDown = this.value;
         const val = this._getHFromEvent(event);
@@ -162,6 +168,7 @@ export default class UiColorWheelElement extends HTMLElement {
     }
 
     handlePointerup(event) {
+        if (!this.hasPointerCapture(event.pointerId)) return;
         this.removeEventListener('pointermove', this.handlePointermove);
         this.releasePointerCapture(event.pointerId);
         if (this.value === this._valueFromDown) {
@@ -205,6 +212,7 @@ export default class UiColorWheelElement extends HTMLElement {
 
                     user-select: none;
                     touch-action: none;
+                    pointer-events: none;
                     display: block;
                     min-width: 10px;
                     min-height: 10px;
@@ -230,6 +238,7 @@ export default class UiColorWheelElement extends HTMLElement {
                     width: 100%;
                     height: 100%;
                     border-radius:100vmax;
+                    pointer-events: all;
                     background: conic-gradient(
                         black 0deg,
                         white 360deg
@@ -241,14 +250,14 @@ export default class UiColorWheelElement extends HTMLElement {
                 :host::part(inner-circle) {
                     position: absolute;
                     z-index: 1;
-                    pointer-events: none;
+                    pointer-events: all;
                     inset: calc((1 - var(--inner-ratio)) / 2 * 100% - 0.5px);
                     border-radius: 100vmax;
                     box-shadow:inset 0 0 0 var(--bg-border-width) var(--bg-border-color);
                 }
                 
                 :host::part(indicator) {
-                    pointer-events: all;
+                    pointer-events: none;
                     z-index: 2;
                     display: flex;
                     justify-content: center;
@@ -263,6 +272,9 @@ export default class UiColorWheelElement extends HTMLElement {
                     height: 100%;
                     min-width: 0;
                     min-height: 8px;
+                }
+                :host .indicator > *{
+                    pointer-events: all;
                 }
 
                 :host .default-handle {
@@ -280,10 +292,10 @@ export default class UiColorWheelElement extends HTMLElement {
                 <div part="bg">
                     <div part="outer-circle">
                     </div>
-                    <div part="inner-circle">
+                    <div part="inner-circle" class="inner-circle">
                     </div>
                 </div>
-                <div part="indicator">
+                <div part="indicator" class="indicator">
                     <slot name="handle">
                         <div class="default-handle"></div>
                     </slot>
