@@ -78,7 +78,7 @@ export default class UiColorWheelHueElement extends UiColorWheelElement {
                 :host {
                     --value: 0;
                     --value-rotation: calc(var(--value, 0) * 1deg);
-                    --inner-ratio: 0.8;
+                    --inner-ratio: var(--wheel-inner-ratio, 0.8);
                 }
             </style>`; // 값 초기화 등
     static appendStyle = `<style>

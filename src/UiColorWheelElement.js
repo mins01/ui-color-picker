@@ -18,7 +18,7 @@ export default class UiColorWheelElement extends HTMLElement {
                 :host {
                     --value: 0;
                     --value-rotation: calc(var(--value, 0) * 360deg);
-                    --inner-ratio: 0.8;
+                    --inner-ratio: var(--wheel-inner-ratio, 0.8);
                 }
             </style>`; // 값 초기화 등
     static appendStyle = `<style></style>`; // 커스텀 스타일 등
@@ -243,15 +243,15 @@ export default class UiColorWheelElement extends HTMLElement {
                         black 0deg,
                         white 360deg
                     );
-                    -webkit-mask: radial-gradient(farthest-side, transparent calc( var(--inner-ratio)  * 100% - 1px), black calc( var(--inner-ratio)  * 100% ));
-                    mask: radial-gradient(farthest-side, transparent calc( var(--inner-ratio)  * 100%  - 1px), black calc( var(--inner-ratio) * 100% ));
+                    -webkit-mask: radial-gradient(farthest-side, transparent calc( var(--inner-ratio, 0.8)  * 100% - 1px), black calc( var(--inner-ratio, 0.8)  * 100% ));
+                    mask: radial-gradient(farthest-side, transparent calc( var(--inner-ratio, 0.8)  * 100%  - 1px), black calc( var(--inner-ratio, 0.8) * 100% ));
                     
                 }
                 :host::part(inner-circle) {
                     position: absolute;
                     z-index: 1;
                     pointer-events: all;
-                    inset: calc((1 - var(--inner-ratio)) / 2 * 100% - 0.5px);
+                    inset: calc((1 - var(--inner-ratio, 0.8)) / 2 * 100% - 0.5px);
                     border-radius: 100vmax;
                     box-shadow:inset 0 0 0 var(--bg-border-width) var(--bg-border-color);
                 }
@@ -279,7 +279,7 @@ export default class UiColorWheelElement extends HTMLElement {
 
                 :host .default-handle {
                     width: 100%;
-                    height: calc( (1 - var(--inner-ratio) ) / 2 * 100% );
+                    height: calc( (1 - var(--inner-ratio, 0.8) ) / 2 * 100% );
                     border-radius: 100px;
                     box-shadow: 0 0 0px 2px #fff, 0 0 0px 4px #000;
                     background-color: rgb(calc(var(--value)*255) calc(var(--value)*255) calc(var(--value)*255));
