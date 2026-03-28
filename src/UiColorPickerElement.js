@@ -178,6 +178,11 @@ export default class UiColorPickerElement extends HTMLElement {
             this.syncToElement(this.pendingColor,el);
         })
     }
+    syncHuePartColorForPending(){
+        this.querySelectorAll('.sync-part-color').forEach((el) => {
+            this.syncHueToElement(this.pendingHue,el);
+        })
+    }
 
     syncInputHue(hue=null) {
         this.querySelectorAll('.sync-hue').forEach((el) => {
@@ -225,7 +230,9 @@ export default class UiColorPickerElement extends HTMLElement {
     }
 
     handleChangeHue(event) {
-        return this.handleInputHue(event);
+        this.handleInputHue(event);
+        this.syncHuePartColorForPending();
+
     }
 
     handleInputColor(event){

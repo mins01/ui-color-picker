@@ -44,6 +44,10 @@ export default class UiColorWheelHueElement extends UiColorWheelElement {
      * public API
      * ========================= */
 
+    setHue(h) { 
+        this.value = h; 
+    }
+    
     // 유지: 색상 적용
     setColor(color) {
         if(!color) return;

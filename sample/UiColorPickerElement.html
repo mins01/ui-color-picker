@@ -246,19 +246,27 @@
         </script>
         <hr>
         <ui-color-picker id="picker2" class="border rounded d-flex flex-column user-select-none gap-2 p-3" style="max-width: 600px;"  onclick="console.log(this.pendingColor.toRgbString());" value="#33ff00" data-to-string-type="hsl">
-            <div class="d-flex gap-3" style="width: 100%;height: auto;  ">
-                <div style="flex: 1 0 auto; aspect-ratio: 1/1;">
-                    <div class="form-label">HSL</div>
-                    <ui-color-plane-sl class="sync-hue sync-part-color" style="flex: 1 0 auto; aspect-ratio: 1/1;">HSL</ui-color-plane-sl>
+            <div class="d-flex flex-column gap-2">
+                <div class="d-flex gap-3" style="width: 100%;height: auto;  ">
+                    <div style="flex: 1 0 auto; aspect-ratio: 1/1;">
+                        <div class="form-label">HSL</div>
+                        <ui-color-plane-sl class="sync-hue sync-part-color" style="flex: 1 0 auto; aspect-ratio: 1/1;">HSL</ui-color-plane-sl>
+                    </div>
+                    <div style="flex: 1 0 auto; aspect-ratio: 1/1;">
+                        <div class="form-label">HSB</div>
+                        <ui-color-plane-sb class="sync-hue sync-part-color" style="flex: 1 0 auto; aspect-ratio: 1/1;">HSB</ui-color-plane-sb>
+                    </div>
                 </div>
-                <div style="flex: 1 0 auto; aspect-ratio: 1/1;">
-                    <div class="form-label">HSB</div>
-                    <ui-color-plane-sb class="sync-hue sync-part-color" style="flex: 1 0 auto; aspect-ratio: 1/1;">HSB</ui-color-plane-sb>
+                <div  style="flex: 0 0 30px;" class="d-flex gap-3 align-items-center w-100">
+                    <div class="form-label-clolumn">HUE</div>
+                    <ui-color-bar-hue data-dir="horizontal" class="sync-part-color" style="flex: 1 0 30px; height: 100%;"></ui-color-bar-hue>
                 </div>
             </div>
-            <div  style="flex: 0 0 30px;" class="d-flex gap-3 align-items-center w-100">
-                <div class="form-label-clolumn">HUE</div>
-                <ui-color-bar-hue data-dir="horizontal" class="sync-part-color" style="flex: 1 0 30px; height: 100%;"></ui-color-bar-hue>
+            <div class="d-flex gap-3" style="width: 100%;height: auto;  ">
+                <div class="wheel-group" >
+                    <ui-color-wheel-hue class="sync-part-color" style="aspect-ratio: 1/1;"></ui-color-wheel-hue>
+                    <ui-color-plane-sb  class="sync-hue sync-part-color inner-circle-position"></ui-color-plane-sb>
+                </div>
             </div>
             <div class="">
                 <div class="d-flex flex-wrap gap-2">
