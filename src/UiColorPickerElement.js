@@ -168,24 +168,23 @@ export default class UiColorPickerElement extends HTMLElement {
             this.syncHueToElement(this.selectedHue,el);
         })
     }
-    syncPendingColor() {
+    syncPendingColor(ignoreElement = null) {
         this.querySelectorAll('.sync-pending-color').forEach((el) => {
+            if(el === ignoreElement){return}
             this.syncToElement(this.pendingColor,el);
+            this.syncHueToElement(this.spendingHue,el);
         })
     }
-    syncPartColorForPending(){
+    syncPartColorForPending(ignoreElement = null) {
         this.querySelectorAll('.sync-part-color').forEach((el) => {
+            if(el === ignoreElement){return}
             this.syncToElement(this.pendingColor,el);
-        })
-    }
-    syncHuePartColorForPending(){
-        this.querySelectorAll('.sync-part-color').forEach((el) => {
-            this.syncHueToElement(this.pendingHue,el);
         })
     }
 
-    syncInputHue(hue=null) {
+    syncInputHue(hue=null,ignoreElement = null) {
         this.querySelectorAll('.sync-hue').forEach((el) => {
+            if(el === ignoreElement){return}
             el.h = hue;
         })
     }
@@ -225,26 +224,27 @@ export default class UiColorPickerElement extends HTMLElement {
         hsl.h = target.value;
         this.pendingHue = hsl.h;
         this.pendingColor.setHsla(hsl.h, hsl.s, hsl.l);
-        this.syncPendingColor();
-        this.syncInputHue(target.value);
+        this.syncPendingColor(target);
+        this.syncPartColorForPending(target);
+        this.syncInputHue(target.value,target);
     }
 
     handleChangeHue(event) {
         this.handleInputHue(event);
-        this.syncHuePartColorForPending();
-
     }
 
     handleInputColor(event){
         const target = event.target;
         this.setPendingColor(target.color,false) // 싱크 안함. 단방향
-        this.syncPendingColor();
+        this.syncPendingColor(target);
+        this.syncPartColorForPending(target);
     }
     handleChangeColor(event){
-        // handleInputColor 과의 차이는 모든 pending 싱크 맞추고 hue도 맞춤.
-        const target = event.target;
-        this.setPendingColor(target.color)
+        this.handleInputColor(event);
         this.syncInputHue(this.pendingHue);
+    }
+    handleSelectSwatch(event) {
+        return this.handleChangeColor(event)
     }
 
     handleInput(event) {
@@ -294,9 +294,7 @@ export default class UiColorPickerElement extends HTMLElement {
 
     
 
-    handleSelectSwatch(event) {
-        return this.handleChangeColor(event)
-    }
+
 
     /* =========================
      * conversion / util
