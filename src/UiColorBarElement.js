@@ -250,7 +250,7 @@ export default class UiColorBarElement extends HTMLElement {
                 <div part="bg"></div>
                 <div part="indicator">
                     <slot name="handle">
-                        <div class="default-handle"></div>
+                        <div class="default-handle" part="default-handle"></div>
                     </slot>
                 </div>
                 <slot></slot>

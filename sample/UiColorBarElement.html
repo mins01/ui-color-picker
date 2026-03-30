@@ -62,13 +62,48 @@
         document.addEventListener('change-green', (event) => { console.log(event.type,event.target.value) });
         document.addEventListener('input-blue', (event) => { console.log(event.type,event.target.value) });
         document.addEventListener('change-blue', (event) => { console.log(event.type,event.target.value) });
-    </script>    
+    </script>
+    
+    <style>
+        .hue-bg-fallback::part(bg){
+            background: linear-gradient(var(--bg-direction),
+                hsl(0,100%,50%),
+                hsl(30,100%,50%),
+                hsl(60,100%,50%),
+                hsl(90,100%,50%),
+                hsl(120,100%,50%),
+                hsl(150,100%,50%),
+                hsl(180,100%,50%),
+                hsl(210,100%,50%),
+                hsl(240,100%,50%),
+                hsl(270,100%,50%),
+                hsl(300,100%,50%),
+                hsl(330,100%,50%),
+                hsl(360,100%,50%)
+            );
+        }
+        .hue-bg-hsl-longer-hue::part(bg){
+            background: linear-gradient(var(--bg-direction) in hsl longer hue,
+                hsl(0, 100%, 50%), hsl(360, 100%, 50%)
+            );
+        }
+        .hue-bg-oklch-longer-hue::part(bg){
+            background: linear-gradient(var(--bg-direction)  in oklch longer hue,
+            oklch(0.65 0.17 0),
+            oklch(0.65 0.17 360)
+            );
+        }
+        .hue-bg-oklch-longer-hue::part(default-handle){
+            background-color:oklch(0.65 0.17 var(--value))
+        }
+    </style>
 </head>
 
 <body>
     <div class="container py-3" id="container0">
         <h1>Sample - UiColorBarElement</h1>
         <hr>
+        <h2>default</h2>
         <div class="d-flex gap-3 my-3">
             <ui-color-bar style="width: 40px;height: 200px;" ></ui-color-bar>
             <ui-color-bar style="width: 40px;height: 200px; --bg-border-color:#ff0000; --bg-border-width:4px; --bg-border-radius:8px" value="0.3"></ui-color-bar>
@@ -78,7 +113,8 @@
             <ui-color-bar-green style="width: 40px;height: 200px;" value="120"></ui-color-bar-green>
             <ui-color-bar-blue style="width: 40px;height: 200px;" value="200"></ui-color-bar-blue>
         </div>
-
+        <hr>
+        <h2>data-dir="horizontal"</h2>
         <div class="d-flex flex-column gap-3 my-3">
             <ui-color-bar data-dir="horizontal" style="width: 200px;height: 40px;" ></ui-color-bar>
             <ui-color-bar data-dir="horizontal" style="width: 200px;height: 40px; --bg-border-color:#ff0000; --bg-border-width:4px; --bg-border-radius:8px" value="0.3"></ui-color-bar>
@@ -87,6 +123,26 @@
             <ui-color-bar-red data-dir="horizontal" style="width: 200px;height: 40px;" value="90"></ui-color-bar-red>
             <ui-color-bar-green data-dir="horizontal" style="width: 200px;height: 40px;" value="120"></ui-color-bar-green>
             <ui-color-bar-blue data-dir="horizontal" style="width: 200px;height: 40px;" value="200"></ui-color-bar-blue>
+        </div>
+        <hr>
+        <h2>custom (testing)</h2>
+        <div class="d-flex flex-column  gap-3 my-3">
+            <div>
+                <h3>fallback</h3>
+                <ui-color-bar-hue  data-dir="horizontal" style="width: 200px;height: 40px;" class="hue-bg-fallback"></ui-color-bar-hue>
+            </div>
+            <div>
+                <h3>hsl</h3>
+                <ui-color-bar-hue  data-dir="horizontal" style="width: 200px;height: 40px;" class="hue-bg-hsl-longer-hue"></ui-color-bar-hue>
+            </div>
+            <div>
+                <h3>oklch</h3>
+                <ui-color-bar-hue  data-dir="horizontal" style="width: 200px;height: 40px;" class="hue-bg-oklch-longer-hue"></ui-color-bar-hue>
+            </div>
+        </div>
+        <div class="form-text">
+            * in hsl longer hue 같은 표현은 브라우저 지원을 확인해야한다. Google Chrome 111+, Safari 16.4+ 가 필요하다.<br>
+            * oklch 은 hue별로 c의 최대 값에 차이가 있어서 같은 hue라도 hsl과의 느낌이 다르다. oklch에서 hsl과 같이 표현하기는 어럽다.(hue별로 처리해줘야함)
         </div>
     </div>
     
