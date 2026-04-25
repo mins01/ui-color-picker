@@ -172,13 +172,14 @@ export default class UiColorPickerElement extends HTMLElement {
         this.querySelectorAll('.sync-pending-color').forEach((el) => {
             if(el === ignoreElement){return}
             this.syncToElement(this.pendingColor,el);
-            this.syncHueToElement(this.spendingHue,el);
+            this.syncHueToElement(this.pendingHue,el);
         })
     }
     syncPartColorForPending(ignoreElement = null) {
         this.querySelectorAll('.sync-part-color').forEach((el) => {
             if(el === ignoreElement){return}
             this.syncToElement(this.pendingColor,el);
+            this.syncHueToElement(this.pendingHue,el);
         })
     }
 
